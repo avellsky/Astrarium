@@ -1,0 +1,792 @@
+:root {
+  --bg: #0b0e1a; --panel: #141830; --fg: #dfe6f5; --dim: #8892b0;
+  --accent: #6ea8ff; --line: #2a3152;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; }
+body {
+  background: var(--bg); color: var(--fg);
+  font-family: "Hiragino Sans", "Noto Sans JP", system-ui, sans-serif;
+  font-size: 14px; overflow: hidden;
+}
+#app { display: flex; flex-direction: column; height: 100vh;
+       height: 100dvh; }
+
+/* the phone draws under the notch and the home indicator: keep the
+ * chrome out from under them (needs viewport-fit=cover) */
+/* the safe-area rules live at the end of this file: they have to win
+ * over the `padding` shorthands in the bar rules below */
+
+/* only shown on narrow screens (see the media query at the end) */
+#panel-toggle { display: none; }
+
+#topbar {
+  display: flex; align-items: center; gap: 12px; padding: 4px 12px;
+  background: var(--panel); border-bottom: 1px solid var(--line);
+}
+#title { font-size: 16px; margin: 0; color: var(--accent); }
+#clock { display: flex; gap: 10px; font-variant-numeric: tabular-nums;
+         color: var(--dim); flex: 1; flex-wrap: wrap; }
+#clock-local { color: var(--fg); font-weight: 600; }
+#topbar-controls { display: flex; gap: 6px; align-items: center; }
+#site-group { max-width: 190px; }
+#site-select { max-width: 300px; }
+
+#main { flex: 1; display: flex; min-height: 0; position: relative; }
+/* min-width/height 0: the canvas width/height attributes must never feed
+ * back into its flex size (that runaway squeezes the panel to 0) */
+#sky { flex: 1 1 0; min-width: 0; min-height: 0; display: block;
+       background: #000; cursor: crosshair; touch-action: none; }
+
+/* transient local-time overlay shown while scrubbing time by drag */
+#scrub-overlay {
+  position: absolute; top: 12px; left: 50%; transform: translateX(-50%);
+  background: rgba(12, 16, 34, .85); color: var(--fg);
+  border: 1px solid var(--line); border-radius: 6px; padding: 4px 14px;
+  font-size: 15px; font-variant-numeric: tabular-nums;
+  opacity: 0; transition: opacity .6s; pointer-events: none; z-index: 4;
+}
+#scrub-overlay.show { opacity: 1; transition: opacity .05s; }
+
+#panel {
+  width: 280px; flex: 0 0 280px; background: var(--panel);
+  border-left: 1px solid var(--line);
+  display: flex; flex-direction: column; overflow-y: auto;
+}
+/* six tabs in a 280 px panel: let them shrink, and wrap to a second row
+ * rather than overflow when a translation is long */
+#tabs { display: flex; flex-wrap: wrap; }
+.tab {
+  flex: 1 1 auto; min-width: 0; padding: 8px 3px; background: none;
+  border: none; color: var(--dim);
+  border-bottom: 2px solid transparent; cursor: pointer;
+  font-size: 12px; white-space: nowrap;
+}
+.tab.active { color: var(--fg); border-bottom-color: var(--accent); }
+.tabpage { display: none; padding: 10px; }
+.tabpage.active { display: block; }
+.tabpage label { display: flex; align-items: center; gap: 6px;
+                 padding: 4px 0; }
+#maglimit-row input[type=range] { flex: 1; }
+.opt-group { border-top: 1px solid var(--line); margin-top: 6px;
+             padding-top: 6px; }
+.hint { color: var(--dim); font-size: 11.5px; line-height: 1.4;
+        padding: 2px 0; min-height: 1em; }
+#export-row { display: flex; gap: 6px; margin-top: 8px;
+              border-top: 1px solid var(--line); padding-top: 8px; }
+#export-row button { flex: 1; }
+#demo-row { display: flex; gap: 6px; margin-top: 6px; }
+#demo-row button { flex: 1; }
+#rec-btn.recording { background: #a02020; color: #fff;
+                     border-color: #ff6060; }
+
+/* comets & asteroids tab */
+#sb-controls { display: flex; gap: 4px; margin: 6px 0; }
+#sb-search { flex: 1; min-width: 0; }
+#sb-selected-box { border-bottom: 1px solid var(--line);
+                   padding-bottom: 4px; margin-bottom: 4px; }
+#sb-selected, #sb-list, #sb-bright-list {
+  list-style: none; margin: 4px 0; padding: 0; font-size: 12px; }
+#sb-list { max-height: 34vh; overflow-y: auto; }
+#sb-bright-list { max-height: 22vh; overflow-y: auto; }
+#sb-selected li, #sb-list li, #sb-bright-list li {
+  display: flex; align-items: center; gap: 6px; padding: 2px 0; }
+#sb-selected li button { padding: 0 6px; font-size: 11px; line-height: 1.4; }
+#sb-list li label, #sb-bright-list li label {
+  flex: 1; display: flex; gap: 6px; padding: 0;
+  cursor: pointer; overflow: hidden;
+  white-space: nowrap; text-overflow: ellipsis; }
+#sb-bright-box { border-bottom: 1px solid var(--line);
+                 padding-bottom: 6px; margin-bottom: 6px; }
+#sb-bright { width: 100%; margin-top: 4px; }
+#sb-update { width: 100%; margin-top: 6px; }
+#sb-msg { color: #ff8080; }
+body.nv #sb-msg { color: var(--accent); }
+
+#timebar {
+  display: flex; align-items: center; gap: 4px; padding: 4px 10px;
+  background: var(--panel); border-top: 1px solid var(--line);
+  flex-wrap: wrap;
+}
+button, select, input {
+  background: #1d2340; color: var(--fg); border: 1px solid var(--line);
+  border-radius: 4px; padding: 4px 8px; font-size: 13px;
+}
+button:hover { border-color: var(--accent); cursor: pointer; }
+button.active { background: var(--accent); color: #000; }
+#t-input { font-variant-numeric: tabular-nums; }
+
+#events-list { list-style: none; margin: 6px 0; padding: 0;
+               font-size: 12.5px; }
+#events-list li { padding: 4px 2px; border-bottom: 1px solid var(--line); }
+#events-list .ev-time { color: var(--dim); font-variant-numeric:
+                        tabular-nums; display: block; }
+
+#object-info { font-size: 13px; line-height: 1.6; }
+#tonight-summary { font-size: 12.5px; line-height: 1.5; }
+#tonight-summary table { border-collapse: collapse; width: 100%; }
+#tonight-summary td { padding: 1px 2px; vertical-align: top; }
+/* values (times, azimuths, distances) must never wrap; the labels may */
+#tonight-summary td:last-child { text-align: right; white-space: nowrap;
+                                 font-variant-numeric: tabular-nums; }
+
+#popup {
+  position: absolute; background: rgba(16, 20, 40, .95); color: var(--fg);
+  border: 1px solid var(--accent); border-radius: 6px; padding: 8px 10px;
+  font-size: 12.5px; pointer-events: none; max-width: 260px; z-index: 10;
+  line-height: 1.5;
+}
+
+/* popup itself never blocks the chart, but its buttons are clickable */
+#popup button { pointer-events: auto; padding: 2px 8px; font-size: 12px;
+                margin-top: 4px; }
+#popup .pop-dim { color: var(--dim); }
+/* Messier photograph inside the object popup */
+#popup .dso-photo { display: block; width: 100%; max-width: 240px;
+                    height: auto; border-radius: 4px; margin: 4px 0 2px; }
+#popup .dso-credit { color: var(--dim); font-size: 10.5px;
+                     line-height: 1.3; margin-bottom: 4px;
+                     overflow: hidden; text-overflow: ellipsis;
+                     white-space: nowrap; }
+
+/* ---- FOV frames (写野角) ---- */
+#fov-box summary { cursor: pointer; color: var(--fg); padding: 4px 0;
+                   font-weight: 600; }
+#fov-add { width: 100%; margin: 4px 0; }
+.fov-row { border: 1px solid var(--line); border-radius: 4px;
+           padding: 4px; margin: 4px 0; font-size: 12px; }
+.fov-row.sel { border-color: #e8b84b; }
+body.nv .fov-row.sel { border-color: var(--accent); }
+.fov-row-main { display: flex; align-items: center; gap: 4px; }
+.fov-row-main select { flex: 1; min-width: 0; font-size: 11.5px; }
+.fov-rot { width: 52px; }
+.fov-custom { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px;
+              align-items: center; }
+.fov-custom input { width: 52px; }
+.fov-size { color: var(--dim); font-size: 11px; padding-top: 2px; }
+
+/* ---- 流星群バッジ (active shower) ---- */
+#shower-badge {
+  position: absolute; bottom: 12px; left: 12px; z-index: 6;
+  display: flex; flex-direction: column; align-items: stretch; gap: 2px;
+  background: rgba(12, 16, 34, .8); color: var(--fg);
+  border: 1px solid #e8b84b; border-radius: 6px; padding: 3px 8px;
+  /* three shower names and a rate have to sit in one strip over the
+     chart: small type keeps it to a single line on a phone */
+  font-size: 10.5px; max-width: calc(100% - 24px);
+}
+#shower-badge[hidden] { display: none; }
+body.nv #shower-badge { border-color: var(--accent); }
+#shower-badge .hint { min-height: 0; }
+#shower-badge button { padding: 1px 7px; font-size: 10.5px;
+                       white-space: nowrap; }
+#shower-badge .sb-row { display: flex; align-items: baseline; gap: 10px;
+                        justify-content: space-between; }
+/* the name is a button, but it reads as the label it replaced */
+#shower-badge .sb-name { white-space: nowrap; background: none;
+  border: 0; padding: 0; color: var(--fg); font: inherit;
+  text-align: left; cursor: pointer; text-decoration: underline;
+  text-decoration-color: rgba(232, 184, 75, .5);
+  text-underline-offset: 2px; }
+#shower-badge .sb-rate { color: var(--dim); white-space: nowrap; }
+#shower-badge #shower-off { align-self: flex-end; margin-top: 2px; }
+
+/* ---- toast (GPS nearest-site etc.) ---- */
+#toast {
+  position: absolute; bottom: 56px; left: 50%; transform: translateX(-50%);
+  background: rgba(12, 16, 34, .92); color: var(--fg);
+  border: 1px solid var(--accent); border-radius: 6px; padding: 6px 16px;
+  font-size: 13px; z-index: 12; pointer-events: none;
+  opacity: 0; transition: opacity .3s;
+}
+#toast.show { opacity: 1; }
+
+/* ---- events list: occultations ---- */
+#events-list li.ev-occ .ev-label { color: #e8d060; }
+body.nv #events-list li.ev-occ .ev-label { color: var(--accent); }
+#events-list li.ev-day { opacity: .45; }
+
+/* ---- events list: eclipses stand out, past events are dimmed ---- */
+#events-controls { display: flex; align-items: center; gap: 6px;
+                   flex-wrap: wrap; }
+#events-controls label { display: flex; align-items: center; gap: 4px;
+                         font-size: 12px; padding: 0; }
+#events-controls select { font-size: 12px; padding: 3px 4px; }
+#events-list li.ev-eclipse { background: rgba(232, 184, 75, .12);
+                             border-left: 3px solid #e8b84b;
+                             padding-left: 5px; }
+body.nv #events-list li.ev-eclipse { background: rgba(255, 80, 80, .12);
+                                     border-left-color: var(--accent); }
+#events-list li.ev-satpass .ev-label { color: #7fe6ee; }
+body.nv #events-list li.ev-satpass .ev-label { color: var(--accent); }
+#events-list li.ev-past { opacity: .62; }
+#events-list .ev-local { display: block; color: var(--dim);
+                         font-size: 11.5px; }
+#events-list .ev-local.ev-invisible { font-style: italic; }
+.tabpage label.disabled { opacity: .45; }
+#events-list li.ev-past.ev-eclipse { opacity: .8; }
+
+/* ---- events list: click a row to jump the clock to that instant ---- */
+#events-list li.ev-jump { cursor: pointer; border-radius: 4px; }
+/* the row the demo tour has jumped to */
+#events-list li.ev-demo { outline: 2px solid var(--accent, #7ab7ff);
+  background: rgba(122, 183, 255, .18); }
+#events-list li.ev-jump:hover, #events-list li.ev-jump:focus {
+  background: rgba(110, 168, 255, .16); outline: none; }
+body.nv #events-list li.ev-jump:hover,
+body.nv #events-list li.ev-jump:focus {
+  background: rgba(255, 80, 80, .18); }
+
+/* ---- 人工衛星 (TLE) ---- */
+#sat-box { margin-top: 10px; }
+#sat-groups label { font-size: 12px; padding: 2px 0; }
+#sat-update { width: 100%; margin-top: 6px; }
+#sat-msg { color: #ff8080; }
+body.nv #sat-msg { color: var(--accent); }
+#sat-maxmag-row input[type=range] { flex: 1; }
+#sat-list { list-style: none; margin: 6px 0; padding: 0; font-size: 12px;
+            max-height: 26vh; overflow-y: auto; }
+#sat-list li { display: flex; justify-content: space-between; gap: 6px;
+               padding: 2px 4px; cursor: pointer; border-radius: 4px; }
+#sat-list li:hover, #sat-list li:focus { background: rgba(110,168,255,.16);
+                                         outline: none; }
+#sat-list .sat-name { overflow: hidden; white-space: nowrap;
+                      text-overflow: ellipsis; }
+#sat-list .sat-num { color: var(--dim); font-variant-numeric: tabular-nums;
+                     white-space: nowrap; }
+#sat-list li.sat-dark { opacity: .5; }
+#sat-pass-list { list-style: none; margin: 4px 0; padding: 0;
+                 font-size: 12px; }
+#sat-pass-list li { padding: 3px 4px; border-bottom: 1px solid var(--line);
+                    cursor: pointer; border-radius: 4px; }
+#sat-pass-list li:hover { background: rgba(110, 168, 255, .16); }
+#sat-pass-list .ev-time { color: var(--dim); display: block;
+                          font-variant-numeric: tabular-nums; }
+
+/* ---- 音声タブ: selected-object rise/set panel ---- */
+#sel-obj-box { margin-top: 4px; }
+#sel-obj { font-size: 12.5px; line-height: 1.6; padding: 4px 0;
+           min-height: 3em; }
+#sel-obj .sel-rs { color: var(--accent); }
+#sel-obj .sel-follow { color: #e8b84b; }
+body.nv #sel-obj .sel-follow { color: var(--accent); }
+#sel-obj button { margin-top: 4px; padding: 2px 8px; font-size: 12px; }
+#speak-selected { width: 100%; }
+#speak-selected:disabled { opacity: .5; cursor: default; }
+
+/* ---- planet close-up modal ---- */
+#planet-modal {
+  position: fixed; inset: 0; background: rgba(0, 0, 0, .6); z-index: 30;
+  display: flex; align-items: center; justify-content: center;
+}
+#planet-modal[hidden] { display: none; }   /* [hidden] must beat flex */
+#planet-modal-box {
+  background: var(--panel); border: 1px solid var(--line);
+  border-radius: 8px; padding: 10px; max-width: 92vw;
+}
+#planet-modal-head { display: flex; align-items: center;
+                     justify-content: space-between; gap: 10px;
+                     padding-bottom: 6px; }
+#planet-canvas { display: block; background: #05070d; border-radius: 4px;
+                 max-width: 86vw; height: auto; }
+body.nv #planet-canvas { filter: sepia(1) saturate(4) hue-rotate(-50deg)
+                         brightness(.75); }
+
+/* ---- night vision: red on black everywhere ---- */
+body.nv { --bg:#000; --panel:#0d0000; --fg:#e03030; --dim:#802020;
+          --accent:#ff5050; --line:#401010; }
+body.nv #sky { filter: url(#) sepia(1) saturate(4) hue-rotate(-50deg)
+               brightness(.75); }
+body.nv img, body.nv .colorful { filter: grayscale(1) sepia(1)
+               saturate(5) hue-rotate(-50deg); }
+
+/* ---------------- phones and small tablets ----------------
+ * The desktop layout puts a fixed 280 px panel beside the chart and
+ * lets the top and bottom bars wrap.  On a phone that leaves the chart
+ * a sliver: the bars wrapped to three rows each and the panel covered
+ * most of what was left.  Here the chart keeps the whole screen and
+ * the panel becomes a sheet that slides up over the bottom half. */
+/* --- rows shared by the top and bottom bars ---------------------- */
+.tb-line { display: flex; align-items: center; gap: 6px; min-width: 0;
+           flex-wrap: nowrap; }
+.tb-line > *, #view-mode-box > * { flex: 0 0 auto; }
+/* The leading group exists only so the phone layout can give both rows
+   the same lead width; on a wide screen it must not affect the layout
+   at all, so it hands its children straight to the row. */
+.tb-lead, .tb-mid { display: contents; }
+#view-mode-box { display: flex; align-items: center; gap: 6px; }
+
+/* --- quick display controls, between the chart and the buttons ---
+ * Repeats the few options that get touched constantly.  Hidden on the
+ * desktop, where the side panel is always open and this would only be
+ * a second copy of it. */
+#quickbar { display: none; }
+#panel-grab { display: none; }
+#clock-ut-short { display: none; }
+#qb-mag { display: flex; align-items: center; gap: 6px; }
+#qb-mag > span { color: var(--dim); flex: 0 0 auto; }
+#qb-mag input[type="range"] { flex: 1 1 auto; min-width: 0; }
+#qb-mag output { color: var(--fg); flex: 0 0 2.2em; text-align: right;
+                 font-variant-numeric: tabular-nums; }
+/* Every control here has to be reachable without scrolling — the row
+   wraps rather than hiding its right-hand end, because a button you
+   have to discover by dragging is a button nobody presses. */
+/* Two rows, split by what the button does: the first draws or hides a
+ * layer that is already in the app, the second goes and gets something
+ * (comets, showers, satellites) or opens a panel.  Mixing the two on
+ * one line meant ten identical chips and no way to tell which press
+ * would cost a download. */
+#qb-toggles { display: flex; flex-direction: column; gap: 3px; }
+.qb-row { display: flex; gap: 3px; }
+/* content width first, then share what is left: with seven controls on
+   the top row an equal split cut "星雲・星団" short */
+.qb-row > button { flex: 1 1 auto; min-width: 0; }
+#qb-toggles::-webkit-scrollbar { display: none; }
+#qb-toggles button {
+  /* nine controls share a phone's width on one line — 星座線 … 情報.
+     At 10px on a 3x screen that is still 30 device pixels of type, and
+     the margins are what gave way, not the labels. */
+  /* Six on the first row, five on the second.  The labels here are the
+     short forms (ui.qb_*), not the panel's full names: "Constellation
+     lines" wrapped to two lines in English and stole 14 px of sky from
+     the chart, which is where the horizon marks N and S sit. */
+  padding: 4px 1px; font-size: 11px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  background: var(--panel); color: var(--dim);
+  border: 1px solid var(--line); border-radius: 6px;
+}
+#qb-toggles button.on { color: var(--bg); background: var(--accent);
+                        border-color: var(--accent); }
+/* the 情報 button sits with the display toggles but does not toggle:
+   it opens the panel, so it is marked out rather than lit up */
+#qb-toggles #info-btn { color: var(--fg); border-color: var(--accent); }
+
+@media (max-width: 800px) {
+  /* two rows: the clock keeps one to itself, the observing site the
+     other — on one line they fought for the same 400 px */
+  #topbar { flex-direction: column; align-items: stretch; gap: 4px;
+            padding-bottom: 5px; }
+  #topbar-main { gap: 8px; }
+  #title { font-size: 15px; flex: 0 1 auto; min-width: 0;
+           overflow: hidden; text-overflow: ellipsis; }
+  /* The clock is the one thing that must never be squeezed out: a
+   * planetarium is a clock with a sky attached.  UT and sidereal time
+   * move to the info tab; the local time stays. */
+  /* three clocks on one phone line: 12px with a tighter gap keeps
+     civil + UT + sidereal inside 402 pt without wrapping */
+  #clock { flex: 0 0 auto; flex-wrap: nowrap; font-size: 12px; gap: 6px; }
+  /* below an SE the three clocks are what sets the minimum width */
+  @media (max-width: 374px) {
+    #clock { font-size: 11px; gap: 4px; }
+  }
+  #clock-lst { display: inline; color: var(--dim); }
+  /* UT beside the local time; the date and the Julian Date are for the
+     wide layout, which still shows them in full */
+  /* the phone keeps the three clocks the observer reads off the bar —
+     civil, UT and sidereal — and drops the long UTC date + JD line,
+     which lives in the 情報 panel */
+  #clock-utc { display: none; }
+  #clock-ut-short { display: inline; color: var(--dim); }
+  #topbar-controls { flex: 1 1 auto; min-width: 0; overflow-x: auto;
+                     scrollbar-width: none; }
+  #topbar-controls::-webkit-scrollbar { display: none; }
+  #site-group { max-width: 34%; }
+  #site-select { max-width: 34%; }
+  #site-search { max-width: 90px; }
+
+  #panel-toggle { display: inline-block; flex: 0 0 auto; }
+
+  #quickbar {
+    display: flex; flex-direction: column; gap: 5px;
+    padding: 5px calc(10px + var(--sa-left)) 5px calc(10px + var(--sa-right));
+    background: var(--panel); border-top: 1px solid var(--line);
+  }
+
+  /* the time controls in two rows, the ones used most on top.  They
+     are set smaller than the rest of the chrome: there are fourteen of
+     them and they have to fit a phone without scrolling to reach the
+     ones that matter. */
+  #timebar { flex-direction: column; align-items: stretch; gap: 4px; }
+  /* the time rows carry fourteen controls: set smaller than the
+     display strip above them, so the chart keeps the height */
+  #timebar button, #timebar select, #timebar input { font-size: 11px; }
+  /* The two rows share a leading group of the same width, so +1m/+1h/+1d
+     sit directly above -1m/-1h/-1d instead of wherever the date field
+     and the view buttons happen to end.  "現在" takes up the slack. */
+  #timebar .tb-lead { display: flex; align-items: center; gap: 6px;
+                      flex: 0 0 52%; min-width: 0; }
+  #timebar .tb-lead > * { flex: 0 0 auto; }
+  /* wide enough to be an easy target, and it is what takes up the slack
+     that makes the two leading groups the same width */
+  #timebar .tb-lead #t-now { flex: 1 1 auto; min-width: 58px; }
+  #timebar .tb-lead #az-center { min-width: 0; }
+  /* basis 0, so the field gives way to the play buttons instead of
+     squeezing them out of the row (these need to out-specify the
+     `.tb-lead > *` rule above, which pins everything else) */
+  #timebar .tb-lead #t-input { flex: 1 1 0; min-width: 0; }
+  /* the step buttons scroll as a group so the 情報 button can stay
+     pinned at the right edge instead of disappearing off it */
+  #timebar .tb-mid { display: flex; align-items: center; gap: 6px;
+                     flex: 1 1 0; min-width: 0;
+                     overflow-x: auto; scrollbar-width: none; }
+  #timebar .tb-mid::-webkit-scrollbar { display: none; }
+  /* fade the right edge so a half-visible button reads as "there is
+     more here", not as a broken one */
+  #timebar .tb-mid {
+    -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 18px),
+                                        transparent);
+    mask-image: linear-gradient(to right, #000 calc(100% - 18px),
+                                transparent);
+  }
+  #timebar .tb-mid > * { flex: 0 0 auto; }
+  /* an even rank: every step button the same width */
+  #timebar .t-step { min-width: 40px; }
+  #timebar button { padding: 3px 6px; }
+  #timebar button, #timebar select { min-height: 28px; }
+  #timebar .tb-line { overflow-x: auto; scrollbar-width: none; }
+  #timebar .tb-line::-webkit-scrollbar { display: none; }
+}
+
+@media (max-width: 560px) {
+  /* The app name is on the icon and in the switcher — the screen is
+     better spent on the time and the observing site.  The cut-off is
+     above the widest phone (the 6.9-inch is 440 pt), where the title
+     would otherwise be squeezed to "Astra…" beside three clocks. */
+  #title { display: none; }
+}
+
+@media (max-width: 800px) {
+
+  /* the panel as a bottom sheet, hidden until asked for */
+  #panel {
+    position: fixed; left: 0; right: 0; bottom: 0; top: auto;
+    width: auto; flex: none; height: 62dvh; max-height: 62dvh;
+    border-left: none; border-top: 1px solid var(--line);
+    border-radius: 12px 12px 0 0; z-index: 20; opacity: 1;
+    padding-bottom: var(--sa-bottom);
+    transform: translateY(100%); transition: transform .22s ease-out;
+    box-shadow: 0 -8px 24px rgba(0, 0, 0, .5);
+  }
+  body.panel-open #panel { transform: translateY(0); }
+  /* a grab handle: the sheet can be pulled down to dismiss it, and
+     this is what says so */
+  #panel-grab {
+    display: block; flex: 0 0 auto; height: 18px; position: relative;
+    touch-action: none; cursor: grab;
+  }
+  #panel-grab::before {
+    content: ""; position: absolute; left: 50%; top: 6px;
+    width: 38px; height: 4px; margin-left: -19px; border-radius: 2px;
+    background: var(--line);
+  }
+  #tabs { position: sticky; top: 0; background: var(--panel); z-index: 1;
+          touch-action: none; }
+  .tab { padding: 10px 4px; font-size: 13px; }
+
+  /* the time controls scroll sideways instead of stacking */
+  #timebar { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
+  #timebar::-webkit-scrollbar { display: none; }
+  #timebar > * { flex: 0 0 auto; }
+  #t-input { max-width: 190px; }
+
+  /* touch targets: the top bar keeps the roomier size; the time rows
+     set their own, smaller one above (fourteen controls to fit) */
+  #topbar button, #topbar select { min-height: 34px; }
+}
+
+#manual-site { border: 1px solid var(--line); border-radius: 6px;
+               padding: 6px 8px; margin-bottom: 10px; }
+#manual-site summary { cursor: pointer; color: var(--fg); }
+#manual-site label { display: flex; align-items: center; gap: 6px;
+                     padding: 3px 0; }
+#manual-site label span { flex: 0 0 5.5em; color: var(--dim); }
+#manual-site input { flex: 1 1 auto; min-width: 0; }
+#ms-row { display: flex; gap: 6px; margin-top: 6px; flex-wrap: wrap; }
+#ms-msg:empty { display: none; }
+
+#credits-box { border: 1px solid var(--line); border-radius: 6px;
+               padding: 6px 8px; margin-top: 12px; }
+#credits-box summary { cursor: pointer; color: var(--fg); }
+#credits-box .cr-intro { color: var(--dim); margin: 6px 0 10px; }
+#credits-box h4 { margin: 10px 0 4px; font-size: 12px; color: var(--dim);
+                  border-bottom: 1px solid var(--line); padding-bottom: 2px; }
+#credits-box .cr { margin-bottom: 8px; }
+#credits-box .cr-name { color: var(--fg); }
+#credits-box .cr-lic { color: var(--accent); }
+#credits-box .cr-ver { font-size: 11px; opacity: .6; }
+.cr-src, #credits-box .cr-note { color: var(--dim);
+                                              font-size: 12px; }
+#credits-box a { color: var(--accent); word-break: break-all; }
+
+/* Sliders own their gesture.  Inside a scrollable panel the browser
+ * treats a drag that starts on the thumb as the beginning of a pan and
+ * fires pointercancel, so the value never changes — which is what made
+ * the magnitude limit impossible to move by touch. */
+input[type="range"] { touch-action: none; }
+
+
+#popup .dso-desc { margin: 4px 0 2px; line-height: 1.45; }
+
+#planet-modal-moon { border: 1px solid var(--accent); border-radius: 6px;
+                     padding: 6px 8px; margin: 6px 0; font-size: 12.5px; }
+#planet-modal-moon .pv-table { width: 100%; }
+
+#planet-modal-info .pv-table { width: 100%; border-collapse: collapse;
+                               font-size: 12.5px; }
+#planet-modal-info .pv-table td { padding: 1px 0; vertical-align: top; }
+#planet-modal-info .pv-table td:first-child { color: var(--dim);
+                                              padding-right: 10px;
+                                              white-space: nowrap; }
+#planet-modal-info .pv-table td:last-child { text-align: right;
+                                             font-variant-numeric: tabular-nums; }
+#planet-modal-info .pv-sec { color: var(--accent); padding-top: 6px;
+                             border-top: 1px solid var(--line); }
+#planet-modal-info .pv-time { color: var(--dim); text-align: right;
+                              margin-top: 4px; }
+#planet-canvas { touch-action: none; }
+
+#brand {
+  flex: 0 0 auto; display: flex; align-items: center; justify-content: center;
+  gap: 8px; color: var(--fg);
+  background: var(--panel); border-top: 1px solid var(--line);
+  font-size: 15px; letter-spacing: .03em; padding: 5px 0;
+}
+#brand-link { display: flex; flex: 0 0 auto; line-height: 0; }
+#brand-logo { width: 34px; height: 34px; border-radius: 6px;
+              flex: 0 0 auto; }
+/* The signature line: small, light and in Material cyan 500, set in the
+ * most refined face each platform actually ships — Optima and Avenir on
+ * Apple, Hiragino Mincho for the katakana — so nothing has to be
+ * downloaded and the page still works with no network at all. */
+#brand-name, #brand-by {
+  font-family: Optima, "Avenir Next", Palatino, "Palatino Linotype",
+               "Hiragino Mincho ProN", "Yu Mincho", serif;
+  color: #00bcd4; font-weight: 300; letter-spacing: .10em;
+}
+#brand-name { font-size: 12.5px; }
+#brand-by { font-size: 11px; }
+
+/* ---------------- device safe areas ----------------
+ * --sa-* are injected by the iOS host (apps/AppStore/Sources/WebView.swift),
+ * which measures them in SwiftUI before ignoring them; env() is the
+ * fallback for the browser and for macOS.  These rules must come last:
+ * the `padding` shorthands on the bars would otherwise reset them. */
+:root {
+  --sa-top: env(safe-area-inset-top, 0px);
+  --sa-right: env(safe-area-inset-right, 0px);
+  --sa-bottom: env(safe-area-inset-bottom, 0px);
+  --sa-left: env(safe-area-inset-left, 0px);
+}
+#topbar {
+  padding-top: calc(4px + var(--sa-top));
+  padding-left: calc(12px + var(--sa-left));
+  padding-right: calc(12px + var(--sa-right));
+}
+#timebar {
+  padding-left: calc(12px + var(--sa-left));
+  padding-right: calc(12px + var(--sa-right));
+}
+/* The signature line is the one thing on screen that is not a control,
+   so it is the one thing that may sit in the home-indicator band: a
+   quarter of the inset keeps it clear of the pill itself and hands the
+   rest of the height back to the chart. */
+#brand { padding-bottom: calc(2px + var(--sa-bottom) * 0.25); }
+
+/* zodiac block inside the constellation popup */
+.zodiac { margin-top: 6px; padding-top: 6px;
+          border-top: 1px solid var(--line); }
+.zo-sign { font-size: 22px; color: #00bcd4; margin-right: 6px;
+           vertical-align: -2px; }
+.zo-name { font-weight: 600; }
+.zo-dates { margin-top: 2px; }
+.zo-note { margin-top: 2px; font-size: 11px; opacity: .65; }
+
+/* ---------------- bottom bar: first line in two rows ----------------
+ * The view controls and the time steps were one long line that only
+ * fitted at 11px.  Split in two they can be read at arm's length in the
+ * dark, which is when this bar is actually used.  The compass menu is
+ * hidden until the horizon view is on — it does nothing in the all-sky
+ * view — and the two view buttons are wide enough to hit without
+ * looking. */
+#az-center { display: none; }
+body.horizon-mode #az-center { display: inline-block; }
+#view-allsky, #view-horizon { min-width: 60px; }
+
+@media (max-width: 800px) {
+  #tb-row1 { flex-wrap: wrap; row-gap: 4px; }
+  #timebar #tb-row1 .tb-lead,
+  #timebar #tb-row1 .tb-mid { flex: 1 0 100%; }
+  #timebar #tb-row1 button,
+  #timebar #tb-row1 select { font-size: 13px; min-height: 30px; }
+  #timebar #tb-row1 .t-step { flex: 1 1 0; min-width: 0; }
+  /* the view controls share the line evenly: three (or four, once the
+     compass menu joins in the horizon view) targets of the same size */
+  #timebar #tb-row1 .tb-lead > *,
+  #timebar #tb-row1 #view-mode-box > * { flex: 1 1 0; min-width: 54px; }
+  /* both of these are pinned wider earlier in the file for the one-line
+     layout; on the split line they take an equal share like the rest */
+  #timebar #tb-row1 #t-now,
+  #timebar #tb-row1 #az-center { flex: 1 1 0; min-width: 54px; }
+  /* the view box holds two controls (three once the compass menu is in
+     it), so it claims that many shares of the line — otherwise it and
+     the single 現在 button split the width half and half */
+  #timebar #tb-row1 #view-mode-box { flex: 2 1 0; }
+  body.horizon-mode #timebar #tb-row1 #view-mode-box { flex: 3 1 0; }
+  #view-allsky, #view-horizon { min-width: 54px; }
+}
+
+/* ---------------- bottom bar, arranged the way it is used ------------
+ * Three groups, each on its own line: what part of the sky (view), when
+ * (stepping), and the clock itself with playback.  The minus and plus
+ * steps sit side by side and in the same order — −1d −1h −1m | +1m +1h
+ * +1d — so stepping back an hour is the mirror of stepping forward, not
+ * a hunt on another row.  The quick controls above keep display layers
+ * and data buttons (comets, showers, satellites) visually apart. */
+/* the panel openers are marked out rather than lit up: they toggle
+   nothing on the chart */
+#qb-toggles #info-btn, #qb-toggles #events-btn {
+  color: var(--fg); border-color: var(--accent); }
+
+@media (max-width: 800px) {
+  #timebar #tb-row1 .tb-mid { justify-content: space-between; }
+  /* nowrap: one label wrapping to two lines raised the whole row */
+  /* A grid, not flexbox: the seven steps are fractions of the row, so
+     the last one cannot push past the right edge whatever the device's
+     font metrics make of "+朔望月" — content-based widths fitted here
+     and overflowed on the phone.  The wide button gets a third more
+     room and a size smaller of type, which is what makes its label fit
+     the cell down to a 375 pt screen. */
+  /* Seven equal cells.  The last one used to be given extra width and a
+     longer label, and on the device the label still came out wider than
+     its box and was clipped at the right edge — so every step now has
+     the same width and a label short enough to fit it. */
+  #timebar #tb-row1 .tb-mid {
+    display: grid; grid-template-columns: repeat(7, 1fr);
+    align-items: stretch;
+  }
+  /* The rows fit by construction now, so they do not need to scroll —
+     and a scrolling box clips the border of its last child, which is
+     what made the right-hand edge look cut.  A pixel of room on the
+     right of every row keeps that border inside the screen and keeps
+     the three rows ending in the same place. */
+  #timebar .tb-line { overflow: visible; padding-right: 1px; }
+  #timebar #tb-row1 .t-step { font-size: 12px; padding: 3px 1px;
+                              white-space: nowrap; min-width: 0;
+                              text-align: center; }
+  #timebar #tb-row1 .t-step[data-step="42524"] { font-size: 11px; }
+  #timebar #tb-row1 button, #timebar #tb-row1 select { min-height: 28px; }
+  #timebar #tb-row1 .tb-mid { gap: 4px; }
+  #timebar #tb-row2 #t-speed { flex: 0 0 auto; min-width: 74px; }
+  /* "現在" moved down to the clock line, where it belongs: it is a jump
+     of the clock, not a choice of view.  The first line is then just
+     the two (or three) view buttons, big enough to hit in the dark. */
+  #timebar #tb-row2 .tb-lead { flex: 1 1 auto; min-width: 0; }
+  #timebar #tb-row2 #t-now { flex: 0 0 auto; min-width: 56px;
+                             font-size: 12px; }
+  #timebar #tb-row2 #t-back, #timebar #tb-row2 #t-play { flex: 0 0 auto; }
+}
+
+/* ---------------- top bar, second row ----------------
+ * The panel button moved down here beside the night-vision toggle: the
+ * first line is now three clocks and needs its width, and the controls
+ * that change what the chart shows all sit on one line.  Everything on
+ * that line is set a size smaller so the four buttons and the two site
+ * menus share a phone's width without crowding. */
+#topbar-controls { font-size: 12px; }
+#topbar-controls select, #topbar-controls button { font-size: 12px; }
+#topbar-controls #panel-toggle { flex: 0 0 auto; font-size: 15px;
+                                 line-height: 1; padding: 3px 9px; }
+
+/* The playback arrows are the control people reach for in the dark;
+   they were the two smallest targets on the bar. */
+#t-back, #t-play { font-size: 15px; padding: 3px 10px; }
+
+@media (max-width: 800px) {
+  /* narrow phones (SE-sized and below): the row is six controls wide,
+     so the gaps and the bar's own margins are what give way */
+  #topbar-controls { gap: 4px; }
+  #topbar { padding-left: calc(8px + var(--sa-left));
+            padding-right: calc(8px + var(--sa-right)); }
+  #topbar-controls select { min-width: 0; }
+  #timebar #tb-row2 #t-back,
+  #timebar #tb-row2 #t-play { flex: 0 0 auto; min-width: 52px;
+                              font-size: 17px; }
+}
+
+/* The second row has to hold two site menus and four buttons on a phone
+ * line.  ☰ sits next to 📍 — the two controls that are pressed rather
+ * than read — and the emoji buttons are set small: a colour dot and a
+ * pin read fine at 12px, and the width they give back is what keeps the
+ * row from wrapping. */
+#topbar-controls #panel-toggle { order: 0; }
+#topbar-controls #nv-toggle,
+#topbar-controls #gps-btn { font-size: 12px; padding: 3px 6px;
+                            line-height: 1.1; }
+/* the panel handle is the one control on this row that is pure target
+   rather than label: it gets the size that makes it easy to hit, and
+   the two site menus give up the width for it (they are flexible) */
+#topbar-controls #panel-toggle { font-size: 19px; padding: 1px 10px;
+                                 line-height: 1.15; }
+#topbar-controls #lang-toggle { padding: 3px 6px; }
+
+@media (max-width: 800px) {
+  #topbar-controls #site-group { flex: 1 1 0; min-width: 0; }
+  #topbar-controls #site-region { flex: 1 1 0; min-width: 0; }
+  #topbar-controls #site-select { flex: 1 1 0; min-width: 0; }
+  #topbar-controls #panel-toggle { font-size: 20px; padding: 1px 9px; }
+  #topbar-controls #nv-toggle,
+  #topbar-controls #gps-btn { font-size: 11px; padding: 3px 5px; }
+}
+
+/* A little tighter all round at the foot of the chart: every pixel here
+   is sky, and the compass marks sit at the very edge of the disc. */
+@media (max-width: 800px) {
+  #quickbar { gap: 3px; padding-top: 3px; padding-bottom: 3px; }
+  #qb-toggles { gap: 2px; }
+  #qb-toggles button { padding: 3px 1px; }
+  #timebar { gap: 3px; }
+  #timebar .tb-line { gap: 4px; }
+  #timebar #tb-row1 button, #timebar #tb-row1 select { min-height: 26px; }
+  #timebar #tb-row2 #t-back, #timebar #tb-row2 #t-play { min-height: 30px; }
+  #brand { padding: 2px 0 calc(2px + var(--sa-bottom) * 0.25); }
+}
+
+/* ---- 経緯線 menu (chart bar) ----
+   A pop-up of tick boxes rather than four more chips on a bar that has
+   no room for them; it opens upwards because the bar is at the foot of
+   the screen. */
+/* The menu button shares the row evenly with 全天 and 地平; the pop-up
+   is positioned in viewport coordinates because the bar it lives in
+   scrolls horizontally, and an absolutely positioned child of a
+   scrolling box is clipped by it — on the phone the menu opened where
+   nothing could be seen of it. */
+#grid-menu { position: relative; display: flex; flex: 1 1 0;
+             min-width: 54px; }
+#grid-menu > #grid-btn { width: 100%; }
+#grid-pop {
+  position: fixed; z-index: 30;
+  background: var(--panel); border: 1px solid var(--accent);
+  border-radius: 8px; padding: 6px 8px; min-width: 148px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, .5);
+  display: flex; flex-direction: column; gap: 4px;
+}
+#grid-pop[hidden] { display: none; }
+#grid-pop label { display: flex; align-items: center; gap: 6px;
+                  font-size: 12px; white-space: nowrap; }
+#grid-pop hr { border: 0; border-top: 1px solid var(--line);
+               margin: 2px 0; width: 100%; }
+#grid-btn.on { color: var(--bg); background: var(--accent);
+               border-color: var(--accent); }
+
+/* the third-level menu only exists for the observatory register */
+#site-region[hidden] { display: none; }
+
+/* the closing line of the credits screen */
+.cr-foot { margin-top: 14px; padding-top: 10px;
+           border-top: 1px solid var(--line);
+           font-size: 12px; color: var(--dim); line-height: 1.6; }
+.cr-foot a { color: var(--accent); }
+
+/* the two links in the signature line keep the line's own styling */
+#brand-by { text-decoration: none; }
+#brand-by:hover, #brand-link:hover { opacity: .8; }

@@ -1,0 +1,917 @@
+{
+ "version": 1,
+ "source": "Wikipedia (en / ja)",
+ "licence": "CC BY-SA 4.0",
+ "licence_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+ "note": "opening paragraph of each article, trimmed",
+ "objects": {
+  "M1": {
+   "desc_en": "The Crab Nebula (catalogue designations M1, NGC 1952, Taurus A) is a supernova remnant and pulsar wind nebula in the constellation of Taurus.",
+   "article_en": "Messier 1",
+   "desc_ja": "かに星雲（かにせいうん、Crab Nebula 、M1、NGC 1952）は、おうし座にある超新星残骸で、地球からの距離は約7200光年。典型的なパルサー星雲で、中心部には「かにパルサー」と呼ばれるパルサーの存在が確認されており、現在も膨張を続けている。 この星雲の元となった超新星爆発が1054年に出現したことが、中国や日本の文献に残されている。",
+   "article_ja": "NGC 1952"
+  },
+  "M2": {
+   "desc_en": "Messier 2 or M2 (also designated NGC 7089) is a globular cluster in the constellation Aquarius, five degrees north of the star Beta Aquarii. It was discovered by Jean-Dominique Maraldi in 1746, and is one of the largest known globular clusters.",
+   "article_en": "Messier 2",
+   "desc_ja": "M2 (NGC 7089) は、みずがめ座にある球状星団。距離37500光年、直径は約175光年。およそ15万個の星からなる。星団の年齢はおよそ130億歳と推定されている。",
+   "article_ja": "NGC 7089"
+  },
+  "M3": {
+   "desc_en": "Messier 3 (M3; also NGC 5272) is a globular cluster located 33.9 thousand light years from Earth in the northern constellation of Canes Venatici. It is one of the largest and brightest globular clusters discovered with around 500,000 stars.",
+   "article_en": "Messier 3",
+   "desc_ja": "M3 (NGC 5272) は、りょうけん座にある球状星団である。シャルル・メシエが彗星に似た天体をカタログにまとめる契機となった天体とされる。",
+   "article_ja": "NGC 5272"
+  },
+  "M4": {
+   "desc_en": "Messier 4 or M4 (also known as NGC 6121 or the Spider Globular Cluster) is a globular cluster in the constellation of Scorpius. It was discovered by Philippe Loys de Chéseaux in 1745 and catalogued by Charles Messier in 1764.",
+   "article_en": "Messier 4",
+   "desc_ja": "M4（NGC 6121）は、さそり座にある球状星団である。",
+   "article_ja": "NGC 6121"
+  },
+  "M5": {
+   "desc_en": "Messier 5 or M5 (also designated NGC 5904) is a globular cluster in the constellation Serpens. It was discovered by Gottfried Kirch in 1702.",
+   "article_en": "Messier 5",
+   "desc_ja": "M5 (NGC 5904) は、へび座にある球状星団である。",
+   "article_ja": "NGC 5904"
+  },
+  "M6": {
+   "desc_en": "The Butterfly Cluster (cataloged as Messier 6 or M6, and as NGC 6405) is an open cluster of stars in the southern constellation of Scorpius. Its name derives from the resemblance of its shape to a butterfly.",
+   "article_en": "Messier 6",
+   "desc_ja": "M6 (NGC 6405) は、さそり座にある散開星団。",
+   "article_ja": "NGC 6405"
+  },
+  "M7": {
+   "desc_en": "Messier 7 or M7, also designated NGC 6475 and sometimes known as Ptolemy's Cluster, is an open cluster of stars in the constellation of Scorpius. The cluster is easily detectable with the naked eye, close to the \"stinger\" of Scorpius.",
+   "article_en": "Messier 7",
+   "desc_ja": "M7 (NGC 6475) は、さそり座にある散開星団 。古くから知られており、プトレマイオス（トレミー）の記述も残ることから「トレミー星団」とも呼ばれる。",
+   "article_ja": "NGC 6475"
+  },
+  "M8": {
+   "desc_en": "The Lagoon Nebula (catalogued as Messier 8 or M8, NGC 6523, Sharpless 25, RCW 146, and Gum 72) is a giant emission nebula with an H II region located in the constellation Sagittarius.",
+   "article_en": "Messier 8",
+   "desc_ja": "干潟星雲 (ひがたせいうん、M8、NGC 6523) は、いて座にある散光星雲（輝線星雲）である。散光星雲を南北に横切る帯状の暗黒星雲が存在し、その姿が干潟に似ていることからその名が付けられている。星雲と同じ位置に散開星団 NGC 6530 も重なって見える。",
+   "article_ja": "NGC 6523"
+  },
+  "M9": {
+   "desc_en": "Messier 9 or M9 (also designated NGC 6333) is a globular cluster in the constellation of Ophiuchus. It is positioned in the southern part of the constellation to the southwest of Eta Ophiuchi, and lies atop a dark cloud of dust designated Barnard 64.",
+   "article_en": "Messier 9",
+   "desc_ja": "M9 (NGC 6333) は、へびつかい座にある球状星団 。距離約26000光年。1764年シャルル・メシエが発見し「星を含まない星雲。円形で暗い」と記述している。星団として分離できなかった。NGCカタログでは「明るく、丸く、中心で星が非常に密集しており、よく分解され、14等の星からなる球状星団」としている。 小さい割に明るく密集している星団で、存在そのものは双眼鏡でも確認できる。口径20cmの望遠鏡で周辺の星が分離しはじめる。また、M9の東西には暗黒星雲のバーナード64が広がっている。",
+   "article_ja": "NGC 6333"
+  },
+  "M10": {
+   "desc_en": "Messier 10 or M10 (also designated NGC 6254) is a globular cluster of stars in the equatorial constellation of Ophiuchus.",
+   "article_en": "Messier 10",
+   "desc_ja": "M10 (NGC 6254) は、へびつかい座にある球状星団 。距離14300光年。1764年シャルル・メシエが発見し「へびつかい座のベルトで見つかった、星を含まない星雲。… 美しく円形をした星雲。単純な3フィートの屈折望遠鏡でかろうじて見ることができる」と記している。初めて星団に分離したのはウィリアム・ハーシェルで、「きれいな星団で、ひどく密集している。M53に似る」としている。 直径は約83光年。密集度の高い、小口径望遠鏡で楽しめる球状星団の一つである。",
+   "article_ja": "NGC 6254"
+  },
+  "M11": {
+   "desc_en": "The Wild Duck Cluster (also known as Messier 11, or NGC 6705) is an open cluster of stars in the constellation Scutum (the Shield). It was discovered by Gottfried Kirch in 1681. Charles Messier included it in his catalogue of diffuse objects in 1764.",
+   "article_en": "Messier 11",
+   "desc_ja": "M11 (NGC 6705) は、たて座にある散開星団。",
+   "article_ja": "NGC 6705"
+  },
+  "M12": {
+   "desc_en": "Messier 12 or M 12 (also designated NGC 6218) is a globular cluster in the constellation of Ophiuchus. It was discovered by the French astronomer Charles Messier on May 30, 1764, who described it as a \"nebula without stars\".",
+   "article_en": "Messier 12",
+   "desc_ja": "M12 (NGC 6218) は、へびつかい座にある球状星団。距離16000光年。1764年シャルル・メシエが発見した。メシエはM12を星雲であるとして「星はない。まるく微か」と記している。1783年ウィリアム・ハーシェルによって初めて星に分解された。 M12は北に家やロケットのような形の星の並びがあり、V字型に縁取られている。その後ろにロケットからはき出される煙のような形の明るい星々を、風にたなびく吹き流しのように連ねている。",
+   "article_ja": "NGC 6218"
+  },
+  "M13": {
+   "desc_en": "Messier 13, or M13 (also designated NGC 6205 and sometimes called the Great Globular Cluster in Hercules, the Hercules Globular Cluster, or the Great Hercules Cluster), is a globular cluster of several hundred thousand stars in the constellation of Hercules.",
+   "article_en": "Messier 13",
+   "desc_ja": "M13 (NGC 6205) は、ヘルクレス座にある球状星団。「ヘルクレス座球状星団」 (Hercules Globular Cluster、Great globular cluster in Hercules ）とも呼ばれる。",
+   "article_ja": "NGC 6205"
+  },
+  "M14": {
+   "desc_en": "Messier 14 (also known as M14 or NGC 6402) is a globular cluster of stars in the constellation Ophiuchus. It was discovered by Charles Messier in 1764. At a distance of about 30,000 light-years, M14 contains several hundred thousand stars.",
+   "article_en": "Messier 14",
+   "desc_ja": "M14（NGC 6402）は、へびつかい座にある球状星団。",
+   "article_ja": "NGC 6402"
+  },
+  "M15": {
+   "desc_en": "Messier 15 or M15 (also designated NGC 7078 and sometimes known as the Great Pegasus Cluster) is a globular cluster in the constellation Pegasus.",
+   "article_en": "Messier 15"
+  },
+  "M16": {
+   "desc_en": "The Eagle Nebula (catalogued as Messier 16 or M16, and as NGC 6611, and also known as the Star Queen Nebula) is a young open cluster of stars in the constellation Serpens, discovered by Jean-Philippe de Cheseaux in 1745–46.",
+   "article_en": "Messier 16",
+   "desc_ja": "わし星雲（わしせいうん、M16、NGC 6611、IC 4703）は、へび座に位置する散開星団と散光星雲の複合した天体である。散開星団の背景に散光星雲が広がっており、メシエ天体としての番号M16は散開星団の方に付けられた番号である。散光星雲にはIC 4703という番号が付けられている。",
+   "article_ja": "NGC 6611"
+  },
+  "M17": {
+   "desc_en": "The Omega Nebula is an H II region in the constellation Sagittarius. It was discovered by Philippe Loys de Chéseaux in 1745. Charles Messier catalogued it in 1764.",
+   "article_en": "Messier 17",
+   "desc_ja": "オメガ星雲 (M17、NGC 6618) は、いて座に位置する散光星雲である。",
+   "article_ja": "NGC 6618"
+  },
+  "M18": {
+   "desc_en": "Messier 18 or M18, also designated NGC 6613 and sometimes known as the Black Swan Cluster, is an open cluster of stars in the constellation Sagittarius. It was discovered by Charles Messier in 1764 and included in his list of comet-like objects.",
+   "article_en": "Messier 18",
+   "desc_ja": "M18 (NGC 6613) は、いて座にある散開星団。",
+   "article_ja": "NGC 6613"
+  },
+  "M19": {
+   "desc_en": "Messier 19 or M19 (also designated NGC 6273) is a globular cluster in the constellation Ophiuchus. It was discovered by Charles Messier on June 5, 1764 and added to his catalogue of comet-like objects that same year.",
+   "article_en": "Messier 19",
+   "desc_ja": "M19 (NGC 6273) は、へびつかい座にある球状星団。",
+   "article_ja": "NGC 6273"
+  },
+  "M20": {
+   "desc_en": "The Trifid Nebula (catalogued as Messier 20 or M20 and as NGC 6514) is an H II region in the north-west of Sagittarius in a star-forming region in the Milky Way's Scutum–Centaurus Arm. It was discovered by Charles Messier on June 5, 1764.",
+   "article_en": "Messier 20",
+   "desc_ja": "三裂星雲（さんれつせいうん、M20、NGC 6514）は、いて座にある散光星雲。",
+   "article_ja": "NGC 6514"
+  },
+  "M21": {
+   "desc_en": "Messier 21 or M21, also designated NGC 6531 or Webb's Cross, is an open cluster of stars located to the north-east of Sagittarius in the night sky, close to the Messier objects M20 to M25 (except M24).",
+   "article_en": "Messier 21",
+   "desc_ja": "M21 (NGC 6531) は、いて座にある散開星団。",
+   "article_ja": "NGC 6531"
+  },
+  "M22": {
+   "desc_en": "Messier 22 or M22, also known as NGC 6656 or the Great Sagittarius Cluster, is an elliptical globular cluster of stars in the constellation Sagittarius, near the Galactic bulge region. It is one of the brightest globulars visible in the night sky.",
+   "article_en": "Messier 22",
+   "desc_ja": "M22 (NGC 6656) は、いて座にある球状星団。",
+   "article_ja": "NGC 6656"
+  },
+  "M23": {
+   "desc_en": "Messier 23, also known as NGC 6494, is an open cluster of stars in the northwest of the southern constellation of Sagittarius. It was discovered by Charles Messier in 1764. It can be found in good conditions with binoculars or a modestly sized telescope.",
+   "article_en": "Messier 23",
+   "desc_ja": "M23 (NGC 6494) は、いて座にある散開星団。",
+   "article_ja": "NGC 6494"
+  },
+  "M24": {
+   "desc_en": "The Small Sagittarius Star Cloud (also known as Messier 24 and IC 4715) is a star cloud in the constellation of Sagittarius approximately 600 light years wide, which was catalogued by Charles Messier in 1764.",
+   "article_en": "Messier 24"
+  },
+  "M25": {
+   "desc_en": "Messier 25, also known as IC 4725, is an open cluster of stars in the southern constellation of Sagittarius.",
+   "article_en": "Messier 25"
+  },
+  "M26": {
+   "desc_en": "Messier 26, also known as NGC 6694, is an open cluster of stars in the southern constellation of Scutum. It was discovered by Charles Messier in 1764.",
+   "article_en": "Messier 26",
+   "desc_ja": "M26 (NGC 6694) は、たて座にある散開星団。",
+   "article_ja": "NGC 6694"
+  },
+  "M27": {
+   "desc_en": "The Dumbbell Nebula (also known as the Apple Core Nebula, Messier 27, and NGC 6853) is a planetary nebula (nebulosity surrounding a white dwarf) in the constellation Vulpecula, at a distance of about 1360 light-years.",
+   "article_en": "Messier 27",
+   "desc_ja": "亜鈴状星雲（あれいじょうせいうん、M27, NGC 6853、Dumbbell Nebula）は、こぎつね座にある惑星状星雲である。地球からの距離は約1,235光年。その形が鉄亜鈴に似ていることから名づけられている。",
+   "article_ja": "NGC 6853"
+  },
+  "M28": {
+   "desc_en": "Messier 28 or M28, also known as NGC 6626, is a globular cluster of stars in the center-west of Sagittarius. It was discovered by French astronomer Charles Messier in 1764. He briefly described it as a \"nebula containing no star...",
+   "article_en": "Messier 28",
+   "desc_ja": "M28 (NGC 6626) はいて座にある球状星団。",
+   "article_ja": "NGC 6626"
+  },
+  "M29": {
+   "desc_en": "Messier 29 or M29, also known as NGC 6913 or the Cooling Tower Cluster, is a quite small, bright open cluster of stars just south of the central bright star Gamma Cygni of a northerly zone of the sky, Cygnus.",
+   "article_en": "Messier 29",
+   "desc_ja": "M29（NGC 6913）は、はくちょう座にある散開星団。",
+   "article_ja": "NGC 6913"
+  },
+  "M30": {
+   "desc_en": "Messier 30 (also known as M30, NGC 7099, or the Jellyfish Cluster) is a globular cluster of stars in the southeast of the southern constellation of Capricornus, at about the declination of the Sun when the latter is at December solstice.",
+   "article_en": "Messier 30"
+  },
+  "M31": {
+   "desc_en": "The Andromeda Galaxy is a barred spiral galaxy and is the nearest major galaxy to the Milky Way. It was originally named the Andromeda Nebula and is cataloged as Messier 31, M31, and NGC 224.",
+   "article_en": "Messier 31",
+   "desc_ja": "アンドロメダ銀河（アンドロメダぎんが、M31、NGC 224）は、アンドロメダ座に位置する地球から目視可能な渦巻銀河である。さんかく座銀河 (M33) 、銀河系（天の川銀河）、大マゼラン雲、小マゼラン雲などとともに局所銀河群を構成する。",
+   "article_ja": "NGC 224"
+  },
+  "M32": {
+   "desc_en": "Messier 32 (also known as M32 and NGC 221) is a dwarf \"early-type\" galaxy about 2,490,000 light-years (760,000 pc) from the Solar System, appearing in the constellation Andromeda.",
+   "article_en": "Messier 32",
+   "desc_ja": "M32 (NGC 221) は、アンドロメダ座にある楕円銀河。アンドロメダ銀河 (M31) の伴銀河であり、局所銀河群に属する。",
+   "article_ja": "NGC 221"
+  },
+  "M33": {
+   "desc_en": "The Triangulum Galaxy is a spiral galaxy 2.878 million light-years (ly) from Earth in the constellation Triangulum. It is catalogued as Messier 33 or NGC 598.",
+   "article_en": "Messier 33",
+   "desc_ja": "さんかく座銀河（さんかくざぎんが、M33, NGC 598）は、さんかく座に位置する渦巻銀河。",
+   "article_ja": "NGC 598"
+  },
+  "M34": {
+   "desc_en": "Messier 34 (also known as M34, NGC 1039, or the Spiral Cluster) is a large and relatively near open cluster in Perseus.",
+   "article_en": "Messier 34",
+   "desc_ja": "M34（NGC 1039）は、ペルセウス座にある散開星団。",
+   "article_ja": "NGC 1039"
+  },
+  "M35": {
+   "desc_en": "Messier 35 or M35, also known as NGC 2168 or the Shoe-Buckle Cluster, is a relatively close open cluster of stars in the west of Gemini, at about the declination of the Sun when the latter is at June solstice.",
+   "article_en": "Messier 35",
+   "desc_ja": "M35 (NGC 2168) はふたご座にある散開星団。",
+   "article_ja": "NGC 2168"
+  },
+  "M36": {
+   "desc_en": "Messier 36 or M36, also known as NGC 1960 or the Pinwheel Cluster, is an open cluster of stars in the somewhat northern Auriga constellation. It was discovered by Giovanni Batista Hodierna before 1654, who described it as a nebulous patch.",
+   "article_en": "Messier 36",
+   "desc_ja": "M36（NGC 1960）は、ぎょしゃ座にある散開星団である。",
+   "article_ja": "NGC 1960"
+  },
+  "M37": {
+   "desc_en": "Messier 37 (also known as M37, NGC 2099, or the Salt and Pepper Cluster) is the brightest and richest open cluster in the constellation Auriga. It was discovered by the Italian astronomer Giovanni Battista Hodierna before 1654.",
+   "article_en": "Messier 37",
+   "desc_ja": "M37 (NGC 2099) はぎょしゃ座にある散開星団。",
+   "article_ja": "NGC 2099"
+  },
+  "M38": {
+   "desc_en": "Messier 38 or M38, also known as NGC 1912 or Starfish Cluster, is an open cluster of stars in the constellation of Auriga. It was discovered by Giovanni Batista Hodierna before 1654 and independently found by Guillaume Le Gentil in 1749.",
+   "article_en": "Messier 38",
+   "desc_ja": "M38 (NGC 1912) はぎょしゃ座にある散開星団。",
+   "article_ja": "NGC 1912"
+  },
+  "M39": {
+   "desc_en": "Messier 39 or M39, also known as NGC 7092, is an open cluster of stars in the constellation of Cygnus, sometimes referred to as the Pyramid Cluster. It is positioned two degrees south of the star Pi Cygni and around 9° east-northeast of Deneb.",
+   "article_en": "Messier 39"
+  },
+  "M40": {
+   "desc_en": "Winnecke 4 (also known as Messier 40 or WNC 4) is an optical double star consisting of two unrelated stars in a northerly zone of the sky, Ursa Major.",
+   "article_en": "Messier 40",
+   "desc_ja": "M40は、おおぐま座の離角51.7秒角の二重星である。WNC 4と同定され、その説が支持されている。",
+   "article_ja": "Winnecke 4"
+  },
+  "M41": {
+   "desc_en": "Messier 41 (also known as M41 or NGC 2287) is an open cluster in the constellation Canis Major. Located approximately four degrees south of Sirius, it forms a roughly equilateral triangle with Sirius and Nu2 Canis Majoris, visible together in binoculars.",
+   "article_en": "Messier 41",
+   "desc_ja": "M41 (NGC 2287) はおおいぬ座にある散開星団。",
+   "article_ja": "NGC 2287"
+  },
+  "M42": {
+   "desc_en": "The Orion Nebula (also known as Messier 42, M42, or NGC 1976) is a diffuse nebula in the Milky Way situated south of Orion's Belt in the constellation of Orion, and is known as the middle \"star\" in the \"sword\" of Orion.",
+   "article_en": "Messier 42",
+   "desc_ja": "オリオン大星雲（オリオンだいせいうん、M42、NGC 1976）は、オリオン座の小三つ星付近に広がる、天の川銀河内にある散光星雲である。",
+   "article_ja": "NGC 1976"
+  },
+  "M43": {
+   "desc_en": "Messier 43 or M43, also known as De Mairan's Nebula and NGC 1982, is a star-forming nebula with a prominent H II region in the equatorial constellation of Orion.",
+   "article_en": "Messier 43",
+   "desc_ja": "M43 (NGC 1982) はオリオン大星雲 (M42) のすぐ北側に広がる小さく暗い円形の散光星雲。",
+   "article_ja": "NGC 1982"
+  },
+  "M44": {
+   "desc_en": "The Beehive Cluster (also known as Praesepe (Latin for \"manger\", \"cot\" or \"crib\"), M44, NGC 2632, or Cr 189) is an open cluster in the constellation Cancer.",
+   "article_en": "Messier 44",
+   "desc_ja": "プレセペ星団（プレセペせいだん、Praesepe 、M44、NGC 2632）はかに座にある散開星団である。",
+   "article_ja": "NGC 2632"
+  },
+  "M45": {
+   "desc_en": "The Pleiades ( PLEE-ə-deez, PLAY-, PLY-), also known as Seven Sisters and Messier 45 (M45), is an asterism of an open star cluster containing young B-type stars in the northwest of the constellation Taurus.",
+   "article_en": "Messier 45",
+   "desc_ja": "プレアデス、プレイアデス、プレーアデス (Πλειάδες, Pleiades, Pleïades, Pléiades, Pléïades)",
+   "article_ja": "Pleiades"
+  },
+  "M46": {
+   "desc_en": "Messier 46 or M46, also known as NGC 2437, is an open cluster of stars in the slightly southern constellation of Puppis. It was discovered by Charles Messier in 1771.",
+   "article_en": "Messier 46",
+   "desc_ja": "M46 (NGC 2437) はとも座にある散開星団。",
+   "article_ja": "NGC 2437"
+  },
+  "M47": {
+   "desc_en": "Messier 47 (M47 or NGC 2422), also known as NGC 2478 is an open cluster in the southern constellation of Puppis. It was discovered by Giovanni Batista Hodierna before 1654 and re-discovered by Charles Messier in 1771.",
+   "article_en": "Messier 47",
+   "desc_ja": "M47（NGC 2422）はとも座にある散開星団である。",
+   "article_ja": "NGC 2422"
+  },
+  "M48": {
+   "desc_en": "Messier 48 or M48, also known as NGC 2548, is an open cluster of stars in the equatorial constellation of Hydra. It sits near Hydra's westernmost limit with Monoceros, about 18° 34′ to the east and slightly south of Hydra's brightest star, Alphard.",
+   "article_en": "Messier 48",
+   "desc_ja": "M48（NGC 2548）は、うみへび座にある散開星団である。",
+   "article_ja": "NGC 2548"
+  },
+  "M49": {
+   "desc_en": "Messier 49 (also known as M49 or NGC 4472) is a giant elliptical galaxy about 56 million light-years away in the equatorial constellation of Virgo. This galaxy was discovered by astronomer Charles Messier in 1777.",
+   "article_en": "Messier 49",
+   "desc_ja": "M49 (NGC 4472) はおとめ座にあるややつぶれた楕円銀河である。",
+   "article_ja": "NGC 4472"
+  },
+  "M50": {
+   "desc_en": "Messier 50 or M 50, also known as NGC 2323 or the Heart-shaped Cluster, is an open cluster of stars in the constellation Monoceros. It was recorded by G. D.",
+   "article_en": "Messier 50",
+   "desc_ja": "M50 (NGC 2323) はいっかくじゅう座にある散開星団。",
+   "article_ja": "NGC 2323"
+  },
+  "M51": {
+   "desc_en": "The Whirlpool Galaxy, also known as Messier 51a (M51a) or NGC 5194, is an interacting grand-design spiral galaxy with a Seyfert 2 active galactic nucleus.",
+   "article_en": "Messier 51",
+   "desc_ja": "子持ち銀河（こもちぎんが、M51、NGC 5194）はりょうけん座にある渦巻銀河である。渦巻銀河NGC 5194から4' 35\" 離れたすぐ近くに伴銀河NGC 5195があることが名前の由来であり、伴銀河を含めて子持ち銀河と呼ぶ場合もある（このときNGC 5194をM51A、NGC 5195をM51Bと表記することがある）。直径はおよそ10万光年。",
+   "article_ja": "NGC 5194"
+  },
+  "M52": {
+   "desc_en": "Messier 52 or M52, also known as NGC 7654 or the Scorpion Cluster, is an open cluster of stars in the highly northern constellation of Cassiopeia. It was discovered by Charles Messier in 1774. It can be seen from Earth under a good night sky with binoculars.",
+   "article_en": "Messier 52",
+   "desc_ja": "M52（NGC 7654） はカシオペヤ座にある散開星団。",
+   "article_ja": "NGC 7654"
+  },
+  "M53": {
+   "desc_en": "Messier 53 (also known as M53 or NGC 5024) is a globular cluster in the Coma Berenices constellation. It was discovered by Johann Elert Bode in 1775.",
+   "article_en": "Messier 53",
+   "desc_ja": "M53は、かみのけ座にある球状星団である。",
+   "article_ja": "NGC 5024"
+  },
+  "M54": {
+   "desc_en": "Messier 54 (also known as M54 or NGC 6715) is a globular cluster in the constellation Sagittarius. It was discovered by Charles Messier in 1778 and then included in his catalog of objects that could be mistaken for comets.",
+   "article_en": "Messier 54",
+   "desc_ja": "M54 (NGC 6715) はいて座にある球状星団。",
+   "article_ja": "NGC 6715"
+  },
+  "M55": {
+   "desc_en": "Messier 55 (also known as M55, NGC 6809, or Specter Cluster) is a globular cluster in the south of the constellation Sagittarius. It was discovered by Nicolas Louis de Lacaille in 1752 while observing from what today is South Africa.",
+   "article_en": "Messier 55",
+   "desc_ja": "M55 (NGC 6809) はいて座にある球状星団。",
+   "article_ja": "NGC 6809"
+  },
+  "M56": {
+   "desc_en": "Messier 56 (also known as M56 or NGC 6779) is a globular cluster in the constellation Lyra. It was discovered by Charles Messier in 1779. It is angularly found about midway between Albireo (Beta (β) Cygni) and Sulafat (Gamma (γ) Lyrae).",
+   "article_en": "Messier 56",
+   "desc_ja": "M56（NGC 6779）はこと座にある球状星団である。",
+   "article_ja": "NGC 6779"
+  },
+  "M57": {
+   "desc_en": "The Ring Nebula is a planetary nebula in the northern constellation of Lyra, about mid-way between the prominent stars Beta and Gamma Lyrae. It is also catalogued as Messier 57, M57 and NGC 6720. The nebula was discovered by Charles Messier in 1779.",
+   "article_en": "Messier 57",
+   "desc_ja": "環状星雲（Ring Nebula 、M57、NGC 6720）はこと座にある惑星状星雲である。地球からの距離は約2600光年。リング状の特徴的な姿をしており、惑星状星雲の中では最も有名な天体の一つで、「リング星雲」「ドーナツ星雲」の別名がある。惑星状星雲としては亜鈴状星雲 (M27) に次いで発見された。",
+   "article_ja": "NGC 6720"
+  },
+  "M58": {
+   "desc_en": "Messier 58 (also known as M58 and NGC 4579) is an intermediate barred spiral galaxy with a weak inner ring structure located within the constellation Virgo, approximately 68 million light-years away from Earth.",
+   "article_en": "Messier 58",
+   "desc_ja": "M58（NGC 4579）はおとめ座にある棒渦巻銀河である。",
+   "article_ja": "NGC 4579"
+  },
+  "M59": {
+   "desc_en": "Messier 59 or M59, also known as NGC 4621, is an elliptical galaxy in the equatorial constellation of Virgo. It is a member of the Virgo Cluster, with the nearest fellow member 8′ away and around 5 magnitudes fainter.",
+   "article_en": "Messier 59",
+   "desc_ja": "M59（NGC 4621）はおとめ座にある楕円銀河。",
+   "article_ja": "NGC 4621"
+  },
+  "M60": {
+   "desc_en": "Messier 60 or M60, also known as NGC 4649, is an elliptical galaxy approximately 57 million light-years away in the equatorial constellation of Virgo. Together with NGC 4647, it forms a pair known as Arp 116.",
+   "article_en": "Messier 60",
+   "desc_ja": "M60（NGC 4649）はおとめ座の楕円銀河である。",
+   "article_ja": "NGC 4649"
+  },
+  "M61": {
+   "desc_en": "Messier 61 (also known as M61, NGC 4303, or the Swelling Spiral Galaxy) is an intermediate barred spiral galaxy in the Virgo Cluster of galaxies.",
+   "article_en": "Messier 61",
+   "desc_ja": "M61（NGC 4303）はおとめ座の渦巻銀河である。",
+   "article_ja": "NGC 4303"
+  },
+  "M62": {
+   "desc_en": "Messier 62 or M62, also known as NGC 6266 or the Flickering Globular Cluster, is a globular cluster of stars located in the south of the constellation of Ophiuchus.",
+   "article_en": "Messier 62",
+   "desc_ja": "M62 (NGC 6266) はへびつかい座にある球状星団。",
+   "article_ja": "NGC 6266"
+  },
+  "M63": {
+   "desc_en": "Messier 63 or M63, also known as NGC 5055 or the seldom-used Sunflower Galaxy, is a spiral galaxy in the northern constellation of Canes Venatici.",
+   "article_en": "Messier 63",
+   "desc_ja": "M63 (NGC 5055) はりょうけん座にある渦巻銀河。ひまわり銀河という通称で知られる。",
+   "article_ja": "NGC 5055"
+  },
+  "M64": {
+   "desc_en": "The Black Eye Galaxy (also called Sleeping Beauty Galaxy or Evil Eye Galaxy and designated Messier 64, M64, or NGC 4826) is a relatively isolated spiral galaxy 17 million light-years away in the constellation of Coma Berenices.",
+   "article_en": "Messier 64",
+   "desc_ja": "黒眼銀河（くろめぎんが、M64, NGC 4826）は、かみのけ座に存在する渦巻銀河。",
+   "article_ja": "NGC 4826"
+  },
+  "M65": {
+   "desc_en": "Messier 65 (also known as NGC 3623) is an intermediate spiral galaxy about 35 million light-years away in the constellation Leo, within its highly equatorial southern half. It was discovered by Charles Messier in 1780.",
+   "article_en": "Messier 65",
+   "desc_ja": "M65（NGC 3623）は、しし座にある渦巻銀河である。",
+   "article_ja": "NGC 3623"
+  },
+  "M66": {
+   "desc_en": "Messier 66 or M66, also known as NGC 3627, is an intermediate spiral galaxy located around 31 million light years from Earth in the equatorial half of the Leo constellation.",
+   "article_en": "Messier 66",
+   "desc_ja": "M66（NGC 3627）は、しし座にある棒渦巻銀河である。",
+   "article_ja": "NGC 3627"
+  },
+  "M67": {
+   "desc_en": "Messier 67 (also known as M67 or NGC 2682) and sometimes called the King Cobra Cluster or the Golden Eye Cluster is an open cluster in the southern, equatorial half of Cancer. It was discovered by Johann Gottfried Koehler in 1779.",
+   "article_en": "Messier 67",
+   "desc_ja": "M67（NGC 2682）はかに座にある散開星団である。",
+   "article_ja": "NGC 2682"
+  },
+  "M68": {
+   "desc_en": "Messier 68 (also known as M68 or NGC 4590) is a globular cluster found in the east south-east of Hydra, away from its precisely equatorial part. It was discovered by Charles Messier in 1780.",
+   "article_en": "Messier 68",
+   "desc_ja": "M68（NGC 4590）は、うみへび座にある球状星団。",
+   "article_ja": "NGC 4590"
+  },
+  "M69": {
+   "desc_en": "Messier 69 or M69, also known NGC 6637, and NGC 6634, is a globular cluster in the southern constellation of Sagittarius. It can be found 2.5° to the northeast of the star Epsilon Sagittarii and is dimly visible in 50 mm aperture binoculars.",
+   "article_en": "Messier 69",
+   "desc_ja": "M69（NGC 6637）はいて座にある球状星団である。",
+   "article_ja": "NGC 6637"
+  },
+  "M70": {
+   "desc_en": "Messier 70 or M70, also known as NGC 6681, is a globular cluster of stars to be found in the south of Sagittarius. It was discovered by Charles Messier in 1780. The famous comet Hale–Bopp was discovered near this cluster in 1995.",
+   "article_en": "Messier 70",
+   "desc_ja": "M70（NGC 6681）はいて座にある球状星団である。",
+   "article_ja": "NGC 6681"
+  },
+  "M71": {
+   "desc_en": "Messier 71 (also known as M71, NGC 6838, or the Angelfish Cluster) is a globular cluster in the small northern constellation Sagitta.",
+   "article_en": "Messier 71",
+   "desc_ja": "M71（NGC 6838）はや座にある球状星団である。",
+   "article_ja": "NGC 6838"
+  },
+  "M72": {
+   "desc_en": "Messier 72 (also known as M72 or NGC 6981) is a globular cluster in the south west of the southern constellation of Aquarius.",
+   "article_en": "Messier 72",
+   "desc_ja": "M72（NGC 6981）はみずがめ座にある球状星団である。",
+   "article_ja": "NGC 6981"
+  },
+  "M73": {
+   "desc_en": "Messier 73 (M73, also known as NGC 6994) is an asterism of four stars in the constellation Aquarius which was long thought to be a small open cluster. It lies several arcminutes east of globular cluster M72.",
+   "article_en": "Messier 73",
+   "desc_ja": "M73（NGC 6994）はみずがめ座にある星群である。",
+   "article_ja": "NGC 6994"
+  },
+  "M74": {
+   "desc_en": "Messier 74 (also known as NGC 628 and Phantom Galaxy) is a large spiral galaxy in the equatorial constellation Pisces. It is about 32 million light-years away from Earth.",
+   "article_en": "Messier 74",
+   "desc_ja": "M74 (NGC 628)、通称ファントム銀河(英: Phantom Galaxy) は、うお座にある渦巻銀河である。メシエ天体の中でも見えづらいものの一つである。",
+   "article_ja": "NGC 628"
+  },
+  "M75": {
+   "desc_en": "Messier 75 or M75, also known as NGC 6864, is a globular cluster of stars in the southern constellation Sagittarius. It was discovered by Pierre Méchain in 1780 and included in Charles Messier's catalog of comet-like objects that same year.",
+   "article_en": "Messier 75",
+   "desc_ja": "M75（NGC 6864）はいて座にある球状星団である。",
+   "article_ja": "NGC 6864"
+  },
+  "M76": {
+   "desc_en": "The Little Dumbbell Nebula, also known as Messier 76, NGC 650/651, the Barbell Nebula, or the Cork Nebula, is a planetary nebula in the northern constellation of Perseus.",
+   "article_en": "Messier 76",
+   "desc_ja": "M76（NGC 650、651）は、太陽系から見てペルセウス座の方向約2,500光年の距離にある惑星状星雲。小亜鈴状星雲（しょうあれいじょうせいうん、英: Little Dumbbell Nebula）とも呼ばれる。",
+   "article_ja": "NGC 650"
+  },
+  "M77": {
+   "desc_en": "Messier 77 (M77), also known as NGC 1068 or the Squid Galaxy, is a barred spiral galaxy in the constellation Cetus. It is 35 million light-years (11 Mpc) away from Earth, and was discovered by Pierre Méchain in 1780, who originally described it as a nebula.",
+   "article_en": "Messier 77",
+   "desc_ja": "M77 (NGC 1068) はくじら座にある渦巻銀河である。",
+   "article_ja": "NGC 1068"
+  },
+  "M78": {
+   "desc_en": "Messier 78 (also known as M78 or NGC 2068) is a reflection nebula in the constellation Orion. It is the brightest diffuse reflection nebula in a group that includes NGC 2064, NGC 2067, and NGC 2071, all part of the Orion B molecular cloud complex.",
+   "article_en": "Messier 78",
+   "desc_ja": "M78（NGC 2068）はオリオン座にある散光星雲（反射星雲）である。",
+   "article_ja": "NGC 2068"
+  },
+  "M79": {
+   "desc_en": "Messier 79 (also known as M79 or NGC 1904) is a globular cluster in the southern constellation Lepus. It was discovered by Pierre Méchain in 1780 and is about 42,000 light-years away from Earth and 60,000 light years from the Galactic Center.",
+   "article_en": "Messier 79",
+   "desc_ja": "M79（NGC 1904）はうさぎ座にある球状星団である。",
+   "article_ja": "NGC 1904"
+  },
+  "M80": {
+   "desc_en": "Messier 80 (also known as M80 or NGC 6093) is a globular cluster located approximately 32,600 light-years (10,000 pc) from Earth in the constellation Scorpius.",
+   "article_en": "Messier 80",
+   "desc_ja": "M80 (NGC 6093) はさそり座にある球状星団。",
+   "article_ja": "NGC 6093"
+  },
+  "M81": {
+   "desc_en": "Messier 81 (also known as NGC 3031 or Bode's Galaxy) is a grand design spiral galaxy about 12 million light-years away in the constellation Ursa Major. It has a D25 isophotal diameter of 29.44 kiloparsecs (96,000 light-years).",
+   "article_en": "Messier 81",
+   "desc_ja": "M81 (NGC 3031) は、おおぐま座にある渦巻銀河。",
+   "article_ja": "NGC 3031"
+  },
+  "M82": {
+   "desc_en": "Messier 82 (also known as NGC 3034, Cigar Galaxy or M82) is a starburst galaxy approximately 12 million light-years away in the constellation Ursa Major.",
+   "article_en": "Messier 82",
+   "desc_ja": "M82 (NGC 3034) は、おおぐま座にある不規則銀河。距離は1200万光年。",
+   "article_ja": "葉巻銀河"
+  },
+  "M83": {
+   "desc_en": "Messier 83 or M83, also known as the Southern Pinwheel Galaxy and NGC 5236, is a barred spiral galaxy approximately 15 million light-years away from Earth in the constellation borders of Hydra and Centaurus.",
+   "article_en": "Messier 83",
+   "desc_ja": "M83（NGC 5236）は、うみへび座にある棒渦巻銀河である。その姿から南の回転花火銀河という別名でも呼ばれる。",
+   "article_ja": "NGC 5236"
+  },
+  "M84": {
+   "desc_en": "Messier 84 or M84, also known as NGC 4374, is a giant elliptical or lenticular galaxy in the constellation Virgo. Charles Messier discovered the object in 1781 in a systematic search for \"nebulous objects\" in the night sky.",
+   "article_en": "Messier 84",
+   "desc_ja": "M84（NGC 4374）はおとめ座にあるレンズ状銀河である。",
+   "article_ja": "Messier 84"
+  },
+  "M85": {
+   "desc_en": "Messier 85 (also known as M85 or NGC 4382 or PGC 40515 or ISD 0135852) is a lenticular galaxy, or elliptical galaxy for other authors, in the Coma Berenices constellation.",
+   "article_en": "Messier 85",
+   "desc_ja": "M85（NGC 4382）はかみのけ座にあるレンズ状銀河である。形や大きさがM84と似ている。",
+   "article_ja": "Messier 85"
+  },
+  "M86": {
+   "desc_en": "Messier 86 (also known as M86 or NGC 4406) is a bright elliptical or lenticular galaxy in the constellation of Virgo. It was discovered by Charles Messier in 1781.",
+   "article_en": "Messier 86",
+   "desc_ja": "M86（NGC 4406）はおとめ座にあるレンズ状銀河である。",
+   "article_ja": "NGC 4406"
+  },
+  "M87": {
+   "desc_en": "Messier 87 (also known as Virgo A or NGC 4486, generally abbreviated to M87) is a supergiant elliptical galaxy in the constellation Virgo that contains several trillion stars.",
+   "article_en": "Messier 87",
+   "desc_ja": "M 87（NGC 4486、おとめ座A）は、おとめ座の方向にある楕円銀河である。おとめ座銀河団の中核をなす質量中心の1つであり、中心に太陽質量 (M☉) の65億倍もの質量を持つ超大質量ブラックホール (Super Massive Black Hole, SMBH) があることで知られ、そこから放出される強力なジェットが観測されている。",
+   "article_ja": "NGC 4486"
+  },
+  "M88": {
+   "desc_en": "Messier 88 (also known as M88 or NGC 4501) is an unbarred spiral galaxy about 50 to 60 million light-years away from Earth in the constellation Coma Berenices. It was discovered by Charles Messier in 1781.",
+   "article_en": "Messier 88",
+   "desc_ja": "M88（NGC 4501）はかみのけ座にある渦巻銀河である。おとめ座銀河団に属している。",
+   "article_ja": "NGC 4501"
+  },
+  "M89": {
+   "desc_en": "Messier 89 (M89 for short, also known as NGC 4552) is an elliptical galaxy in the constellation Virgo. It was discovered by Charles Messier on March 18, 1781. M89 is a member of the Virgo Cluster of galaxies.",
+   "article_en": "Messier 89",
+   "desc_ja": "M89（NGC 4552）はおとめ座にある楕円銀河である。おとめ座銀河団に属している。",
+   "article_ja": "NGC 4552"
+  },
+  "M90": {
+   "desc_en": "Messier 90 (also known as M90, NGC 4569 or as the Carabin Galaxy) is an intermediate spiral galaxy exhibiting a weak inner ring structure about 60 million light-years away[a] in the constellation Virgo. It was discovered by Charles Messier in 1781.",
+   "article_en": "Messier 90",
+   "desc_ja": "M90（NGC 4569）はおとめ座にある渦巻銀河である。おとめ座銀河団に属している。数少ない銀河系に対して接近している銀河の一つである。",
+   "article_ja": "NGC 4569"
+  },
+  "M91": {
+   "desc_en": "Messier 91 (also known as NGC 4548 or M91) is a barred spiral galaxy that is found in the south of Coma Berenices. It is in the local supercluster and is part of the Virgo Cluster of galaxies. It is about 63 million light-years away from the Milky Way.",
+   "article_en": "Messier 91",
+   "desc_ja": "M91（NGC 4548）は、かみのけ座にある棒渦巻銀河である。シャルル・メシエがカタログに記載する際に座標を間違えたことによって長い間失われた天体となっていた。",
+   "article_ja": "NGC 4548"
+  },
+  "M92": {
+   "desc_en": "Messier 92 (also known as M92, M 92, or NGC 6341) is a globular cluster of stars in the northern constellation of Hercules.",
+   "article_en": "Messier 92",
+   "desc_ja": "M92（NGC 6341）は、ヘルクレス座にある球状星団である。",
+   "article_ja": "NGC 6341"
+  },
+  "M93": {
+   "desc_en": "Messier 93 or M93, also known as NGC 2447 or the Critter Cluster, is an open cluster in the modestly southern constellation Puppis, the imagined poop deck of the legendary Argo.",
+   "article_en": "Messier 93",
+   "desc_ja": "M93（NGC 2447）はとも座にある散開星団である。",
+   "article_ja": "NGC 2447"
+  },
+  "M94": {
+   "desc_en": "Messier 94 (also known as NGC 4736, Cat's Eye Galaxy, Crocodile Eye Galaxy, or Croc's Eye Galaxy) is a spiral galaxy in the mid-northern constellation Canes Venatici.",
+   "article_en": "Messier 94",
+   "desc_ja": "M94（NGC 4736）はりょうけん座にある渦巻銀河である。",
+   "article_ja": "NGC 4736"
+  },
+  "M95": {
+   "desc_en": "Messier 95, also known as M95 or NGC 3351, is a barred spiral galaxy about 33 million light-years away in the zodiac constellation Leo. It was discovered by Pierre Méchain in 1781, and catalogued by compatriot Charles Messier four days later.",
+   "article_en": "Messier 95"
+  },
+  "M96": {
+   "desc_en": "Messier 96 (also known as M96 or NGC 3368) is an intermediate spiral galaxy about 31 million light-years away in the constellation Leo.",
+   "article_en": "Messier 96"
+  },
+  "M97": {
+   "desc_en": "The Owl Nebula (also known as Messier 97, M97 or NGC 3587) is a planetary nebula approximately 2,030 light years away in the constellation Ursa Major.",
+   "article_en": "Messier 97",
+   "desc_ja": "ふくろう星雲（ふくろうせいうん、Owl Nebula 、M97、NGC 3587）はおおぐま座にある惑星状星雲である。",
+   "article_ja": "NGC 3587"
+  },
+  "M98": {
+   "desc_en": "Messier 98, M98 or NGC 4192 is an intermediate spiral galaxy about 44.4 million light-years away in slightly northerly Coma Berenices, about 6° to the east of the bright star Denebola (Beta Leonis).",
+   "article_en": "Messier 98",
+   "desc_ja": "M98（NGC 4192）はかみのけ座にある渦巻銀河である。",
+   "article_ja": "Messier 98"
+  },
+  "M99": {
+   "desc_en": "Messier 99 or M99, also known as NGC 4254 or St. Catherine's Wheel, is a grand design spiral galaxy in the northern constellation Coma Berenices approximately 15,000,000 parsecs (49,000,000 light-years) from the Milky Way.",
+   "article_en": "Messier 99",
+   "desc_ja": "M99（NGC 4254）はかみのけ座にある渦巻銀河である。おとめ座銀河団に属しており、メシエカタログに含まれる天体の中で最も大きな後退速度を持つ。",
+   "article_ja": "Messier 99"
+  },
+  "M100": {
+   "desc_en": "Messier 100 (also known as NGC 4321 or the Mirror Galaxy) is a grand design intermediate spiral galaxy in the constellation of Coma Berenices.",
+   "article_en": "Messier 100",
+   "desc_ja": "M100（NGC 4321）はかみのけ座にある渦巻銀河である。",
+   "article_ja": "NGC 4321"
+  },
+  "M101": {
+   "desc_en": "The Pinwheel Galaxy (also known as Messier 101, M101 or NGC 5457) is a face-on, counterclockwise intermediate spiral galaxy located 21 million light-years (6.4 megaparsecs) from Earth in the constellation Ursa Major.",
+   "article_en": "Messier 101",
+   "desc_ja": "M101 (NGC 5457) は、地球から見ておおぐま座の方向約2180万 光年にある渦巻銀河。地球から見て銀河円盤を垂直方向から見ることができる「フェイスオン銀河」で、その姿を花火に喩えて回転花火銀河や風ぐるまに喩えて風車銀河 (英: Pinwheel Galaxy)と呼ばれる。 双眼鏡では条件が良ければ大きく広がった円形で濃淡のない光斑として見えるという。口径8cmの望遠鏡の低倍率で濃淡が見えるが、双眼鏡の方がかえってよく見えるとする意見もある。マラスは口径10cmの望遠鏡で観察して「低倍率が有効。",
+   "article_ja": "NGC 5457"
+  },
+  "M102": {
+   "desc_en": "Messier 102 (also known as M102) is a galaxy listed in the Messier Catalogue that cannot be unambiguously identified.",
+   "article_en": "Messier 102",
+   "desc_ja": "NGC 3115（Caldwell53、スピンドル銀河）は、ろくぶんぎ座にあるレンズ状銀河。1787年2月22日にウィリアム・ハーシェルによって発見された。銀河系の数倍の大きさがある。 1992年、ハワイ大学のジョン・コーメンディ（John Kormendy ）とミシガン大学のダグラス・リッチストーン（Douglas Richstone ）はこの銀河内に超大質量ブラックホールを観測したと発表した。その質量は太陽の20億倍であり、当時発見されていたものでは最大規模のものであった。",
+   "article_ja": "スピンドル銀河"
+  },
+  "M103": {
+   "desc_en": "Messier 103 (also known as M103, or NGC 581) is a small open cluster of many faint stars in Cassiopeia. It was discovered on 27 March 1781 by Pierre Méchain, but later added as Charles Messier's last deep-sky object in his catalogue.",
+   "article_en": "Messier 103",
+   "desc_ja": "M103（NGC 581、Melotte 8）は、カシオペヤ座にある散開星団である。",
+   "article_ja": "NGC 581"
+  },
+  "M104": {
+   "desc_en": "The Sombrero Galaxy (also known as Messier Object 104, M104 or NGC 4594) is a peculiar galaxy of unclear classification in the constellation borders of Virgo and Corvus, being about 9.55 megaparsecs (31.1 million light-years) from the Milky Way galaxy.",
+   "article_en": "Messier 104",
+   "desc_ja": "ソンブレロ銀河（ソンブレロぎんが、M104、NGC 4594）はおとめ座にある銀河である。おとめ座のスピカの約 11° 西に位置する。通称はソンブレロを横から見た姿に似ていることから付けられている。月の約 1/5 の視直径があるが、暗いため肉眼で見ることはできない。 これまでこの銀河は非常に大きなバルジを持つ渦巻銀河だと考えられてきたが、2012年、スピッツァー宇宙望遠鏡による観測結果から、楕円銀河の中に円盤が収まった複雑な構造を持つことが明らかとなった。",
+   "article_ja": "NGC 4594"
+  },
+  "M105": {
+   "desc_en": "Messier 105 or M105, also known as NGC 3379, is an elliptical galaxy 36.6 million light-years away in the equatorial constellation of Leo. It is the biggest elliptical galaxy in the Messier catalogue that is not in the Virgo cluster.",
+   "article_en": "Messier 105",
+   "desc_ja": "M105（NGC 3379）はしし座にある楕円銀河である。",
+   "article_ja": "NGC 3379"
+  },
+  "M106": {
+   "desc_en": "Messier 106 (also known as NGC 4258) is an intermediate spiral galaxy in the constellation Canes Venatici. It was discovered by Pierre Méchain in 1781. M106 is at a distance of about 22 to 25 million light-years away from Earth.",
+   "article_en": "Messier 106",
+   "desc_ja": "M106（NGC 4258）はりょうけん座にある渦巻銀河である。",
+   "article_ja": "NGC 4258"
+  },
+  "M107": {
+   "desc_en": "Messier 107 or M107, also known as NGC 6171 or the Crucifix Cluster, is a very loose globular cluster close to the equator in Ophiuchus, and is the last such object in the Messier Catalogue.",
+   "article_en": "Messier 107",
+   "desc_ja": "M107 (NGC 6171) はへびつかい座にある球状星団。",
+   "article_ja": "NGC 6171"
+  },
+  "M108": {
+   "desc_en": "Messier 108 (also known as NGC 3556, nicknamed the Surfboard Galaxy) is a barred spiral galaxy about 46 million light-years away from Earth in the northern constellation Ursa Major. It was discovered by Pierre Méchain in 1781 or 1782.",
+   "article_en": "Messier 108",
+   "desc_ja": "M108 (NGC 3556) は、おおぐま座にある渦巻銀河である。",
+   "article_ja": "NGC 3556"
+  },
+  "M109": {
+   "desc_en": "Messier 109 (also known as NGC 3992 or the Vacuum Cleaner Galaxy) is a barred spiral galaxy approximately 67.2 ± 23 million light-years away in the northern constellation Ursa Major. M109 can be seen south-east of the star Phecda (γ UMa, Gamma Ursa Majoris).",
+   "article_en": "Messier 109",
+   "desc_ja": "NGC 3992は、おおぐま座にある棒渦巻銀河である。1781年にピエール・メシャンによって発見された。シャルル・メシエはM99としてメシエカタログの草稿に加えていたが、出版に位置の計算が間に合わず初版には掲載されなかった。後にM109に該当する天体として、M108とともにメシエカタログに加えられた。ジョン・ハーシェルは「外観は星雲状で微か。径7'x4'。2つの星の間に囲まれている」と記した。テンペルは「最大径1.5'。中心は輝く。ここに明るい3つの星がある」と記した。 距離はおよそ6,720万光年（諸説あり）。",
+   "article_ja": "NGC 3992"
+  },
+  "M110": {
+   "desc_en": "Messier 110, or M110, also known as NGC 205, is a dwarf elliptical galaxy that is a satellite of the Andromeda Galaxy in the Local Group.",
+   "article_en": "Messier 110",
+   "desc_ja": "M110 (NGC 205) は、アンドロメダ座に位置する楕円銀河である。",
+   "article_ja": "NGC 205"
+  },
+  "C4": {
+   "desc_en": "The Iris Nebula (also known as NGC 7023 or Caldwell 4) is a bright reflection nebula located about 1,300 light years from Earth in the constellation of Cepheus. The nebula is illuminated by a magnitude +7.4 star designated HD 200775.",
+   "article_en": "Iris Nebula",
+   "desc_ja": "アイリス星雲（LBN 487、Caldwell 4）は、ケフェウス座の明るい散光星雲である。1794年10月18日、ウィリアム・ハーシェルによって発見された。星雲は+7等星の星SAO 19158によって輝いている。ミラ型変光星であるケフェウス座T星や、明るい変光星（+3.23等）であるケフェウス座β星の近くに位置する。大きさは6光年である。 なお、NGC 7023は、LBN 487内の散開星団を指す。",
+   "article_ja": "NGC 7023"
+  },
+  "C6": {
+   "desc_en": "The Cat's Eye Nebula (also known as NGC 6543 and Caldwell 6) is a planetary nebula in the northern constellation of Draco, discovered by William Herschel on February 15, 1786.",
+   "article_en": "Cat's Eye Nebula",
+   "desc_ja": "キャッツアイ星雲（キャッツアイせいうん、NGC 6543、Caldwell 6）は、りゅう座にある惑星状星雲である。現在知られている中で最も構造が複雑な星雲の一つであり、ハッブル宇宙望遠鏡による高解像度の観測によって、ノットやジェット、弧のような形など、注目すべき構造が明らかにされている。 キャッツアイ星雲は、ウィリアム・ハーシェルによって1786年2月15日に発見された。",
+   "article_ja": "NGC 6543"
+  },
+  "C7": {
+   "desc_en": "NGC 2403 (also known as Caldwell 7) is an intermediate spiral galaxy in the constellation Camelopardalis. It is an outlying member of the M81 Group, and is approximately 9.7 million light-years distant.",
+   "article_en": "NGC 2403",
+   "desc_ja": "NGC 2403（Caldwell 7）は、きりん座の方角に約980万光年離れた位置にある渦巻銀河である。内部で活発な星形成が行われており、赤く輝く多数のHII領域が見られる。",
+   "article_ja": "NGC 2403"
+  },
+  "C9": {
+   "desc_en": "Sh 2-155 (also designated Caldwell 9, Sharpless 155 or S155, or LBN529) is a diffuse nebula in the constellation Cepheus, within a larger nebula complex containing emission, reflection, and dark nebulosity.",
+   "article_en": "Cave Nebula",
+   "desc_ja": "Sh2-155（Caldwell 9）は、ケフェウス座の散光星雲である。Sh2-155は、輝線星雲・反射星雲・暗黒星雲の複合体からなる大きな星雲の中に存在する、かすんで非常に拡散した明るい星雲である。見ることは困難だが、適切な露出で写すと鮮烈な画像になる。望遠鏡で見た時に、輝線星雲の最も明るいカーブに隣接している東側の暗いラインが、深い洞窟の外観となっており、Cave Nebulaとも呼ばれる。",
+   "article_ja": "Sh2-155"
+  },
+  "C11": {
+   "desc_en": "The Bubble Nebula, also known as NGC 7635, Sharpless 162, or Caldwell 11, is an H II region emission nebula in the constellation Cassiopeia. It lies close to the open cluster Messier 52.",
+   "article_en": "Bubble Nebula",
+   "desc_ja": "NGC 7635（Sh2-162、Caldwell 11）は、カシオペヤ座に位置する散光星雲（HII領域）である。この星雲は、M52の近くに位置して見える。この星雲は1787年に、ウィリアム・ハーシェルによって発見された。 泡状に見える部分は、中心の8.71等級の若く高温な大質量（15 ± 5 M☉）な恒星、SAO 20575（BD+60 2522）からの恒星風によって作られている。なお、SAO 20575（BD+60 2522）は、10-40太陽質量だと推測されている。",
+   "article_ja": "バブル星雲"
+  },
+  "C12": {
+   "desc_en": "NGC 6946, sometimes referred to as the Fireworks Galaxy, is a grand design, face-on intermediate spiral galaxy with a small bright nucleus, whose location in the sky straddles the boundary between the northern constellations of Cepheus and Cygnus.",
+   "article_en": "Fireworks Galaxy",
+   "desc_ja": "NGC 6946（Arp 29、Caldwell 12）は、ケフェウス座及びはくちょう座の方角に2250万光年離れた位置にある中間渦巻銀河である。花火銀河という名前でも知られる。 1798年9月9日にウィリアム・ハーシェルが発見した。NGC 6946は銀河面に近いため、銀河系内部の星間物質によってかなり覆い隠されている。9つの超新星（SN 1917A、SN 1939C、SN 1948B、SN 1968D、SN 1969P、SN 1980K、SN 2002hh、SN 2004et、SN 2008S）が観測されている。",
+   "article_ja": "花火銀河"
+  },
+  "C13": {
+   "desc_ja": "NGC 457（Caldwell 13、Melotte 7）は、カシオペヤ座の方角に約7900光年離れた位置にある散開星団である。ふくろう星団（Owl Cluster ）、とんぼ星団（Dragonfly Cluster ）という名前でも知られる。また、5等級のカシオペヤ座φ1星と7等級のカシオペヤ座φ2星が両目のように見えるため、映画のキャラクターに例えてE.T.星団（ET Cluster ）とも呼ばれる。1787年にウィリアム・ハーシェルが発見した。約2100万歳であると推定されている。",
+   "article_ja": "NGC 457"
+  },
+  "C14": {
+   "desc_en": "The Double Cluster, also known as Caldwell 14, consists of the open clusters NGC 869 and NGC 884 (often designated h Persei and χ (chi) Persei, respectively), which are close together in the constellation Perseus.",
+   "article_en": "Double Cluster",
+   "desc_ja": "二重星団（にじゅうせいだん、Double Cluster ）はペルセウス座にある散開星団である。カシオペヤ座との境界の近く、天の川のほぼ中央に位置している。2つの散開星団が近接しているためこの名で呼ばれる。",
+   "article_ja": "二重星団"
+  },
+  "C19": {
+   "desc_en": "IC 5146 (also Caldwell 19, Sh 2-125, Barnard 168, and the Cocoon Nebula) is a reflection/emission nebula and Caldwell object in the constellation Cygnus. The NGC description refers to IC 5146 as a cluster of 9.5 mag stars involved in a bright and dark nebula.",
+   "article_en": "Cocoon Nebula",
+   "desc_ja": "IC 5146（Caldwell 19）は、はくちょう座にある反射星雲、輝線星雲である。まゆ星雲(Cocoon Nebula)とも呼ばれる。また、特にIC 5146と言う時は星雲、コリンダー470(Collinder 470)という時は星団を表す。等級は、+10.0/+9.3/+7.2である。近傍には、裸眼で見えるはくちょう座π星やとかげ座の散開星団NGC 7209、明るい散開星団M39等がある。星団は約4000光年離れており、中心星は約10万年前に形成されたと考えられている。",
+   "article_ja": "IC 5146"
+  },
+  "C20": {
+   "desc_en": "The North America Nebula (NGC 7000 or Caldwell 20) is an emission nebula in the constellation Cygnus, close to Deneb (the tail of the swan and its brightest star) in the night sky. It is named because its shape resembles North America.",
+   "article_en": "North America Nebula",
+   "desc_ja": "北アメリカ星雲（きたあめりかせいうん、NGC 7000、Sh2-117、Caldwell 20）は、はくちょう座の尾部、デネブの近くに見える散光星雲である。18世紀の天文学者ウィリアム・ハーシェルによって発見された。形が北アメリカ大陸に似ているところから名づけられた。見かけの大きさは面積にして満月の十倍ほどと広大であるが、暗いため肉眼での観測は余程空の暗い場所でもなければ、ほぼ不可能である。ある程度の口径と広視界を持つ双眼鏡を使えば、しみのような星雲の姿を観測することができる。",
+   "article_ja": "NGC 7000"
+  },
+  "C22": {
+   "desc_en": "NGC 7662 is a planetary nebula located in the northern constellation Andromeda. It is known as the Blue Snowball Nebula, Snowball Nebula, and Caldwell 22. This nebula was discovered October 6, 1784 by the German-born English astronomer William Herschel.",
+   "article_en": "Blue Snowball",
+   "desc_ja": "NGC 7662（Caldwell 22）は、アンドロメダ座にある惑星状星雲である。青い雪だるま星雲という名前でも知られる。 この星雲までの距離は正確には分かっていないが、Skalnate Pleso Catalogue (1951)によると、NGC 7662までの距離は約1800光年、直径は約2万天文単位とされている。より最近の調査であるC.R.O'Dell (1963)は、距離は約5600光年、直径は約5万天文単位と推定している。中央の恒星は変光星で、等級は12から16まで変化する。",
+   "article_ja": "青い雪だるま星雲"
+  },
+  "C23": {
+   "desc_en": "NGC 891 (also known as Caldwell 23, the Silver Sliver Galaxy, and the Outer Limits Galaxy) is an edge-on unbarred spiral galaxy about 30 million light-years away in the constellation Andromeda. It was discovered by William Herschel on October 6, 1784.",
+   "article_en": "NGC 891",
+   "desc_ja": "NGC 891（Caldwell 23）は、アンドロメダ座の方角に地球から約3000万光年の距離にある非棒状渦巻銀河である。1784年10月6日にウィリアム・ハーシェルが発見した。この銀河は、おとめ座超銀河団にあるNGC 1023銀河群を構成する銀河であり、H II核を持つ。 小型から中型の望遠鏡を用いて、大きな塵の帯を持つ微かな長細い光りのしみとして見ることができる。 1999年、ハッブル宇宙望遠鏡がNGC 891を赤外線で撮影した。",
+   "article_ja": "NGC 891"
+  },
+  "C25": {
+   "desc_en": "NGC 2419 (also known as Caldwell 25) is a globular cluster in the constellation Lynx. It was discovered by William Herschel on December 31, 1788.",
+   "article_en": "Intergalactic Wanderer",
+   "desc_ja": "NGC 2419（Caldwell 25）は、やまねこ座の方角にある球状星団である。 1788年12月31日にウィリアム・ハーシェルによって発見された。V_HBは20.31である。かつては銀河系の周囲を公転していないと誤って判断され、\"the Intergalactic Wanderer,\"（銀河間放浪者）というニックネームが付けられた。しかし実際にはマゼラン雲よりも遠くの軌道を公転しており、銀河系の一部をなすと考えられている。軌道距離が長いせいで、銀河系の周りを一周するのに30億年もかかる。",
+   "article_ja": "NGC 2419"
+  },
+  "C27": {
+   "desc_en": "The Crescent Nebula (also known as NGC 6888, Caldwell 27, Sharpless 105) is an emission nebula in the constellation Cygnus, about 5000 light-years away from Earth. It was discovered by William Herschel in 1792.",
+   "article_en": "Crescent Nebula",
+   "desc_ja": "NGC 6888（Sh2-105、Caldwell 27）は、はくちょう座の散光星雲 である。WR型星WR 136(HD 192163)からの高速の恒星風と、約40万年前の赤色巨星の時に放出された速度の遅い恒星風が衝突して形成されている。衝突の結果は殻と衝撃波となる。衝撃波は外側へ向かうものと内側へ向かうものがあり、内側への衝撃波は、恒星風をX線放射温度に熱している。三日月星雲、クレセント星雲（Crescent Nebula ）とも呼ばれている。",
+   "article_ja": "三日月星雲"
+  },
+  "C30": {
+   "desc_en": "NGC 7331, also known as Caldwell 30, is an unbarred spiral galaxy about 13.427 megaparsecs (43.79 million light-years) away in the constellation Pegasus. It was discovered by William Herschel on 6 September 1784.",
+   "article_en": "NGC 7331",
+   "desc_ja": "NGC 7331（Caldwell 30）は、ペガスス座の方角に約4000万光年の位置にある渦巻銀河である。1784年にウィリアム・ハーシェルが発見した。NGC 7331銀河群の中で最も明るい。 この銀河は、大きさや構造が銀河系と似ており、しばしば「銀河系の双子」と呼ばれていたが、近年の銀河系の構造に関する発見で、この認識は誤りであったことが示された。",
+   "article_ja": "NGC 7331"
+  },
+  "C31": {
+   "desc_en": "IC 405 (also known as the Flaming Star Nebula, SH 2-229, or Caldwell 31) is an emission and reflection nebula in the constellation Auriga north of the celestial equator, surrounding the bluish, irregular variable star AE Aurigae. It shines at magnitude +6.0.",
+   "article_en": "Flaming Star Nebula",
+   "desc_ja": "IC 405（Sh2-229、Caldwell 31）は、ぎょしゃ座の散光星雲である。不規則型（I）の爆発型変光星であるぎょしゃ座AE星を囲み、輝線星雲IC 410や散開星団のM38やM36、ぎょしゃ座ι星の近くに位置して見える。中心星の固有運動はオリオン座のベルトの領域にまで遡ることができると推測されている。星雲は約5光年に渡って広がっている。日本では勾玉星雲と呼ばれる事もある。",
+   "article_ja": "IC 405"
+  },
+  "C33": {
+   "desc_ja": "網状星雲（あみじょうせいうん、英: Veil Nebula、NGC 6992-5, NGC 6960）は、はくちょう座ε星の3°から5°ほど南に東西に約3°の間隔で向かい合った半弧状の散光星雲である。 明るい東側がNGC 6992－5 (C33) 、西側がNGC 6960 (C34) であり、数万年前に爆発した超新星残骸のガスが毎秒100kmで広がっている姿だと考えられている。肉眼ではたいへん淡いがカラー写真にはよく写る。",
+   "article_ja": "NGC 6992"
+  },
+  "C34": {
+   "desc_ja": "網状星雲（あみじょうせいうん、英: Veil Nebula、NGC 6992-5, NGC 6960）は、はくちょう座ε星の3°から5°ほど南に東西に約3°の間隔で向かい合った半弧状の散光星雲である。 明るい東側がNGC 6992－5 (C33) 、西側がNGC 6960 (C34) であり、数万年前に爆発した超新星残骸のガスが毎秒100kmで広がっている姿だと考えられている。肉眼ではたいへん淡いがカラー写真にはよく写る。",
+   "article_ja": "NGC 6960"
+  },
+  "C38": {
+   "desc_en": "NGC 4565 (also known as the Needle Galaxy or Caldwell 38) is an edge-on spiral galaxy about 30 to 50 million light-years away in the constellation Coma Berenices. It lies close to the North Galactic Pole and has a visual magnitude of approximately 10.",
+   "article_en": "Needle Galaxy",
+   "desc_ja": "NGC 4565（Caldwell 38）は、かみのけ座の渦巻銀河で、地球から約3000万から5000万光年離れている。 この銀河は10等級で、ポラリスが地球から見て天の北極に位置するように、銀河系の銀河北極にほぼ垂直に位置している。 側面が狭いため、Needle Galaxyとして知られている。1785年にウィリアム・ハーシェルによって発見された。この銀河は、最も有名な真横から見た渦巻銀河の1つである。小型望遠鏡で観察した天文愛好家達は、NGC 4565はメシエが見逃した傑作な天体である、と考えている。",
+   "article_ja": "NGC 4565"
+  },
+  "C39": {
+   "desc_en": "The Eskimo Nebula (NGC 2392), also known as the Clown Face Nebula, Lion Nebula, or Caldwell 39, is a bipolar double-shell planetary nebula (PN). It was discovered by astronomer William Herschel in 1787.",
+   "article_en": "Eskimo Nebula",
+   "desc_ja": "エスキモー星雲（エスキモーせいうん、NGC2392、Caldwell 39）は、ふたご座の惑星状星雲である。ふたご座δ星の約2.3度南東に位置する。1787年にウィリアム・ハーシェルによって発見された。地上の望遠鏡で観測すると、毛皮のフードを被ったエスキモーのような特徴的な形をしていることからこの名が付けられている。アマチュア向けの望遠鏡ならば見ることができるが、低倍率では恒星と判別がつきにくい。100倍以上の倍率で星雲状に見える。",
+   "article_ja": "NGC 2392"
+  },
+  "C41": {
+   "desc_en": "Hyades may refer to: Hyades (band) Hyades (mythology) Hyades (star cluster), an open star cluster in the constellation Taurus",
+   "article_en": "Hyades",
+   "desc_ja": "ヒアデス星団（Mel 25、Caldwell 41）は、おうし座に位置する散開星団である。1等星アルデバランの近傍に広がるV字形の星の集団で、おうし座の顔の位置にある。日本ではその形状から釣鐘星（つりがねぼし）と呼ばれていた。 距離は1982年にオリン・エッゲンによって142光年の値が求められ、今日では150光年と考えられている。直径は30光年ほどと推定されている。 2007年には日本の国立天文台を中心とする研究グループによって、星団を構成するおうし座ε星にガスジャイアント（おうし座ε星b）が発見された。",
+   "article_ja": "ヒアデス星団"
+  },
+  "C42": {
+   "desc_en": "NGC 7006 (also known as Caldwell 42) is a globular cluster in the constellation Delphinus. NGC 7006 resides in the outskirts of the Milky Way.",
+   "article_en": "NGC 7006",
+   "desc_ja": "NGC 7006（Caldwell 42）は、いるか座の方角にある球状星団である。銀河系の外縁部に存在する。太陽と銀河中心の5倍に当たる約13万5000光年離れており、銀河ハローに位置する。",
+   "article_ja": "NGC 7006"
+  },
+  "C46": {
+   "desc_en": "NGC 2261 (also known as Hubble's Variable Nebula or Caldwell 46) is a variable nebula located in the constellation Monoceros. The nebula is illuminated by the star R Monocerotis (R Mon), which is not directly visible itself.",
+   "article_en": "Hubble's Variable Nebula",
+   "desc_ja": "NGC 2261（ハッブルの変光星雲、Caldwell 46）は、いっかくじゅう座の変光星雲である。この星雲は、いっかくじゅう座R星によって照らされている。なお、R星は直接見ることはできない。",
+   "article_ja": "ハッブルの変光星雲"
+  },
+  "C49": {
+   "desc_en": "The Rosette Nebula (also known as Caldwell 49) is an H II region located near one end of a giant molecular cloud in the Monoceros region of the Milky Way Galaxy.",
+   "article_en": "Rosette Nebula",
+   "desc_ja": "ばら星雲（ばらせいうん、英: The Rosette Nebula 、NGC 2237-9, 2246、Caldwell 49）は、いっかくじゅう座の方向にある散光星雲（HII領域）である。赤いバラの花飾り(ロゼット)のような姿であることから「ばら星雲（バラ星雲）」とよばれている。",
+   "article_ja": "NGC 2237"
+  },
+  "C50": {
+   "desc_en": "NGC 2244 (also known as Caldwell 50 or the Satellite Cluster) is an open cluster in the Rosette Nebula, which is located in the constellation Monoceros.",
+   "article_en": "NGC 2244",
+   "desc_ja": "NGC 2244（Caldwell 50、Melotte 47）はいっかくじゅう座のバラ星雲の中に位置する散開星団である。この星団は、いくつかのO型の恒星を含み、超高温の恒星は多量の放射線と恒星風を発している。",
+   "article_ja": "NGC 2244"
+  },
+  "C53": {
+   "desc_ja": "NGC 3115（Caldwell53、スピンドル銀河）は、ろくぶんぎ座にあるレンズ状銀河。1787年2月22日にウィリアム・ハーシェルによって発見された。銀河系の数倍の大きさがある。 1992年、ハワイ大学のジョン・コーメンディ（John Kormendy ）とミシガン大学のダグラス・リッチストーン（Douglas Richstone ）はこの銀河内に超大質量ブラックホールを観測したと発表した。その質量は太陽の20億倍であり、当時発見されていたものでは最大規模のものであった。",
+   "article_ja": "NGC 3115"
+  },
+  "C55": {
+   "desc_en": "The Saturn Nebula (also known as NGC 7009 or Caldwell 55) is a planetary nebula in the constellation Aquarius. It appears as a greenish-yellowish hue in a small amateur telescope.",
+   "article_en": "Saturn Nebula",
+   "desc_ja": "土星状星雲（Saturn Nebula 、NGC 7009、Caldwell 55）は、みずがめ座にある惑星状星雲である。",
+   "article_ja": "NGC 7009"
+  },
+  "C57": {
+   "desc_en": "NGC 6822 (also known as Barnard's Galaxy, IC 4895, or Caldwell 57) is a barred irregular galaxy approximately 1.6 million light-years away in the constellation Sagittarius. Part of the Local Group of galaxies, it was discovered by E. E.",
+   "article_en": "Barnard's Galaxy",
+   "desc_ja": "NGC 6822（Caldwell 57）は、いて座にある棒状構造の見られる不規則銀河である。局所銀河群に属している。1881年にアメリカの天文学者エドワード・エマーソン・バーナードによって発見された。発見者であるバーナードの名前をとってバーナードの銀河ともいう。 ハッブルのVと呼ばれるガス雲が存在し、研究者による観測も行われている。",
+   "article_ja": "NGC 6822"
+  },
+  "C59": {
+   "desc_en": "NGC 3242 (also known as the Ghost of Jupiter, Eye Nebula or Caldwell 59) is a planetary nebula located in the constellation Hydra. William Herschel discovered the nebula on February 7, 1785, and catalogued it as H IV.27.",
+   "article_en": "Ghost of Jupiter",
+   "desc_ja": "木星状星雲（もくせいじょうせいうん、NGC 3242、Caldwell 59）は、うみへび座の惑星状星雲である。うみへび座μ星の約2度南に位置している。 ウィリアム・ハーシェルが1785年2月7日に発見した。「大きさといい、色といい、見え方といい、木星そっくりだ」と感想を述べたウィリアム・ヘンリー・スミスにより名付けられた。 ほぼ円形であるため低倍率では恒星のように見えるので、倍率を上げて見る必要がある。",
+   "article_ja": "NGC 3242"
+  },
+  "C60": {
+   "desc_en": "The Antennae Galaxies (also known as NGC 4038/NGC 4039 or Caldwell 60/Caldwell 61) are a pair of interacting galaxies in the constellation Corvus.",
+   "article_en": "Antennae Galaxies",
+   "desc_ja": "触角銀河 （しょっかくぎんが、Antennae Galaxies 、NGC 4038/NGC 4039、Caldwell 60/61）は、からす座にある銀河の対である。NGC4038及びNGC4039という二つの銀河が衝突しており、互いに潮汐力を及ぼし合うことで2本の長い腕状の構造が伸びているのが特徴である。日本語ではアンテナ銀河、リングテール銀河とも呼ばれる。この二つの銀河は共に1785年にウィリアム・ハーシェルによって発見された。",
+   "article_ja": "NGC 4038"
+  },
+  "C63": {
+   "desc_en": "The Helix Nebula (also known as NGC 7293 or Caldwell 63) is a planetary nebula (PN) located in the constellation Aquarius.",
+   "article_en": "Helix Nebula",
+   "desc_ja": "らせん星雲（NGC 7293、Caldwell 63）は、みずがめ座にある有名な惑星状星雲である。 距離はおよそ219パーセクあるいは約700光年で、太陽系に最も近い惑星状星雲の1つである。猫のような目の形をしている中心部が「らせん」の名前の由来であるが、最近の研究ではその周囲に淡い環状のガスが広がっていることがわかっている。環状部まで含めると、全体の大きさは満月の約半分くらいまで広がっている。中心部に白色矮星が存在する。 視直径は満月の半分ほどもあるが、光が分散しているため等級の割に淡く、眼視では捉えにくい。",
+   "article_ja": "NGC 7293"
+  },
+  "C64": {
+   "desc_en": "NGC 2362, also known as Caldwell 64, is an open cluster of stars in the southern constellation of Canis Major. It was discovered by the Italian court astronomer Giovanni Batista Hodierna, who published his finding in 1654.",
+   "article_en": "Tau Canis Majoris Cluster",
+   "desc_ja": "NGC 2362（Caldwell 64、Melotte 65）は、おおいぬ座にある散開星団である。1654年以前にジョヴァンニ・バッティスタ・オディエルナが発見した。最も明るい恒星はおおいぬ座τ星であるため、Tau Canis Majoris Cluster（おおいぬ座τ星星団）と呼ばれることもある。地球からの距離は約1480パーセクで、400万歳から500万歳と比較的若い恒星からなる。質量は大きく、太陽質量の500倍以上である。同じ距離にある巨大な星雲Sh2-310との関連がある。",
+   "article_ja": "Tau Canis Majoris Cluster"
+  },
+  "C65": {
+   "desc_en": "The Sculptor Galaxy (also known as the Silver Coin Galaxy, Silver Dollar Galaxy, NGC 253, or Caldwell 65) is an intermediate spiral galaxy in the constellation Sculptor.",
+   "article_en": "Sculptor Galaxy",
+   "desc_ja": "NGC 253（Sculptor Galaxy 、ちょうこくしつ座銀河、Caldwell 65）は、ちょうこくしつ座の方角にある渦巻銀河である。NGC 253はスターバースト銀河であり、急激な星形成の過程にある。",
+   "article_ja": "ちょうこくしつ座銀河"
+  },
+  "C69": {
+   "desc_en": "NGC 6302 (also known as the Bug Nebula, Butterfly Nebula, or Caldwell 69) is a bipolar type planetary nebula in the constellation Scorpius. The structure in this planetary nebula is among the most complex ever seen in any planetary nebulae.",
+   "article_en": "Bug Nebula",
+   "desc_ja": "NGC 6302（Caldwell 69）は、さそり座にある双極性の惑星状星雲である。その形からバタフライ星雲とも呼ばれる。星雲中の構造は、これまで惑星状星雲で観測された中で最も複雑なものの1つである。スペクトルにより、中央の恒星の表面温度は20万Kを超え、この銀河の中で最も熱い恒星の1つであることが示されており、形成の元となった恒星が非常に大きいものであったことが示唆されている（PG1159型星参照）。",
+   "article_ja": "バグ星雲"
+  },
+  "C72": {
+   "desc_en": "NGC 55, also known as the String of Pearls Galaxy, is a Magellanic type barred spiral galaxy located about 6.5 million light-years away in the constellation Sculptor. It was discovered on 7 July 1826 by Scottish astronomer James Dunlop.",
+   "article_en": "NGC 55",
+   "desc_ja": "NGC 55（Caldwell 72）は、ちょうこくしつ座に位置する銀河である。1826年7月7日にジェイムズ・ダンロップによって発見された。 日本国内で見える銀河としては比較的明るい部類に属するが、東京での南中高度15度ほどと南に低いことから目立たない存在となっている。",
+   "article_ja": "NGC 55"
+  },
+  "C76": {
+   "desc_en": "NGC 6231 (also known as Caldwell 76 or the Baby Scorpion Cluster) is an open cluster in the southern sky located half a degrees north of Zeta Scorpii.",
+   "article_en": "NGC 6231",
+   "desc_ja": "NGC 6231（Caldwell 76、Melotte 153）は、さそり座にある散開星団である。中国では「神宮」と呼ばれる。さそり座ζ星の近くに位置し、さそり座ζ1星は、この星団の恒星である（より明るいさそり座ζ2星は、地球からわずか150光年の位置にあるため、この星団の恒星ではない）。 この星団は、約3200万歳と推定されており、22km/sの速度で太陽系に近づいている。若いさそり座OB1に属している。",
+   "article_ja": "NGC 6231"
+  },
+  "C77": {
+   "desc_en": "Centaurus A (also known as NGC 5128 or Caldwell 77) is a galaxy in the constellation of Centaurus. It was discovered in 1826 by Scottish astronomer James Dunlop from his home in Parramatta, in New South Wales, Australia.",
+   "article_en": "Centaurus A",
+   "desc_ja": "ケンタウルス座A（NGC 5128、Caldwell 77）は、ケンタウルス座に位置する電波銀河である。",
+   "article_ja": "NGC 5128"
+  },
+  "C80": {
+   "desc_en": "Omega Centauri (ω Cen, NGC 5139, or Caldwell 80) is a globular cluster in the constellation of Centaurus that was first identified as a non-stellar object by Edmond Halley in 1677.",
+   "article_en": "Omega Centauri",
+   "desc_ja": "ω星団（おめがせいだん、NGC 5139、Caldwell 80、Melotte 118）は、ケンタウルス座にある大型の球状星団である。肉眼で見ることができる数少ない球状星団のうちでも最大級のものとされている。 ω星団は地球から17,000光年の距離にある。 1000万個もの恒星の集団で、中心の星は互いに0.1光年ほどしか離れていない超高密度の球状星団であると考えられている。また、他の球状星団とは違って、星生成が行われている。",
+   "article_ja": "NGC 5139"
+  },
+  "C85": {
+   "desc_en": "IC 2391 (also known as the Omicron Velorum Cluster or Caldwell 85) is an open cluster in the constellation Vela consisting of hot, young, blueish stars, some of which are binaries and one of which is a quadruple.",
+   "article_en": "Omicron Velorum Cluster",
+   "desc_ja": "IC 2391（Caldwell 85）は、ほ座にある散開星団である。ほ座ο星星団（The Omicron Velorum Cluster ）とも呼ばれる。ペルシアの天文学者アブドゥル・ラフマーン・スーフィーが964年にこの天体を初めて記述した。ニコラ・ルイ・ド・ラカーユは、Lac II 5としてカタログに収録した。 この星団は、地球から約500光年離れており、裸眼でも見える。視等級は2.5で、50分の範囲に広がり、約30個の恒星が含まれている。",
+   "article_ja": "IC 2391"
+  },
+  "C92": {
+   "desc_en": "The Carina Nebula or Eta Carinae Nebula (catalogued as NGC 3372; also known as the Great Carina Nebula) is a large, complex area of bright and dark nebulosity in the constellation Carina, located in the Carina–Sagittarius Arm of the Milky Way galaxy.",
+   "article_en": "Eta Carinae Nebula",
+   "desc_ja": "イータカリーナ星雲（イータカリーナせいうん、ηカリーナ星雲、Carina Nebula、Eta Carinae Nebula）は、いくつかの散開星団に囲まれた大きく明るい星雲である。りゅうこつ座η星とHD 93129Aという、銀河系で最大級の重さと光度を持つ恒星の2つがこの星雲の中にある。地球からは、6500光年から1万光年離れていると推定されている。イータカリーナ星雲は、りゅうこつ座の中に見え、いて・りゅうこつ腕の中に位置する。この星雲には、いくつかのO型星が含まれる。",
+   "article_ja": "NGC 3372"
+  },
+  "C94": {
+   "desc_en": "Jewel box or Jewel Box may refer to: Jewelry box, a container for gemstones",
+   "article_en": "Jewel Box",
+   "desc_ja": "NGC 4755（Caldwell 94、Melotte 114）は、みなみじゅうじ座にある散開星団である。その美しさから宝石箱（ほうせきばこ）の名で知られる。",
+   "article_ja": "NGC 4755"
+  },
+  "C96": {
+   "desc_en": "NGC 2516 (also known as Caldwell 96) is an open star cluster in the southern sky in the constellation Carina discovered by Abbe Lacaille in 1751-1752. It is also called Southern Beehive or the Sprinter.",
+   "article_en": "NGC 2516",
+   "desc_ja": "NGC 2516（Caldwell 96、Melotte 82）は、りゅうこつ座内とびうお座の近くに位置する散開星団である。1751年から1752年にニコラ・ルイ・ド・ラカーユによって発見された。",
+   "article_ja": "NGC 2516"
+  },
+  "C102": {
+   "desc_en": "IC 2602 (also known as the Southern Pleiades, Theta Carinae Cluster, or Caldwell 102) is an open cluster in the constellation Carina.",
+   "article_en": "Southern Pleiades",
+   "desc_ja": "IC 2602（Caldwell 102、Melotte 102）は、りゅうこつ座の散開星団である。南天のプレアデスとしても知られている。1751年南アフリカでニコラ・ルイ・ド・ラカーユによって発見された。地球から479光年離れており、肉眼で見ることができる。この星団全体の視等級は1.9で、おうし座のプレアデス星団の70%の明るさである。星団は約60の星で含んでいる。りゅうこつ座θ星は、星団の中で最も明るい3等星（視等級+2.74）である。星団内の他の星は5等星以下である。",
+   "article_ja": "IC 2602"
+  },
+  "C103": {
+   "desc_en": "The Tarantula Nebula (also known as 30 Doradus) is a large H II region in the Large Magellanic Cloud (LMC), forming its south-east corner (from Earth's perspective).",
+   "article_en": "Tarantula Nebula",
+   "desc_ja": "タランチュラ星雲（タランチュラせいうん、Tarantula Nebula、別名かじき座30(30 Doradus)）は、大マゼラン雲のHII領域の輝線星雲である。中心には太陽の150倍以上にもなる大質量星が複数存在しており、星形成の過程を研究するのに最適な場所と言える。これまでタランチュラ星雲では、80万個以上の星の形成があったと試算されている。",
+   "article_ja": "NGC 2070"
+  },
+  "C106": {
+   "desc_en": "47 Tucanae, also designated as NGC 104, Caldwell 106 or simply 47 Tuc, is a globular cluster located in the constellation Tucana. It is about 4.45 ± 0.01 kpc (14,500 ± 32.6 ly) from Earth, and 120 light years in diameter.",
+   "article_en": "47 Tucanae",
+   "desc_ja": "きょしちょう座47（NGC 104、Caldwell 106、、Melotte 1）は、きょしちょう座にある球状星団である。実視等級が4.0等と明るく、ケンタウルス座のω星団とともに肉眼で見ることができる球状星団の一つであるが、日本からは見ることができない。",
+   "article_ja": "Caldwell 106"
+  }
+ }
+}

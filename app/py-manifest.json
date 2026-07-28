@@ -1,0 +1,33 @@
+{
+ "wheels": [
+  "astrarium-0.1.0-py3-none-any.whl",
+  "jplephem-2.24-py3-none-any.whl",
+  "tzdata-2026.3-py2.py3-none-any.whl"
+ ],
+ "data": [
+  "de421.bsp",
+  "finals2000A.all",
+  "catalog_bsc5.sqlite",
+  "sites.json",
+  "capitals.json",
+  "mpc_observatories.json",
+  "stargazing_spots.json",
+  "horizon_masks.json",
+  "meteor_showers.json",
+  "dso.json",
+  "exoplanets_sample.json",
+  "variable_stars.json",
+  "constellation_info.json",
+  "planet_moons.json",
+  "milkyway.json",
+  "credits.json",
+  "dso_info.json",
+  "i18n/ja.json",
+  "i18n/en.json",
+  "mpc/comets.json",
+  "mpc/asteroids.json",
+  "constellation_art/index.json",
+  "dso_photos/index.json",
+  "planet_textures/index.json"
+ ]
+}

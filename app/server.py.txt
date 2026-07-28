@@ -1,0 +1,1997 @@
+#!/usr/bin/env python3
+"""Astrarium web GUI server — stdlib only (offline capable, spec §10).
+
+    python3 webapp/server.py [--port 8080] [--host 127.0.0.1]
+
+JSON API consumed by static/app.js:
+    /api/i18n?lang=        UI string table
+    /api/sites?q=          site list / search
+    /api/sky?site&time&mag topocentric apparent-of-date sky snapshot
+    /api/tonight?site      tonight summary rows + voice text
+    /api/events?site&days&back   event scan over [now-back, now+days]
+    /api/riseset?site&ra&dec|body&time   rise/set summary for popups
+    /api/satellites?site&time&groups     TLE satellites: alt/az tracks
+    /api/satellites_update?groups        download element sets (Celestrak)
+    /api/satellite_passes?site&norad     upcoming visible passes
+    /api/satellite_events?site&days      ISS / Starlink-train passes as
+                                         selectable calendar events
+    /api/dso_photos                      Messier photograph index
+                                         (images served from /dsophoto/)
+    /api/planet_textures                 surface-map index for the disk
+                                         renderer (maps from /planettex/)
+
+The client performs only the rigid LST rotation for animation; every
+quantity served here comes from the full DE+ERFA chain in the core.
+"""
+from __future__ import annotations
+
+import argparse
+import datetime
+import json
+import math
+import os
+import time
+import sys
+import threading
+import urllib.parse
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
+
+import erfa
+import numpy as np
+
+from astrarium.bodies import PLANETS, moon_info, observe_planet
+from astrarium.catalog import DSOCatalog, StarCatalog
+from astrarium.ephemeris import Ephemeris
+from astrarium.frames import (altaz_to_radec, ecliptic_to_icrs,
+                                galactic_to_icrs, icrs_to_of_date,
+                                observe_star, observer_bary_pv)
+from astrarium.i18n import I18n
+from astrarium.mpc import SmallBodyRegistry
+from astrarium.observer import SiteDB
+from astrarium.orbits import observe_elements
+from astrarium.riseset import dark_windows, rise_set, twilight_times
+from astrarium.timescale import Time
+
+from astrarium.paths import data_dir
+
+STATIC = os.path.join(os.path.dirname(__file__), "static")
+DATA = data_dir()
+
+_lock = threading.Lock()
+_g = {}
+
+
+def core():
+    with _lock:
+        if "eph" not in _g:
+            _g["eph"] = Ephemeris()
+            _g["db"] = SiteDB()
+            _g["stars"] = StarCatalog()
+            _g["dso"] = DSOCatalog()
+            _g["i18n"] = I18n()
+            _g["lines_icrs"] = _g["stars"].constellation_lines()
+            _g["connames"] = _g["stars"].constellations()
+            _g["sb"] = SmallBodyRegistry()
+            _g["cache"] = {}
+            mw = os.path.join(DATA, "milkyway.json")
+            if os.path.exists(mw):
+                with open(mw, encoding="utf-8") as f:
+                    _g["milkyway"] = json.load(f)
+            else:
+                _g["milkyway"] = None
+        return _g
+
+
+def parse_time(qs, site):
+    v = (qs.get("time") or ["now"])[0]
+    if v == "now":
+        return Time.now()
+    return Time.from_utc(v.replace("Z", ""))
+
+
+def api_i18n(qs):
+    g = core()
+    lang = (qs.get("lang") or ["ja"])[0]
+    return g["i18n"]._table(lang)
+
+
+def api_sites(qs):
+    """Site menu, served one level at a time.
+
+    The register is ~3000 entries once the MPC observatory codes are
+    loaded, so the whole list is never shipped: the browser asks for the
+    groups, then for the members of the group it is showing (or for
+    search hits).  ``id`` returns that one site plus the group it lives
+    in, which is how the page finds its way back to the current site.
+    """
+    g = core()
+    db = g["db"]
+    q = (qs.get("q") or [""])[0]
+    group = (qs.get("group") or [""])[0]
+    want_id = (qs.get("id") or [""])[0]
+    limit = int(float((qs.get("limit") or ["600"])[0]))
+
+    def row(s):
+        return {"id": s.id, "name_ja": s.name_ja, "name_en": s.name_en,
+                "name_kana": s.name_kana,
+                "lat_deg": s.lat_deg, "lon_deg": s.lon_deg, "tz": s.tz,
+                "elev_m": s.elev_m,
+                "category": s.category, "mpc_code": s.mpc_code,
+                "country_ja": s.country_ja, "country_en": s.country_en,
+                "region": s.region, "group": db.group_of(s)}
+
+    counts = {}
+    for s in db.sites:
+        k = db.group_of(s)
+        counts[k] = counts.get(k, 0) + 1
+    if q:
+        sites = db.search(q)[:limit]
+    elif group:
+        sites = [s for s in db.sites if db.group_of(s) == group]
+        # The prefectures and the domestic observatories keep the
+        # customary north-to-south order of a Japanese list; the dark-sky
+        # spots come from two published lists in no order at all, so they
+        # are put in the same one, by latitude.  Everywhere else is a set
+        # of places with nothing to order them by but their names — the
+        # client sorts those again for the language on display.
+        if group == "jp_dark":
+            sites.sort(key=lambda s: (-s.lat_deg, s.id))
+        elif group not in ("japan", "jp_obs"):
+            sites.sort(key=lambda s: ((s.name_en or s.name_ja or "").lower(),
+                                      s.id))
+        sites = sites[:limit]
+    else:
+        sites = []
+    out = {
+        "groups": [{"key": k, "ja": ja, "en": en,
+                    "count": counts.get(k, 0)} for k, ja, en in db.GROUPS],
+        "regions": [{"key": k, "ja": ja, "en": en}
+                    for k, ja, en in db.REGIONS],
+        "total": len(db.sites),
+        "sites": [row(s) for s in sites]}
+    if want_id:
+        try:
+            out["current"] = row(db.get(want_id))
+        except KeyError:
+            out["current"] = None
+    return out
+
+
+def _frame_matrices(t: Time):
+    """Rotation matrices for client-side grid drawing (exact, of date).
+
+    ecl2eq: ecliptic-of-date (λ,β) -> true equatorial of date
+    gal2eq: IAU 1958 galactic (l,b) -> true equatorial of date
+    Client transforms unit vectors: v_eq = M @ v_frame.
+    """
+    eps = float(erfa.obl06(*t.tt) + erfa.nut06a(*t.tt)[1])
+    ce, se = math.cos(eps), math.sin(eps)
+    ecl2eq = [[1.0, 0.0, 0.0], [0.0, ce, -se], [0.0, se, ce]]
+    # galactic -> ICRS via basis vectors, then bias-precession-nutation
+    lb = [(0.0, 0.0), (90.0, 0.0), (0.0, 90.0)]
+    cols = []
+    for l, b in lb:
+        ra, dec = galactic_to_icrs(l, b)
+        cols.append(erfa.s2c(math.radians(float(ra)),
+                             math.radians(float(dec))))
+    m_icrs = np.array(cols).T          # columns = galactic axes in ICRS
+    rbpn = erfa.pnm06a(*t.tt)
+    gal2eq = (rbpn @ m_icrs).tolist()
+    return {"ecl2eq": ecl2eq, "gal2eq": gal2eq,
+            "j2eq": rbpn.tolist(),     # ICRS/J2000 -> true equator of date
+            "eps_deg": math.degrees(eps)}
+
+
+def api_sky(qs):
+    g = core()
+    site = g["db"].get((qs.get("site") or ["jp-tokyo"])[0])
+    t = parse_time(qs, site)
+    mag = float((qs.get("mag") or ["6.6"])[0])
+
+    stars = g["stars"].apparent_stars(t, site, vmag_limit=mag,
+                                      refraction=False)
+    star_rows = [[round(s["ra_apparent"], 5), round(s["dec_apparent"], 5),
+                  s["vmag"], s.get("bv"), s.get("name")]
+                 for s in stars]
+
+    lines = []
+    l = g["lines_icrs"]
+    ra1 = np.array([x[1] for x in l]); de1 = np.array([x[2] for x in l])
+    ra2 = np.array([x[3] for x in l]); de2 = np.array([x[4] for x in l])
+    r1, d1 = icrs_to_of_date(ra1, de1, t)
+    r2, d2 = icrs_to_of_date(ra2, de2, t)
+    lines = np.stack([r1, d1, r2, d2], axis=1).round(4).tolist()
+
+    connames = []
+    cn = g["connames"]
+    ra = np.array([c["ra_deg"] for c in cn])
+    de = np.array([c["dec_deg"] for c in cn])
+    rr, dd = icrs_to_of_date(ra, de, t)
+    for c, a, b in zip(cn, rr, dd):
+        connames.append({"abbr": c["abbr"], "ja": c["name_ja"],
+                         "en": c["name_latin"],
+                         "ra": round(float(a), 3),
+                         "dec": round(float(b), 3)})
+
+    planets = []
+    for key in ["sun", "moon"] + PLANETS:
+        bv = observe_planet(g["eph"], key, t, site, refraction=False)
+        row = {"key": key,
+               "ra": round(float(np.atleast_1d(
+                   bv.position.ra_apparent)[0]), 5),
+               "dec": round(float(np.atleast_1d(
+                   bv.position.dec_apparent)[0]), 5),
+               "mag": (None if not np.isfinite(
+                   np.atleast_1d(bv.magnitude)[0].astype(float))
+                   else round(float(np.atleast_1d(bv.magnitude)[0]), 2)),
+               "name_ja": g["i18n"].t(f"body.{key}", "ja"),
+               "name_en": g["i18n"].t(f"body.{key}", "en")}
+        if key == "moon":
+            row["illum"] = round(float(np.atleast_1d(
+                bv.illuminated_fraction)[0]), 3)
+        # disk rendering: true angular size, phase and orientation
+        row["diam"] = round(float(np.atleast_1d(bv.diameter_arcsec)[0]), 3)
+        if key != "sun":
+            row["illum"] = round(float(np.atleast_1d(
+                bv.illuminated_fraction)[0]), 4)
+            row["phase"] = round(float(np.atleast_1d(
+                bv.phase_angle_deg)[0]), 2)
+            o = _orientation(g, key, t, site, row["ra"], row["dec"])
+            if o:
+                row["orient"] = o
+            if key in MOON_SETS:
+                row["moons"] = _moon_config(g, key, t, site)
+        planets.append(row)
+
+    dso = []
+    for d in g["dso"].all():
+        r, dd_ = icrs_to_of_date(d["ra_deg"], d["dec_deg"], t)
+        dso.append({"id": d["id"], "ra": round(float(r), 4),
+                    "dec": round(float(dd_), 4), "vmag": d.get("vmag"),
+                    "name_ja": d.get("name_ja"),
+                    "name_en": d.get("name_en") or d["id"],
+                    "type": d.get("type"),
+                    # catalogue detail shown in the object popup
+                    "messier": d.get("messier"), "ngc": d.get("ngc"),
+                    "con": d.get("con"),
+                    "size_arcmin": d.get("size_arcmin"),
+                    "best_month": d.get("best_month")})
+
+    lon = np.arange(0.0, 360.1, 5.0)
+    er, ed = ecliptic_to_icrs(lon, np.zeros_like(lon), t)
+    er, ed = icrs_to_of_date(er, ed, t)
+    ecl = np.stack([er, ed], axis=1).round(3).tolist()
+
+    # selected comets/asteroids (spec: 彗星・小惑星を選択して表示)
+    smallbodies = []
+    sb_ids = [x for x in (qs.get("sb") or [""])[0].split(",") if x]
+    for sid in sb_ids[:40]:
+        try:
+            el = g["sb"].elements(sid)
+        except (KeyError, IndexError, ValueError):
+            continue
+        bv = observe_elements(g["eph"], el, t, site, refraction=False)
+        mag = float(np.atleast_1d(bv.magnitude)[0])
+        f = lambda v: float(np.atleast_1d(v)[0])            # noqa: E731
+        a_au = None if el.e >= 1.0 else el.q_au / (1.0 - el.e)
+        row = {
+            "id": sid, "name": el.name,
+            "kind": "comet" if el.kind == "comet" else "asteroid",
+            "ra": round(f(bv.position.ra_apparent), 5),
+            "dec": round(f(bv.position.dec_apparent), 5),
+            "mag": None if not np.isfinite(mag) else round(mag, 1),
+            # circumstances of this moment
+            "r_sun_au": round(f(bv.r_sun_au), 4),
+            "delta_au": round(f(bv.delta_au), 4),
+            "phase_deg": round(f(bv.phase_angle_deg), 1),
+            "elong_deg": round(f(bv.elongation_deg), 1),
+            "elong_side": str(np.atleast_1d(bv.elongation_side)[0]),
+            # the orbit it is on
+            "elements": {
+                "q_au": round(el.q_au, 6), "e": round(el.e, 6),
+                "incl_deg": round(el.incl_deg, 4),
+                "node_deg": round(el.node_deg, 4),
+                "argp_deg": round(el.argp_deg, 4),
+                "tp_jd_tt": round(el.tp_jd_tdb, 5),
+                "epoch_jd_tt": (None if el.epoch_jd_tdb is None
+                                else round(el.epoch_jd_tdb, 5)),
+                "a_au": None if a_au is None else round(a_au, 6),
+                "Q_au": (None if a_au is None
+                         else round(a_au * (1.0 + el.e), 6)),
+                # Kepler's third law; meaningless for an unbound orbit
+                "period_yr": (None if a_au is None or a_au <= 0
+                              else round(a_au ** 1.5, 4)),
+                "H": el.H, "G": el.G, "M1": el.M1, "K1": el.K1},
+        }
+        smallbodies.append(row)
+
+    sun_bv = observe_planet(g["eph"], "sun", t, site, refraction=False)
+    return {
+        "time": {"utc_iso": t.iso_utc(0),
+                 "local_iso": t.iso_local(site.tz),
+                 "lst_hours": float(t.lst(site.lon_deg)),
+                 "tz": site.tz},
+        "site": {"id": site.id, "lat_deg": site.lat_deg,
+                 "lon_deg": site.lon_deg,
+                 "name_ja": site.name_ja, "name_en": site.name_en},
+        "sun_alt": round(float(np.atleast_1d(sun_bv.alt)[0]), 2),
+        "stars": star_rows, "lines": lines, "connames": connames,
+        "planets": planets, "dso": dso, "ecliptic": ecl,
+        "smallbodies": smallbodies,
+        "matrices": _frame_matrices(t),
+        "deep_available": os.path.exists(
+            os.path.join(DATA, "tycho2.sqlite")),
+        "milkyway_available": g["milkyway"] is not None,
+    }
+
+
+def api_tonight(qs):
+    g = core()
+    lang = (qs.get("lang") or ["ja"])[0]
+    site = g["db"].get((qs.get("site") or ["jp-tokyo"])[0])
+    i = g["i18n"]
+    now = Time.now()
+    local_noon = now.datetime_local(site.tz).replace(
+        hour=12, minute=0, second=0, microsecond=0)
+    if now.datetime_local(site.tz).hour < 12:
+        local_noon -= datetime.timedelta(days=1)
+    t0 = Time.from_local(local_noon.replace(tzinfo=None), site.tz)
+    t1 = t0 + 1.0
+
+    def L(x):
+        return x.iso_local(site.tz)[11:16]
+
+    def with_az(e):
+        """'18:51 / 方位 293°' — rise and set azimuths matter for framing
+        a shot and for judging what the horizon hides."""
+        if e.az is None:
+            return L(e.time)
+        return f"{L(e.time)} / {i.t('ui.azimuth', lang)} {e.az:.0f}°"
+
+    def transit_row(arc, label_key):
+        e = arc.first("transit")
+        if e is None or e.alt is None:
+            return None
+        return [i.t(label_key, lang),
+                f"{L(e.time)} / {i.t('ui.altitude', lang)} {e.alt:.1f}°"]
+
+    rows, voice = [], []
+    voice.append(i.t("voice.tonight_intro", lang,
+                     site=site.name(lang)))
+    sun = rise_set(g["eph"], "sun", site, t0, t1)
+    for e in sun.events:
+        if e.kind == "set":
+            rows.append([i.t("ui.sunset", lang), with_az(e)])
+            voice.append(i.t("voice.sunset_at", lang, time=L(e.time)))
+        if e.kind == "rise":
+            rows.append([i.t("ui.sunrise", lang), with_az(e)])
+    r = transit_row(sun, "ui.sun_transit")
+    if r:
+        rows.append(r)
+    tw = twilight_times(g["eph"], site, t0, t1)
+    if tw["astronomical_dusk"]:
+        rows.append([i.t("twilight.astronomical", lang) + " " +
+                     i.t("ui.dusk", lang), L(tw["astronomical_dusk"][0])])
+        voice.append(i.t("voice.astro_dark", lang,
+                         time=L(tw["astronomical_dusk"][0])))
+    if tw["astronomical_dawn"]:
+        rows.append([i.t("twilight.astronomical", lang) + " " +
+                     i.t("ui.dawn", lang), L(tw["astronomical_dawn"][0])])
+    if tw["nautical_dusk"]:
+        rows.append([i.t("twilight.nautical", lang) + " " +
+                     i.t("ui.dusk", lang), L(tw["nautical_dusk"][0])])
+    if tw["nautical_dawn"]:
+        rows.append([i.t("twilight.nautical", lang) + " " +
+                     i.t("ui.dawn", lang), L(tw["nautical_dawn"][0])])
+    moon = rise_set(g["eph"], "moon", site, t0, t1)
+    for e in moon.events:
+        if e.kind == "rise":
+            rows.append([i.t("ui.moonrise", lang), with_az(e)])
+        if e.kind == "set":
+            rows.append([i.t("ui.moonset", lang), with_az(e)])
+    r = transit_row(moon, "ui.moon_transit")
+    if r:
+        rows.append(r)
+    # Julian Date of the instant on the clock, not of the night as a
+    # whole: it is the number an observation gets logged against.  Both
+    # scales are given because they differ by about a minute — UTC is
+    # what the clock reads, TT is what an ephemeris is argued with.
+    tnow = parse_time(qs, site)
+    rows.append(["JD (UTC)", f"{sum(tnow.utc):.5f}"])
+    rows.append(["JD (TT)", f"{sum(tnow.tt):.5f}"])
+
+    mi = moon_info(g["eph"], t0 + 0.5)
+    illum = int(round(float(mi.illuminated_fraction) * 100))
+    rows.append([i.t("ui.moon_age", lang), f"{mi.age_days:.1f}"])
+    rows.append([i.t("ui.illumination", lang), f"{illum}%"])
+    voice.append(i.t("voice.moon_state", lang,
+                     age=f"{mi.age_days:.0f}", illum=illum))
+    # geocentric Moon distance and the Earth's heliocentric distance
+    rows.append([i.t("ui.moon_distance", lang),
+                 f"{mi.distance_geocentric_km:,.0f} km"])
+    sun_geo = observe_planet(g["eph"], "sun", t0 + 0.5, None,
+                             refraction=False)
+    r_au = float(np.atleast_1d(sun_geo.delta_au)[0])
+    rows.append([i.t("ui.heliocentric_distance", lang),
+                 f"{r_au:.6f} au"])
+    # the whole astronomical night (dusk -> dawn), then the part of it
+    # that is also moonless — the two windows an observer plans against
+    if tw["astronomical_dusk"] and tw["astronomical_dawn"]:
+        rows.append([i.t("ui.night_window", lang),
+                     f"{L(tw['astronomical_dusk'][0])}–"
+                     f"{L(tw['astronomical_dawn'][0])}"])
+    for a, b in dark_windows(g["eph"], site, t0, t1):
+        rows.append([i.t("ui.dark_time", lang), f"{L(a)}–{L(b)}"])
+    # planets above 15 deg one hour after dusk
+    t_eve = (tw["astronomical_dusk"][0] + 1.0 / 24
+             if tw["astronomical_dusk"] else t0 + 0.45)
+    for b in PLANETS:
+        v = observe_planet(g["eph"], b, t_eve, site, refraction=False)
+        alt = float(np.atleast_1d(v.alt)[0])
+        az = float(np.atleast_1d(v.az)[0])
+        if alt > 15:
+            rows.append([i.t(f"body.{b}", lang),
+                         f"{alt:.0f}° / {az:.0f}°"])
+            voice.append(i.t("voice.planet_visible", lang,
+                             body=i.t(f"body.{b}", lang),
+                             az=f"{az:.0f}", alt=f"{alt:.0f}"))
+    rows += _calendar_rows(g, now, lang)
+    return {"rows": rows, "voice_text": " ".join(voice)}
+
+
+def _calendar_rows(g, t: Time, lang):
+    """旧暦 / 二十四節気 / 六曜 — Japanese civil calendar, defined in JST
+    and therefore independent of the observing site (cached per day)."""
+    from astrarium import koyomi
+    day = koyomi.jst_date(t)
+    key = ("koyomi", day.isoformat())
+    with _lock:
+        hit = g["cache"].get(key)
+    if hit is None:
+        try:
+            ls = koyomi.lunisolar(g["eph"], day)
+            cur, nxt = koyomi.current_and_next_term(g["eph"], t)
+            hit = {"ls": ls, "cur": cur, "nxt": nxt}
+        except Exception:
+            hit = {}
+        with _lock:
+            g["cache"][key] = hit
+    if not hit:
+        return []
+    i = g["i18n"]
+    ls, cur, nxt = hit["ls"], hit["cur"], hit["nxt"]
+    rows = [[i.t("ui.lunisolar", lang),
+             ls.label_ja() if lang == "ja" else ls.label_en()],
+            [i.t("ui.rokuyo", lang),
+             ls.rokuyo_ja if lang == "ja"
+             else koyomi.ROKUYO_EN[ls.rokuyo_key]]]
+    if cur:
+        d = koyomi.jst_date(cur[0])
+        rows.append([i.t("ui.solar_term", lang),
+                     f"{cur[2] if lang == 'ja' else cur[3]} ({d:%m/%d}~)"])
+    if nxt:
+        d = koyomi.jst_date(nxt[0])
+        rows.append([i.t("ui.solar_term_next", lang),
+                     f"{nxt[2] if lang == 'ja' else nxt[3]} {d:%m/%d}"])
+    return rows
+
+
+MAX_EVENT_DAYS = 3700.0          # ~10 years each way
+SHORT_WINDOW_DAYS = 200.0        # scanned directly, no year chunking
+
+
+def _year_scan(g, site, year):
+    """All events of one calendar year, cached (and its eclipses' local
+    circumstances warmed).  Chunking by year is what makes the multi-year
+    windows affordable: a 10-year request reuses whatever the 1-year view
+    already computed, and every window shares the same year blocks."""
+    key = ("year", site.id, year)
+    with _lock:
+        hit = g["cache"].get(key)
+    if hit is not None:
+        return hit
+    from astrarium.scanner import scan_events
+    t0 = Time.from_utc(f"{year}-01-01T00:00:00")
+    t1 = Time.from_utc(f"{year + 1}-01-01T00:00:00")
+    rows = scan_events(g["eph"], t0, t1, site)
+    for r in rows:                     # warm the per-eclipse local pass
+        if r.kind in ("solar_eclipse", "lunar_eclipse"):
+            _eclipse_local(g, site, r)
+    with _lock:
+        g["cache"][key] = rows
+    return rows
+
+
+def _scan_job(g, site, years):
+    """Progress a multi-year scan (a decade takes minutes).
+
+    The endpoint reports progress instead of blocking the browser, which
+    keeps the UI responsive and lets the user watch it fill in.
+
+    Where threads exist, one background worker walks the whole list.
+    The WebAssembly build has none — `threading.Thread.start()` raises
+    "can't start new thread" — so there the work is done a year per
+    request and the client's polling drives it forward.  Without this
+    the offline build reported `pending` for ever and any window longer
+    than SHORT_WINDOW_DAYS (a year, or 180 days either side of now)
+    simply never appeared.
+    """
+    key = ("job", site.id, years[0], years[-1])
+    with _lock:
+        job = g.setdefault("jobs", {}).get(key)
+        if job is None:
+            job = {"done": 0, "total": len(years), "error": None,
+                   "threaded": False}
+            g["jobs"][key] = job
+
+            def run():
+                try:
+                    for y in years:
+                        _year_scan(g, site, y)
+                        with _lock:
+                            job["done"] += 1
+                except Exception as e:               # keep it reportable
+                    with _lock:
+                        job["error"] = str(e)[:200]
+            try:
+                threading.Thread(target=run, daemon=True).start()
+                job["threaded"] = True
+            except RuntimeError:
+                pass                     # no threads here: scan inline
+    if not job["threaded"] and job["error"] is None:
+        # one year per call, so a request stays bounded and the poll
+        # that the client already does becomes the scheduler
+        try:
+            for y in years:
+                if ("year", site.id, y) not in g["cache"]:
+                    _year_scan(g, site, y)
+                    break
+            with _lock:
+                job["done"] = sum(1 for y in years
+                                  if ("year", site.id, y) in g["cache"])
+        except Exception as e:
+            with _lock:
+                job["error"] = str(e)[:200]
+    return job
+
+
+def api_events(qs):
+    """Events in [now - back, now + days] (days/back in days).
+
+    The window is anchored on the real present, not the simulated clock,
+    so the browser's 今後 / 過去 / 前後 selector maps onto the two
+    parameters directly.
+
+    Short windows (<= SHORT_WINDOW_DAYS in total) are scanned directly
+    and returned synchronously — that is the everyday case and it costs
+    about a second.  Longer ones are chunked into whole calendar years
+    scanned by a background thread, so a decade (minutes of work) does
+    not block the browser: until every year is cached the reply is
+    {"pending": true, "done": k, "total": n} and the client polls.  The
+    year blocks are shared between every window that overlaps them.
+    """
+    g = core()
+    lang = (qs.get("lang") or ["ja"])[0]
+    site_id = (qs.get("site") or ["jp-tokyo"])[0]
+    days = min(max(float((qs.get("days") or ["30"])[0]), 0.0),
+               MAX_EVENT_DAYS)
+    back = min(max(float((qs.get("back") or ["0"])[0]), 0.0),
+               MAX_EVENT_DAYS)
+    if days <= 0 and back <= 0:
+        days = 30.0
+    site = g["db"].get(site_id)
+    now = Time.now()
+    t0, t1 = now - back, now + days
+
+    if days + back <= SHORT_WINDOW_DAYS:
+        key = (site_id, days, back, datetime.date.today().isoformat())
+        with _lock:
+            cached = g["cache"].get(key)
+        if cached is None:
+            from astrarium.scanner import scan_events
+            cached = scan_events(g["eph"], t0, t1, site)
+            with _lock:
+                g["cache"][key] = cached
+    else:
+        years = list(range(int(t0.iso_utc(0)[:4]),
+                           int(t1.iso_utc(0)[:4]) + 1))
+        with _lock:
+            missing = [y for y in years
+                       if ("year", site.id, y) not in g["cache"]]
+        if missing:
+            job = _scan_job(g, site, years)
+            with _lock:
+                done, total, err = job["done"], job["total"], job["error"]
+            return {"pending": err is None, "done": done, "total": total,
+                    "error": err, "events": []}
+        jd0, jd1 = t0.jd_tt, t1.jd_tt
+        cached = [r for y in years for r in _year_scan(g, site, y)
+                  if jd0 <= r.time.jd_tt <= jd1]
+        cached.sort(key=lambda r: r.time.jd_tt)
+
+    i = g["i18n"]
+    out = []
+    for r in cached:
+        label = i.event_name(r.kind, r.detail.get("kind"), lang)
+        if r.kind == "meteor_shower_maximum":
+            label = (r.detail.get("name_ja") if lang == "ja"
+                     else r.detail.get("name_en")) or label
+        elif r.body not in ("sun", "moon") and \
+                not r.kind.startswith(("solar", "lunar", "meteor")):
+            label = f"{i.t('body.' + r.body, lang)} {label}"
+        row = {"kind": r.kind, "body": r.body,
+               "time_utc": r.time.iso_utc(0) + "Z",
+               "time_local": r.time.iso_local(site.tz),
+               "label": label,
+               "value": (None if r.value is None
+                         else round(float(r.value), 2))}
+        if r.kind in ("solar_eclipse", "lunar_eclipse"):
+            row["eclipse"] = _eclipse_local(g, site, r)
+        elif r.kind == "meteor_shower_maximum":
+            row["shower"] = {
+                "code": r.body,
+                "ra": round(float(r.detail.get("radiant_ra", 0.0)), 3),
+                "dec": round(float(r.detail.get("radiant_dec", 0.0)), 3),
+                "zhr": r.detail.get("zhr"), "r": r.detail.get("r"),
+                "vinf": r.detail.get("vinf"),
+                "parent": (r.detail.get("parent_ja") if lang == "ja"
+                           else r.detail.get("parent_en")),
+                "moon": r.detail.get("moon_condition"),
+                "moon_illum": r.detail.get("moon_illum"),
+                "peak_local": r.time.iso_local(site.tz),
+                "peak_utc": r.time.iso_utc(0) + "Z",
+                "name": (r.detail.get("name_ja") if lang == "ja"
+                         else r.detail.get("name_en"))}
+        out.append(row)
+    return {"pending": False, "events": out}
+
+
+def _eclipse_local(g, site, r):
+    """Local circumstances of one eclipse at the selected site.
+
+    A geocentric eclipse says nothing about whether *this* observer sees
+    anything, which is the first thing a user wants from an eclipse
+    entry.  Solar: the topocentric contact solution (eclipses.py).
+    Lunar: visible wherever the Moon is above the horizon at maximum.
+    Cached per (site, event) — the scan itself is cached separately, so
+    switching language or window does not recompute this.
+    """
+    key = ("ecl", site.id, r.kind, round(r.time.jd_tt, 6))
+    with _lock:
+        hit = g["cache"].get(key)
+    if hit is not None:
+        return hit
+    try:
+        def _alt(body, t):
+            bv = observe_planet(g["eph"], body, t, site, refraction=False)
+            return float(np.atleast_1d(bv.alt)[0])
+
+        if r.kind == "solar_eclipse":
+            from astrarium.eclipses import local_solar_eclipse
+            loc = local_solar_eclipse(g["eph"], site, r.time)
+            # geometric overlap is not enough: the Sun has to be up for
+            # at least part of C1..C4 (it may rise mid-eclipse)
+            alts = [_alt("sun", x) for x in (loc.c1, loc.max, loc.c4) if x]
+            up = any(a > -0.5 for a in alts)
+            if loc.kind == "none" or loc.magnitude <= 0 or not up:
+                res = {"visible": False}
+            else:
+                res = {"visible": True, "kind": loc.kind,
+                       "magnitude": round(float(loc.magnitude), 3),
+                       "obscuration": round(float(loc.obscuration), 3),
+                       "alt": round(float(loc.sun_alt_at_max), 1),
+                       # greatest eclipse below the horizon: only the
+                       # start or the end of it can be watched
+                       "partial_view": float(loc.sun_alt_at_max) <= 0,
+                       "start_local": (loc.c1.iso_local(site.tz)[11:16]
+                                       if loc.c1 else None),
+                       "max_local": (loc.max.iso_local(site.tz)[11:16]
+                                     if loc.max else None),
+                       "end_local": (loc.c4.iso_local(site.tz)[11:16]
+                                     if loc.c4 else None)}
+        else:
+            # a lunar eclipse runs a few hours; the Moon may rise or set
+            # during it, so sample maximum ±1.5 h
+            alts = [_alt("moon", r.time + off)
+                    for off in (-0.0625, 0.0, 0.0625)]
+            res = {"visible": max(alts) > 0, "alt": round(alts[1], 1),
+                   # the Moon rises or sets mid-eclipse: greatest eclipse
+                   # itself is below the horizon here
+                   "partial_view": alts[1] <= 0 < max(alts),
+                   "max_local": r.time.iso_local(site.tz)[11:16]}
+    except Exception:                     # never break the event list
+        res = None
+    with _lock:
+        g["cache"][key] = res
+    return res
+
+
+def api_riseset(qs):
+    g = core()
+    lang = (qs.get("lang") or ["ja"])[0]
+    site = g["db"].get((qs.get("site") or ["jp-tokyo"])[0])
+    t = parse_time(qs, site)
+    i = g["i18n"]
+    local = t.datetime_local(site.tz).replace(hour=0, minute=0, second=0,
+                                              microsecond=0)
+    t0 = Time.from_local(local.replace(tzinfo=None), site.tz)
+    body = (qs.get("body") or [""])[0]
+    if body:
+        arc = rise_set(g["eph"], body, site, t0, t0 + 1.0)
+    else:
+        ra = float(qs["ra"][0]); dec = float(qs["dec"][0])
+        arc = rise_set(g["eph"], "star", site, t0, t0 + 1.0,
+                       star=(ra, dec))
+    parts = []
+    for e in arc.events:
+        k = {"rise": "ui.rise", "set": "ui.set",
+             "transit": "ui.transit"}[e.kind]
+        parts.append(f"{i.t(k, lang)} {e.time.iso_local(site.tz)[11:16]}")
+    if arc.always_up:
+        parts.append(i.t("ui.always_up", lang))
+    if arc.always_down:
+        parts.append(i.t("ui.always_down", lang))
+    return {"summary": " / ".join(parts)}
+
+
+def api_milkyway(qs):
+    g = core()
+    if g["milkyway"] is None:
+        return {"available": False,
+                "hint": "run scripts/build_deep_catalog.py"}
+    return {"available": True, "grid": g["milkyway"]["grid"]}
+
+
+def api_smallbodies(qs):
+    """Catalog listing / search of cached MPC/SBDB objects."""
+    g = core()
+    q = (qs.get("q") or [""])[0]
+    kind = (qs.get("kind") or [None])[0]
+    reg = g["sb"]
+    if q:
+        rows = reg.search(q, kind)
+    else:
+        rows = (reg.catalog(kind) if kind else
+                reg.catalog("comet") + reg.catalog("asteroid"))
+    return {"fetched": reg.fetched, "objects": rows[:4000]}
+
+
+def api_smallbodies_update(qs):
+    """Fetch the latest element files (MPC comets / SBDB asteroids) and
+    cache them under data/mpc/ (network required)."""
+    g = core()
+    kinds = (qs.get("kinds") or ["comets,asteroids"])[0].split(",")
+    limit = int((qs.get("limit") or ["1000"])[0])
+    g["sb"].update(kinds=[k.strip() for k in kinds], limit=limit)
+    return {"ok": True, "fetched": g["sb"].fetched,
+            "counts": {"comets": len(g["sb"].comets),
+                       "asteroids": len(g["sb"].asteroids)}}
+
+
+def _import_asteroids(body):
+    """Store an SBDB bulk query the host relayed for us.
+
+    Same records `fetch_bright_asteroids` builds — the difference is
+    only who made the HTTP request, because the WebAssembly core cannot.
+    """
+    from astrarium import mpc
+    try:
+        raw = json.loads(body)
+        fields, data = raw["fields"], raw["data"]
+    except (ValueError, KeyError, TypeError):
+        return {"ok": False, "error": "not an SBDB query result"}
+    rows = mpc.rows_from_sbdb_query(fields, data)
+    if not rows:
+        return {"ok": False, "error": "no asteroid elements parsed"}
+    payload = {"fetched_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ",
+                                            time.gmtime()),
+               "source": "JPL SBDB Query API (MPC-equivalent elements)",
+               "objects": rows}
+    os.makedirs(os.path.join(DATA, "mpc"), exist_ok=True)
+    with open(os.path.join(DATA, "mpc", "asteroids.json"), "w",
+              encoding="utf-8") as f:
+        json.dump(payload, f, ensure_ascii=False, indent=0)
+    g = core()
+    g["sb"].reload()
+    return {"ok": True, "count": len(rows), "fetched": g["sb"].fetched}
+
+
+def _import_one_object(body):
+    """Add a single object looked up in the JPL database.
+
+    It joins the cached catalogue rather than living somewhere special,
+    so everything downstream — search, selection, ephemeris, magnitude —
+    treats it exactly like an object that came from a bulk file.
+    """
+    try:
+        rec = json.loads(body)
+    except ValueError:
+        return {"ok": False, "error": "not JSON"}
+    need = ("name", "kind", "q_au", "e", "incl_deg", "node_deg",
+            "argp_deg", "tp_jd_tt")
+    missing = [k for k in need if rec.get(k) is None]
+    if missing:
+        return {"ok": False, "error": "missing: " + ", ".join(missing)}
+    if rec["kind"] not in ("comet", "asteroid"):
+        return {"ok": False, "error": f"bad kind {rec['kind']!r}"}
+    if not (0 <= float(rec["e"]) < 50) or float(rec["q_au"]) <= 0:
+        return {"ok": False, "error": "orbit out of range"}
+    fname = "comets.json" if rec["kind"] == "comet" else "asteroids.json"
+    path = os.path.join(DATA, "mpc", fname)
+    if os.path.exists(path):
+        with open(path, encoding="utf-8") as f:
+            payload = json.load(f)
+    else:
+        payload = {"fetched_utc": None, "source": "JPL SBDB", "objects": []}
+    rows = payload.get("objects", [])
+    name = str(rec["name"]).strip()
+    rows = [o for o in rows if o.get("name") != name]     # replace, not add
+    rec["name"] = name
+    rows.insert(0, rec)
+    payload["objects"] = rows
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(payload, f, ensure_ascii=False, indent=0)
+    g = core()
+    g["sb"].reload()
+    idx = next((i for i, o in enumerate(
+        g["sb"].comets if rec["kind"] == "comet" else g["sb"].asteroids)
+        if o.get("name") == name), None)
+    return {"ok": True, "name": name, "kind": rec["kind"],
+            "id": None if idx is None else f"{rec['kind']}:{idx}"}
+
+
+def api_smallbodies_import(qs, body):
+    """Store comet elements the page downloaded from the MPC.
+
+    The MPC serves CometEls.txt with a permissive CORS header, so the
+    page can fetch it even in the WebAssembly build, where nothing else
+    can.  Parsing and caching stay here.
+    """
+    from astrarium import mpc
+    kind = (qs.get("kind") or ["comets"])[0]
+    if kind == "object":
+        return _import_one_object(body)
+    if kind == "asteroids":
+        return _import_asteroids(body)
+    if kind != "comets":
+        return {"ok": False, "error": f"unknown kind {kind!r}"}
+    rows = [d for d in (mpc.parse_comet_line(l) for l in body.splitlines())
+            if d is not None and d["q_au"] > 0]
+    if not rows:
+        return {"ok": False, "error": "no comet elements parsed"}
+    payload = {"fetched_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ",
+                                            time.gmtime()),
+               "source": mpc.COMETS_URL, "objects": rows}
+    os.makedirs(os.path.join(DATA, "mpc"), exist_ok=True)
+    with open(os.path.join(DATA, "mpc", "comets.json"), "w",
+              encoding="utf-8") as f:
+        json.dump(payload, f, ensure_ascii=False, indent=0)
+    g = core()
+    g["sb"].reload()
+    return {"ok": True, "count": len(rows), "fetched": g["sb"].fetched}
+
+
+def api_deepstars(qs):
+    """Cone query on the Tycho-2 deep catalog for the current view.
+
+    Params: site, time, az, alt (view center), fov [deg], mag.
+    Returns rows [ra_of_date, dec_of_date, vmag, bv] (apparent frame,
+    aberration ~20" neglected for these faint chart stars — documented).
+    """
+    path = os.path.join(DATA, "tycho2.sqlite")
+    if not os.path.exists(path):
+        return {"available": False,
+                "hint": "run scripts/build_deep_catalog.py"}
+    g = core()
+    site = g["db"].get((qs.get("site") or ["jp-tokyo"])[0])
+    t = parse_time(qs, site)
+    az = float((qs.get("az") or ["180"])[0])
+    alt = float((qs.get("alt") or ["45"])[0])
+    fov = min(float((qs.get("fov") or ["60"])[0]), 120.0)
+    mag = min(float((qs.get("mag") or ["12"])[0]), 12.5)
+
+    ra_c, dec_c = altaz_to_radec(az, alt, t, site)   # of date
+    # back to ICRS for the catalog query
+    from astrarium.frames import of_date_to_icrs
+    ra_i, dec_i = of_date_to_icrs(float(ra_c), float(dec_c), t)
+    radius = fov * 0.72
+
+    import sqlite3
+    con = sqlite3.connect(path)
+    dec_lo = max(dec_i - radius, -90.0)
+    dec_hi = min(dec_i + radius, 90.0)
+    zones = set()
+    for zd in range(int((dec_lo + 90) // 2), int((dec_hi + 90) // 2) + 1):
+        band_lo = -90.0 + 2.0 * zd
+        maxabs = min(89.0, max(abs(band_lo), abs(band_lo + 2.0)))
+        cosd = max(math.cos(math.radians(maxabs)), 0.05)
+        dra = min(radius / cosd + 2.0, 180.0)
+        c0 = math.floor((ra_i - dra) / 2.0)
+        c1 = math.floor((ra_i + dra) / 2.0)
+        for c in range(c0, c1 + 1):
+            zones.add(zd * 180 + (c % 180))
+    zones = sorted(zones)
+    rows = []
+    for i in range(0, len(zones), 500):
+        chunk = zones[i:i + 500]
+        ph = ",".join("?" * len(chunk))
+        rows += con.execute(
+            f"SELECT ra,dec,pmra,pmde,vmag,bv FROM star "
+            f"WHERE zone IN ({ph}) AND vmag<=?",
+            (*chunk, mag)).fetchall()
+    con.close()
+    if not rows:
+        return {"available": True, "stars": []}
+    arr = np.array(rows, dtype=float)
+    # proper motion to date (pmra is mu_alpha*cos(delta), mas/yr)
+    yrs = (t.jd_tt - 2451545.0) / 365.25
+    cosd = np.maximum(np.cos(np.deg2rad(arr[:, 1])), 1e-6)
+    ra = arr[:, 0] + np.nan_to_num(arr[:, 2]) * yrs / 3.6e6 / cosd
+    dec = arr[:, 1] + np.nan_to_num(arr[:, 3]) * yrs / 3.6e6
+    # exact cone filter
+    from astrarium.frames import angular_separation_deg
+    sep = angular_separation_deg(ra, dec, ra_i, dec_i)
+    keep = sep <= radius
+    ra, dec, vm, bv = ra[keep], dec[keep], arr[keep, 4], arr[keep, 5]
+    if len(ra) > 25000:                     # densest fields: keep brightest
+        order = np.argsort(vm)[:25000]
+        ra, dec, vm, bv = ra[order], dec[order], vm[order], bv[order]
+    rr, dd = icrs_to_of_date(ra, dec, t)
+    out = np.stack([np.round(rr, 4), np.round(dd, 4),
+                    np.round(vm, 2),
+                    np.round(np.nan_to_num(bv, nan=0.6), 2)],
+                   axis=1).tolist()
+    return {"available": True, "stars": out}
+
+
+def api_smallbodies_bright(qs):
+    """Currently-bright comets & asteroids, ranked by apparent magnitude.
+
+    Fast geocentric pass (no light-time / no topocentric parallax — both
+    irrelevant for a brightness ranking): heliocentric two-body state +
+    the magnitude laws in orbits.Elements.  Cached for 6 h.
+    """
+    g = core()
+    t = parse_time(qs, None)
+    mag_max = float((qs.get("mag") or ["13"])[0])
+    limit = min(int((qs.get("limit") or ["40"])[0]), 200)
+    key = ("bright", round(t.jd_tt * 4) / 4, mag_max)   # 6 h buckets
+    with _lock:
+        cached = g["cache"].get(key)
+    if cached is None:
+        d1, d2 = t.tdb
+        pe, _ = g["eph"].pv_bary("earth", d1, d2)
+        ps, _ = g["eph"].pv_bary("sun", d1, d2)
+        jd = d1 + d2
+        rows = []
+        reg = g["sb"]
+        for kind, src in (("comet", reg.comets),
+                          ("asteroid", reg.asteroids)):
+            for i, o in enumerate(src):
+                try:
+                    el = reg.elements(f"{kind}:{i}")
+                    ph, _ = el.state_icrs(jd)
+                    ph = np.asarray(ph).reshape(3)
+                    pb = ps + ph
+                    r_sun = float(np.linalg.norm(ph))
+                    dvec = pb - pe
+                    delta = float(np.linalg.norm(dvec))
+                    cosph = float(np.dot(-ph, pe - pb)) / (r_sun * delta)
+                    phase = math.degrees(math.acos(
+                        max(-1.0, min(1.0, cosph))))
+                    m = el.apparent_magnitude(r_sun, delta, phase)
+                    m = float(np.atleast_1d(m)[0])
+                    if not np.isfinite(m) or m > mag_max:
+                        continue
+                    ra, dec = erfa.c2s(dvec / delta)
+                    rows.append({
+                        "id": f"{kind}:{i}", "name": o["name"],
+                        "kind": kind, "mag": round(m, 1),
+                        "ra": round(math.degrees(ra) % 360.0, 3),
+                        "dec": round(math.degrees(dec), 3),
+                        "r_au": round(r_sun, 3),
+                        "delta_au": round(delta, 3)})
+                except (ValueError, KeyError, OverflowError):
+                    continue
+        rows.sort(key=lambda r: r["mag"])
+        cached = rows
+        with _lock:
+            g["cache"][key] = cached
+    return {"objects": cached[:limit], "time_utc": t.iso_utc(0)}
+
+
+def _sky_plane_pa(pole_icrs, obs_to_planet_unit, ra_rad, dec_rad):
+    """Position angle (deg, N through E) of a body-pole vector projected
+    on the sky plane at the given apparent position."""
+    e = obs_to_planet_unit
+    p = np.asarray(pole_icrs, dtype=float)
+    p_sky = p - np.dot(p, e) * e
+    north = np.array([-math.sin(dec_rad) * math.cos(ra_rad),
+                      -math.sin(dec_rad) * math.sin(ra_rad),
+                      math.cos(dec_rad)])
+    east = np.array([-math.sin(ra_rad), math.cos(ra_rad), 0.0])
+    return math.degrees(math.atan2(np.dot(p_sky, east),
+                                   np.dot(p_sky, north))) % 360.0
+
+
+#: Mean orbital elements, for the panel that shows what orbit a planet
+#: is on.  Values are the standard mean elements (J2000 epoch, IAU/JPL
+#: fact sheets); they are descriptive constants, not what the ephemeris
+#: computes with — DE421 supplies every position in this program.
+PLANET_ORBIT = {
+    "mercury": {"a_au": 0.38710, "e": 0.20563, "incl_deg": 7.005,
+                "period_yr": 0.2408, "radius_km": 2439.7},
+    "venus":   {"a_au": 0.72333, "e": 0.00677, "incl_deg": 3.395,
+                "period_yr": 0.6152, "radius_km": 6051.8},
+    "mars":    {"a_au": 1.52371, "e": 0.09339, "incl_deg": 1.850,
+                "period_yr": 1.8808, "radius_km": 3396.2},
+    "jupiter": {"a_au": 5.20288, "e": 0.04839, "incl_deg": 1.304,
+                "period_yr": 11.862, "radius_km": 71492.0},
+    "saturn":  {"a_au": 9.53668, "e": 0.05386, "incl_deg": 2.486,
+                "period_yr": 29.457, "radius_km": 60268.0},
+    "uranus":  {"a_au": 19.18916, "e": 0.04726, "incl_deg": 0.773,
+                "period_yr": 84.011, "radius_km": 25559.0},
+    "neptune": {"a_au": 30.06992, "e": 0.00859, "incl_deg": 1.770,
+                "period_yr": 164.79, "radius_km": 24764.0},
+    "moon":    {"a_au": 0.00257, "e": 0.0549, "incl_deg": 5.145,
+                "period_yr": 0.0748, "radius_km": 1737.4},
+}
+
+
+def _moon_phase_key(age_days):
+    """Phase name from the age in days (synodic month 29.53)."""
+    f = (age_days % 29.530588) / 29.530588
+    for edge, key in ((0.0625, "new"), (0.1875, "waxing_crescent"),
+                      (0.3125, "first_quarter"), (0.4375, "waxing_gibbous"),
+                      (0.5625, "full"), (0.6875, "waning_gibbous"),
+                      (0.8125, "last_quarter"), (0.9375, "waning_crescent")):
+        if f < edge:
+            return key
+    return "new"
+
+
+#: Full-moon epithets by calendar month (the almanac names in common
+#: use).  September and October are provisional: the Harvest Moon is
+#: properly the full moon nearest the September equinox, which can fall
+#: in either month, and the Hunter's Moon is the one after it — so both
+#: are decided by computation below and only fall back to this table.
+_FULL_MOON_NAMES = {
+    1: ("ウルフムーン", "Wolf Moon"),
+    2: ("スノームーン", "Snow Moon"),
+    3: ("ワームムーン", "Worm Moon"),
+    4: ("ピンクムーン", "Pink Moon"),
+    5: ("フラワームーン", "Flower Moon"),
+    6: ("ストロベリームーン", "Strawberry Moon"),
+    7: ("バックムーン", "Buck Moon"),
+    8: ("スタージョンムーン", "Sturgeon Moon"),
+    9: ("コーンムーン", "Corn Moon"),
+    10: ("ハンターズムーン", "Hunter's Moon"),
+    11: ("ビーバームーン", "Beaver Moon"),
+    12: ("コールドムーン", "Cold Moon"),
+}
+#: A full moon closer than this is popularly a "supermoon"; further than
+#: the second, a "micromoon".  Perigee and apogee vary between 356,500
+#: and 406,700 km, and these are the thresholds in common use.
+_SUPERMOON_KM = 360_000.0
+_MICROMOON_KM = 405_000.0
+
+
+def _local_ym(t, tz):
+    """(year, month, day) of an instant in the site's own calendar."""
+    iso = t.iso_local(tz)                      # "YYYY-MM-DD HH:MM:SS TZ"
+    return int(iso[0:4]), int(iso[5:7]), int(iso[8:10])
+
+
+def _full_moon_titles(g, t, site, lang):
+    """Popular names for this full moon, empty away from full.
+
+    Three quite different things get called out: the month's almanac
+    name (ピンクムーン and the rest), how close the Moon is (supermoon),
+    and whether it is the second full moon of the calendar month (blue
+    moon).  All are decided from the instant of full moon itself, not
+    from the moment being drawn, so a full moon just after midnight is
+    still named for the month it belongs to.
+    """
+    from astrarium.phenomena import find_moon_phases, find_seasons
+    from astrarium.bodies import observe_planet
+    from astrarium.constants import AU_KM
+
+    fulls = [p.time for p in find_moon_phases(g["eph"], t - 34.0, t + 34.0)
+             if p.kind == "full_moon"]
+    if not fulls:
+        return []
+    f = min(fulls, key=lambda x: abs(x.jd_tt - t.jd_tt))
+    if abs(f.jd_tt - t.jd_tt) > 1.5:           # not the full Moon now
+        return []
+
+    y, m, _ = _local_ym(f, site.tz)
+    ja, en = _FULL_MOON_NAMES[m]
+
+    # Harvest / Hunter: nearest the September equinox, then the next
+    if m in (9, 10):
+        eqs = [p.time for p in find_seasons(g["eph"], f - 45.0, f + 45.0)
+               if p.kind == "september_equinox"]
+        if eqs:
+            eq = eqs[0]
+            near = min(fulls, key=lambda x: abs(x.jd_tt - eq.jd_tt))
+            later = [x for x in fulls if x.jd_tt > near.jd_tt + 1]
+            if abs(f.jd_tt - near.jd_tt) < 0.5:
+                ja, en = "ハーベストムーン", "Harvest Moon"
+            elif later and abs(f.jd_tt - later[0].jd_tt) < 0.5:
+                ja, en = "ハンターズムーン", "Hunter's Moon"
+
+    out = [ja if lang == "ja" else en]
+
+    # distance at the moment of full moon
+    mv = observe_planet(g["eph"], "moon", f, site, refraction=False)
+    km = float(np.atleast_1d(mv.delta_au)[0]) * AU_KM
+    if km <= _SUPERMOON_KM:
+        out.append("スーパームーン" if lang == "ja" else "Supermoon")
+    elif km >= _MICROMOON_KM:
+        out.append("マイクロムーン" if lang == "ja" else "Micromoon")
+
+    # blue moon: the second full moon of the same calendar month
+    same = [x for x in fulls if _local_ym(x, site.tz)[:2] == (y, m)]
+    if len(same) > 1 and f.jd_tt > min(x.jd_tt for x in same) + 1:
+        out.append("ブルームーン" if lang == "ja" else "Blue Moon")
+    return out
+
+
+def api_planetview(qs):
+    """Planet close-up simulation (ステラナビ参考: 惑星シミュレーション).
+
+    Returns disk parameters (diameter, phase, bright-limb PA), Galilean /
+    Saturnian moon configuration (satellites.py, config-display grade)
+    and Saturn's ring opening angle + pole position angle.
+    """
+    g = core()
+    body = (qs.get("body") or ["jupiter"])[0]
+    site = g["db"].get((qs.get("site") or ["jp-tokyo"])[0])
+    t = parse_time(qs, site)
+    bv = observe_planet(g["eph"], body, t, site, refraction=False)
+    ra = math.radians(float(np.atleast_1d(bv.position.ra_apparent)[0]))
+    dec = math.radians(float(np.atleast_1d(bv.position.dec_apparent)[0]))
+
+    sun = observe_planet(g["eph"], "sun", t, site, refraction=False)
+    ra_s = math.radians(float(np.atleast_1d(sun.position.ra_apparent)[0]))
+    de_s = math.radians(float(np.atleast_1d(sun.position.dec_apparent)[0]))
+    chi = math.degrees(math.atan2(
+        math.cos(de_s) * math.sin(ra_s - ra),
+        math.sin(de_s) * math.cos(dec)
+        - math.cos(de_s) * math.sin(dec) * math.cos(ra_s - ra))) % 360.0
+
+    out = {
+        "body": body,
+        "name_ja": g["i18n"].t(f"body.{body}", "ja"),
+        "name_en": g["i18n"].t(f"body.{body}", "en"),
+        "time_utc": t.iso_utc(0),
+        "diameter_arcsec": round(float(np.atleast_1d(
+            bv.diameter_arcsec)[0]), 2),
+        "magnitude": (None if not np.isfinite(np.atleast_1d(
+            bv.magnitude)[0].astype(float)) else
+            round(float(np.atleast_1d(bv.magnitude)[0]), 2)),
+        "phase_angle_deg": round(float(np.atleast_1d(
+            bv.phase_angle_deg)[0]), 2),
+        "illuminated_fraction": round(float(np.atleast_1d(
+            bv.illuminated_fraction)[0]), 4),
+        "bright_limb_pa_deg": round(chi, 1),
+        "alt": round(float(np.atleast_1d(bv.alt)[0]), 2),
+        "az": round(float(np.atleast_1d(bv.az)[0]), 2),
+        "orient": _orientation(g, body, t, site, math.degrees(ra),
+                               math.degrees(dec)),
+        "moons": [], "ring": None,
+        # where it is in the solar system, not just on the sky
+        "delta_au": round(float(np.atleast_1d(bv.delta_au)[0]), 6),
+        "r_sun_au": round(float(np.atleast_1d(bv.r_sun_au)[0]), 6),
+        "elong_deg": round(float(np.atleast_1d(bv.elongation_deg)[0]), 1),
+        "elong_side": str(np.atleast_1d(bv.elongation_side)[0]),
+        "ra_deg": round(math.degrees(ra), 5),
+        "dec_deg": round(math.degrees(dec), 5),
+        "orbit": PLANET_ORBIT.get(body),
+    }
+    if body == "moon":
+        # the Moon is not on a heliocentric orbit the observer cares
+        # about: age, libration and the geocentric distance are
+        mi = moon_info(g["eph"], t)
+        lang = (qs.get("lang") or ["ja"])[0]
+        key = ("moon_titles", int(t.jd_tt * 4), site.id, lang)
+        with _lock:
+            titles = g["cache"].get(key)
+        if titles is None:
+            titles = (_full_moon_titles(g, t, site, lang)
+                      if _moon_phase_key(float(mi.age_days)) == "full"
+                      else [])
+            with _lock:
+                g["cache"][key] = titles
+        out["moon"] = {
+            "age_days": round(float(mi.age_days), 2),
+            "distance_km": round(float(mi.distance_geocentric_km), 0),
+            "phase_name": g["i18n"].t(
+                f"moonphase.{_moon_phase_key(float(mi.age_days))}", lang),
+            "titles": titles,
+        }
+        out["delta_km"] = round(
+            float(np.atleast_1d(bv.delta_au)[0]) * 149597870.7, 0)
+    if body in MOON_SETS:
+        from astrarium.satellites import MOON_NAMES_JA, SatelliteEphemeris
+        if "sat" not in _g:
+            _g["sat"] = SatelliteEphemeris()
+        for p in _g["sat"].positions(g["eph"], t, MOON_SETS[body], site):
+            out["moons"].append({
+                "name": p.name, "name_ja": MOON_NAMES_JA[p.name],
+                "dx_radii": round(p.dx_radii, 3),
+                "dy_radii": round(p.dy_radii, 3),
+                "dx_arcsec": round(p.dx_arcsec, 3),
+                "dy_arcsec": round(p.dy_arcsec, 3),
+                "front": p.in_front,
+                "phys": MOON_PHYS.get(p.name)})
+    if body == "saturn":
+        from astrarium.magnitudes import SATURN_POLE, sub_latitude_deg
+        d1, d2 = t.tdb
+        po, _, _ = observer_bary_pv(g["eph"], t, site)
+        pp, _ = g["eph"].pv_bary("saturn", d1, d2)
+        v = pp - po
+        u = np.asarray(v, dtype=float).reshape(3)
+        u = u / np.linalg.norm(u)
+        b = float(sub_latitude_deg(SATURN_POLE, (po - pp).reshape(3)))
+        out["ring"] = {
+            "b_deg": round(b, 2),                  # + = north face visible
+            "pole_pa_deg": round(_sky_plane_pa(
+                SATURN_POLE, u, ra, dec), 1)}
+    return out
+
+
+def api_occultations(qs):
+    """Lunar occultations of bright catalog stars (恒星食予報).
+
+    days (<=60), maxmag (<=6.5).  Heavy on first call (root-solving per
+    candidate star) — cached per site & day.
+    """
+    g = core()
+    site = g["db"].get((qs.get("site") or ["jp-tokyo"])[0])
+    t0 = parse_time(qs, site)
+    days = min(float((qs.get("days") or ["30"])[0]), 60.0)
+    maxmag = min(float((qs.get("maxmag") or ["6.0"])[0]), 6.5)
+    key = ("occ", site.id, round(t0.jd_tt), days, maxmag)
+    with _lock:
+        cached = g["cache"].get(key)
+    if cached is None:
+        from astrarium.occultations import scan_lunar_occultations
+        stars = g["stars"].stars_brighter_than(maxmag)
+        for s in stars:
+            s.setdefault("name", None)
+        res = scan_lunar_occultations(g["eph"], site, stars,
+                                      t0, t0 + days, min_alt_deg=0.0)
+        cached = []
+        for r in res:
+            st = r["star"]
+            label = st.get("name") or f"HR {st.get('hr', '?')}"
+            for e in r["events"]:
+                sun = observe_planet(g["eph"], "sun", e.time, site,
+                                     refraction=False)
+                cached.append({
+                    "star": label, "vmag": st.get("vmag"),
+                    "kind": e.kind,
+                    "time_utc": e.time.iso_utc(0) + "Z",
+                    "time_local": e.time.iso_local(site.tz),
+                    "pa_deg": round(e.pa_deg, 1),
+                    "alt": round(e.target_alt_deg, 1),
+                    "sun_alt": round(float(np.atleast_1d(sun.alt)[0]), 1),
+                    "dark_limb": bool(e.dark_limb),   # np.bool_ -> JSON
+                    "moon_illum": round(e.moon_illum, 2)})
+        cached.sort(key=lambda x: x["time_utc"])
+        with _lock:
+            g["cache"][key] = cached
+    return {"events": cached}
+
+
+def api_constellations_info(qs):
+    path = os.path.join(DATA, "constellation_info.json")
+    if not os.path.exists(path):
+        return {"available": False}
+    if "coninfo" not in _g:
+        with open(path, encoding="utf-8") as f:
+            _g["coninfo"] = json.load(f)
+    return {"available": True,
+            "constellations": _g["coninfo"]["constellations"]}
+
+
+def api_constellation_art(qs):
+    """Anchor index of the Stellarium constellation artwork
+    (data/constellation_art, scripts/fetch_constellation_art.py)."""
+    path = os.path.join(DATA, "constellation_art", "index.json")
+    if not os.path.exists(path):
+        return {"available": False,
+                "hint": "run scripts/fetch_constellation_art.py"}
+    if "conart" not in _g:
+        with open(path, encoding="utf-8") as f:
+            _g["conart"] = json.load(f)
+    return {"available": True, **_g["conart"]}
+
+
+def _sat_registry():
+    g = core()
+    with _lock:
+        if "tle" not in g:
+            from astrarium.tle import TLERegistry
+            g["tle"] = TLERegistry()
+    return g["tle"]
+
+
+def api_satellites(qs):
+    """Alt/az tracks of the satellites currently up over the site.
+
+    A window of ``n`` samples spaced ``step`` seconds is returned per
+    satellite so the browser can interpolate its own frames (satellites
+    move ~1°/s — far too fast for the rigid-rotation model the rest of
+    the chart animates with).
+    """
+    from astrarium.tle import GROUPS, track_all
+    g = core()
+    reg = _sat_registry()
+    site = g["db"].get((qs.get("site") or ["jp-tokyo"])[0])
+    t = parse_time(qs, site)
+    groups = [x for x in (qs.get("groups") or [""])[0].split(",") if x]
+    step = min(max(float((qs.get("step") or ["5"])[0]), 0.5), 600.0)
+    n = int(min(max(float((qs.get("n") or ["25"])[0]), 2), 120))
+    min_alt = float((qs.get("minalt") or ["0"])[0])
+    sunlit_only = (qs.get("sunlit") or ["0"])[0] == "1"
+    maxmag = (qs.get("maxmag") or [""])[0]
+    idx = reg.index()
+    if (qs.get("meta") or ["0"])[0] == "1":
+        # group list / fetch dates only — no propagation (the page asks
+        # for this at boot, when tens of thousands of elements may be
+        # cached but nothing is being drawn yet)
+        return {"available": bool(idx), "satellites": [],
+                "loaded": sum(v.get("count", 0) for v in idx.values()),
+                "groups": [{"key": k, "ja": ja, "en": en,
+                            "meta": idx.get(k)} for k, ja, en in GROUPS]}
+    sats = reg.satellites(groups or None)
+    norad = (qs.get("norad") or [""])[0]
+    if norad:                       # single object (pass-track requests)
+        sats = [s for s in sats if str(s.satnum) == norad]
+    desig = (qs.get("desig") or [""])[0]
+    if desig:                       # one launch (a Starlink train)
+        sats = [s for s in sats if s.tle.intl_desig[:5] == desig]
+    if not sats:
+        return {"available": False, "satellites": [],
+                "groups": [{"key": k, "ja": ja, "en": en,
+                            "meta": idx.get(k)} for k, ja, en in GROUPS],
+                "hint": "download TLEs first (/api/satellites_update)"}
+    rows = track_all(g["eph"], sats, t, step, n, site,
+                     min_alt_deg=min_alt, sunlit_only=sunlit_only,
+                     max_mag=float(maxmag) if maxmag else None)
+    return {"available": True, "t0_utc": t.iso_utc(0) + "Z",
+            "step_s": step, "n": n, "loaded": len(sats),
+            "groups": [{"key": k, "ja": ja, "en": en, "meta": idx.get(k)}
+                       for k, ja, en in GROUPS],
+            "satellites": rows}
+
+
+def api_satellites_update(qs):
+    """Download element sets from Celestrak into data/tle/."""
+    from astrarium.tle import GROUP_KEYS
+    reg = _sat_registry()
+    groups = [x for x in (qs.get("groups") or ["stations,visual"])[0]
+              .split(",") if x in GROUP_KEYS]
+    done, failed = [], {}
+    for grp in groups:
+        try:
+            done.append(reg.update(grp))
+        except Exception as e:                       # network/parse
+            failed[grp] = str(e)[:200]
+    return {"updated": done, "failed": failed, "index": reg.index()}
+
+
+def api_satellites_import(qs, body):
+    """Store element-set text the page downloaded for us.
+
+    The browser can reach Celestrak directly (it answers with
+    ``Access-Control-Allow-Origin: *``), and in the WebAssembly build it
+    is the only thing that can: there is no subprocess to run curl in.
+    """
+    from astrarium.tle import GROUP_KEYS
+    group = (qs.get("group") or [""])[0]
+    if group not in GROUP_KEYS:
+        return {"ok": False, "error": f"unknown group {group!r}"}
+    if not body or len(body) < 100:
+        return {"ok": False, "error": "empty element set"}
+    reg = _sat_registry()
+    try:
+        res = reg.import_text(group, body)
+    except ValueError as e:
+        return {"ok": False, "error": str(e)}
+    return dict(res, ok=True, index=reg.index())
+
+
+def _starlink_trains(reg, max_height_km=420.0, min_members=8):
+    """Freshly launched Starlink groups that are still strung out in a
+    line ("数珠繋ぎ").
+
+    A launch stays as a train until the satellites raise their orbits, so
+    the signature is: same international designator, still low, and many
+    members.  The brightest phase of a Starlink launch is exactly this
+    window, which is why it deserves its own event.
+    """
+    from astrarium.tle import XKMPER
+    groups = {}
+    for s in reg.load("starlink"):
+        desig = s.tle.intl_desig[:5]        # yyNNN launch identifier
+        # mean semi-major axis from the un-Kozai'd mean motion
+        a = (398600.8 / (s.no / 60.0) ** 2) ** (1.0 / 3.0)
+        h = a * (1.0 - s.tle.ecco) - XKMPER
+        groups.setdefault(desig, []).append((h, s))
+    out = []
+    for desig, members in groups.items():
+        if len(members) < min_members:
+            continue
+        hs = sorted(h for h, _ in members)
+        median = hs[len(hs) // 2]
+        if median > max_height_km:
+            continue
+        members.sort(key=lambda x: x[1].satnum)
+        out.append({"desig": desig, "count": len(members),
+                    "height_km": round(median),
+                    "lead": members[0][1]})
+    out.sort(key=lambda g: -g["count"])
+    return out
+
+
+def api_satellite_events(qs):
+    """Visible passes of the ISS, the CSS and any Starlink train.
+
+    These are merged into the events list by the browser, so a pass can
+    be picked like any other phenomenon; selecting one draws its track
+    across the sky.
+    """
+    from astrarium.tle import next_passes
+    g = core()
+    reg = _sat_registry()
+    site = g["db"].get((qs.get("site") or ["jp-tokyo"])[0])
+    days = min(float((qs.get("days") or ["7"])[0]), 30.0)
+    min_alt = float((qs.get("minalt") or ["20"])[0])
+    t0 = parse_time(qs, site)
+    targets = []
+    for s in reg.load("stations"):
+        if s.satnum in (25544, 48274):            # ISS (ZARYA), CSS
+            targets.append({"sat": s, "kind": "iss", "label": s.name,
+                            "count": 1})
+    for tr in _starlink_trains(reg):
+        targets.append({"sat": tr["lead"], "kind": "starlink_train",
+                        "label": f"Starlink {tr['desig']}",
+                        "count": tr["count"], "desig": tr["desig"],
+                        "height_km": tr["height_km"]})
+    out = []
+    for tg in targets[:6]:                        # keep the scan bounded
+        try:
+            ps = next_passes(g["eph"], tg["sat"], site, t0, days=days,
+                             min_alt_deg=min_alt, max_passes=40)
+        except Exception:
+            continue
+        for p in ps:
+            out.append({
+                "kind": tg["kind"], "norad": tg["sat"].satnum,
+                "name": tg["label"], "members": tg["count"],
+                "desig": tg.get("desig"),
+                "height_km": tg.get("height_km"),
+                "time_utc": p["max"].iso_utc(0) + "Z",
+                "time_local": p["max"].iso_local(site.tz),
+                "rise_utc": p["rise"].iso_utc(0) + "Z",
+                "set_utc": p["set"].iso_utc(0) + "Z",
+                "rise_local": p["rise"].iso_local(site.tz)[11:19],
+                "set_local": p["set"].iso_local(site.tz)[11:19],
+                "max_alt": p["max_alt"], "rise_az": p["rise_az"],
+                "max_az": p["max_az"], "set_az": p["set_az"],
+                "duration_s": p["duration_s"], "mag": p["mag"]})
+    out.sort(key=lambda r: r["time_utc"])
+    return {"available": bool(targets), "events": out}
+
+
+#: mean advance of the Sun's ecliptic longitude, degrees per day
+_DEG_PER_DAY = 360.0 / 365.2422
+
+
+def api_showers(qs):
+    """The major meteor showers of the coming year, next maximum first.
+
+    The IMO working list gives each shower a solar longitude, not a
+    date: the maximum falls where the Earth reaches that point of its
+    orbit, which drifts by a day or so between years.  Every entry is
+    therefore solved rather than tabulated, and reported with the local
+    circumstances that decide whether it is worth going out — how high
+    the radiant is at maximum and what the Moon is doing.
+
+    Cached per site and day; the whole year costs a couple of seconds.
+    """
+    g = core()
+    site = g["db"].get((qs.get("site") or ["jp-tokyo"])[0])
+    lang = (qs.get("lang") or ["ja"])[0]
+    t = parse_time(qs, site)
+    key = ("showers", int(t.jd_tt), site.id)
+    with _lock:
+        cached = g["cache"].get(key)
+    if cached is None:
+        from astrarium.meteors import MeteorCalendar
+        cal = _g.get("meteor_cal")
+        if cal is None:
+            cal = _g["meteor_cal"] = MeteorCalendar()
+        # 400 days ahead: every shower on the list then has a maximum
+        # in the window.  90 days behind as well, because a shower that
+        # peaked last week may still be running — the Taurids are active
+        # for two months — and "what is falling tonight" is the question
+        # the chart button asks.
+        evs = cal.peaks_between(g["eph"], t - 90.0, t + 400.0, site)
+        by_code = {sh["iau_code"]: sh for sh in cal.data}
+        chosen = {}
+        for ev in evs:
+            sh = by_code.get(ev.iau_code, {})
+            peak_sl = sh.get("peak_sollon")
+            start = end = None
+            if peak_sl is not None and ev.activity_start_sollon is not None:
+                # solar longitude advances at very nearly the mean rate,
+                # so the ends of the activity window are the peak offset
+                # by the longitude difference — good to a fraction of a
+                # day, which is finer than the window is known
+                start = ev.peak - ((peak_sl - ev.activity_start_sollon)
+                                   % 360.0) / _DEG_PER_DAY
+                end = ev.peak + ((ev.activity_end_sollon - peak_sl)
+                                 % 360.0) / _DEG_PER_DAY
+            live = (start is not None
+                    and start.jd_tt <= t.jd_tt <= end.jd_tt)
+            prev = chosen.get(ev.iau_code)
+            # an entry that is running now wins; otherwise the next one
+            if prev is None:
+                keep = live or ev.peak.jd_tt >= t.jd_tt
+            else:
+                keep = live and not prev[1]
+            if keep:
+                chosen[ev.iau_code] = (ev, live, start, end)
+        cached = sorted(chosen.values(), key=lambda x: x[0].peak.jd_tt)
+        with _lock:
+            g["cache"][key] = cached
+
+    out = []
+    for ev, live, act0, act1 in cached:
+        out.append({
+            "active": bool(live),
+            "active_start_utc": (act0.iso_utc(0) + "Z") if act0 else None,
+            "active_end_utc": (act1.iso_utc(0) + "Z") if act1 else None,
+            "code": ev.iau_code,
+            "name": ev.name_ja if lang == "ja" else ev.name_en,
+            "name_ja": ev.name_ja, "name_en": ev.name_en,
+            "peak_utc": ev.peak.iso_utc(0) + "Z",
+            "peak_local": ev.peak.iso_local(site.tz),
+            "ra": round(float(ev.radiant_ra_deg), 3),
+            "dec": round(float(ev.radiant_dec_deg), 3),
+            "zhr": ev.zhr, "r": ev.r, "vinf": ev.vinf_km_s,
+            "parent": (ev.parent_ja if lang == "ja" else ev.parent_en),
+            "parent_ja": ev.parent_ja, "parent_en": ev.parent_en,
+            "radiant_alt": (None if ev.radiant_alt_at_peak is None
+                            else round(float(ev.radiant_alt_at_peak), 1)),
+            "moon": ev.moon_condition,
+            "moon_illum": (None if ev.moon_illum is None
+                           else round(float(ev.moon_illum), 3)),
+            "moon_alt": (None if ev.moon_alt_at_peak is None
+                         else round(float(ev.moon_alt_at_peak), 1)),
+            "activity_start_sollon": ev.activity_start_sollon,
+            "activity_end_sollon": ev.activity_end_sollon,
+            "note": ev.note})
+    return {"showers": out, "site": site.id}
+
+
+def api_satellite_passes(qs):
+    """Upcoming passes of one satellite (NORAD id) over the site."""
+    from astrarium.tle import next_passes
+    g = core()
+    reg = _sat_registry()
+    site = g["db"].get((qs.get("site") or ["jp-tokyo"])[0])
+    t = parse_time(qs, site)
+    norad = int((qs.get("norad") or ["25544"])[0])
+    days = min(float((qs.get("days") or ["5"])[0]), 15.0)
+    min_alt = float((qs.get("minalt") or ["10"])[0])
+    visible = (qs.get("visible") or ["1"])[0] == "1"
+    sat = next((s for s in reg.satellites() if s.satnum == norad), None)
+    if sat is None:
+        return {"found": False, "passes": []}
+    ps = next_passes(g["eph"], sat, site, t, days=days,
+                     min_alt_deg=min_alt, dark_only=visible,
+                     sunlit_only=visible)
+    return {"found": True, "name": sat.name, "norad": norad,
+            "visible_only": visible,
+            "passes": [{
+                "rise_utc": p["rise"].iso_utc(0) + "Z",
+                "rise_local": p["rise"].iso_local(site.tz),
+                "max_local": p["max"].iso_local(site.tz),
+                "set_local": p["set"].iso_local(site.tz),
+                "max_alt": p["max_alt"], "rise_az": p["rise_az"],
+                "max_az": p["max_az"], "set_az": p["set_az"],
+                "duration_s": p["duration_s"], "mag": p["mag"],
+                "sun_alt": p["sun_alt"], "sunlit": p["sunlit"]}
+                for p in ps]}
+
+
+def _orientation(g, body, t, site, ra, dec):
+    """Disk orientation for the texture renderer.
+
+    Returns the sub-observer point, the north-pole position angle and the
+    rate at which the central meridian drifts, so the browser can carry
+    the rotation forward between server solutions (Jupiter turns 36° per
+    hour — far too fast to hold fixed for the 20 minutes the sky payload
+    is reused).  Moon and Sun use the package's classical solutions.
+    """
+    from astrarium.bodies import moon_info, sun_axis
+    from astrarium.rotation import IAU_ROTATION, sub_observer
+    if body == "moon":
+        mi = moon_info(g["eph"], t, site, refraction=False)
+        # optical libration = selenographic lon/lat of the sub-Earth point
+        return {"lon": round(float(mi.libration_lon_deg), 3),
+                "lat": round(float(mi.libration_lat_deg), 3),
+                "pa": round(float(mi.axis_pa_deg), 2),
+                "lon_rate": 0.0,          # libration drifts slowly
+                "ssl_lon": None, "ssl_lat": None}
+    if body not in IAU_ROTATION:
+        return None
+    o = sub_observer(g["eph"], body, t, site, ra, dec)
+    o2 = sub_observer(g["eph"], body, t + 0.05, site)
+    rate = (((o2.lon_east_deg - o.lon_east_deg + 180.0) % 360.0) - 180.0) \
+        / 0.05
+    return {"lon": round(o.lon_east_deg, 3), "lat": round(o.lat_deg, 3),
+            "pa": round(o.pole_pa_deg, 2), "lon_rate": round(rate, 4),
+            "ssl_lon": round(o.sub_solar_lon_deg, 2),
+            "ssl_lat": round(o.sub_solar_lat_deg, 2)}
+
+
+#: Which moons belong to which planet in the close-up.  Mars's two are
+#: tiny and never far from the disk, which is precisely what the
+#: magnified window is for.
+from astrarium.satellites import GALILEAN, MARTIAN, SATURNIAN
+MOON_SETS = {"mars": MARTIAN, "jupiter": GALILEAN, "saturn": SATURNIAN}
+
+#: Physical facts for the moon a reader clicks on.  Radii are mean
+#: values (IAU/JPL); the distance is the semi-major axis of the orbit
+#: and the period its sidereal period.
+MOON_PHYS = {
+    "phobos": {"radius_km": 11.3, "a_km": 9376, "period_d": 0.3189},
+    "deimos": {"radius_km": 6.2, "a_km": 23463, "period_d": 1.2624},
+    "io": {"radius_km": 1821.6, "a_km": 421800, "period_d": 1.769},
+    "europa": {"radius_km": 1560.8, "a_km": 671100, "period_d": 3.551},
+    "ganymede": {"radius_km": 2634.1, "a_km": 1070400, "period_d": 7.155},
+    "callisto": {"radius_km": 2410.3, "a_km": 1882700, "period_d": 16.689},
+    "mimas": {"radius_km": 198.2, "a_km": 185540, "period_d": 0.942},
+    "enceladus": {"radius_km": 252.1, "a_km": 238040, "period_d": 1.370},
+    "tethys": {"radius_km": 531.1, "a_km": 294670, "period_d": 1.888},
+    "dione": {"radius_km": 561.4, "a_km": 377420, "period_d": 2.737},
+    "rhea": {"radius_km": 763.8, "a_km": 527070, "period_d": 4.518},
+    "titan": {"radius_km": 2574.7, "a_km": 1221870, "period_d": 15.945},
+    "hyperion": {"radius_km": 135.0, "a_km": 1500880, "period_d": 21.277},
+    "iapetus": {"radius_km": 734.5, "a_km": 3560840, "period_d": 79.322},
+}
+
+
+def _moon_config(g, body, t, site):
+    """Sky-plane offsets of the major moons, in arcseconds from the
+    planet's centre (+east, +north).  They are drawn on the chart
+    whatever the limiting magnitude — they belong to the planet."""
+    from astrarium.satellites import MOON_NAMES_JA, SatelliteEphemeris
+    if "sat" not in _g:
+        _g["sat"] = SatelliteEphemeris()
+    out = []
+    for p in _g["sat"].positions(g["eph"], t, MOON_SETS.get(body, []), site):
+        out.append({"name": p.name, "name_ja": MOON_NAMES_JA[p.name],
+                    "dx": round(p.dx_arcsec, 3),
+                    "dy": round(p.dy_arcsec, 3),
+                    "front": bool(p.in_front)})
+    return out
+
+
+def api_planet_textures(qs):
+    """Index of the bundled surface maps (scripts/fetch_planet_textures)."""
+    path = os.path.join(DATA, "planet_textures", "index.json")
+    if not os.path.exists(path):
+        return {"available": False,
+                "hint": "run scripts/fetch_planet_textures.py"}
+    if "planettex" not in _g:
+        with open(path, encoding="utf-8") as f:
+            _g["planettex"] = json.load(f)
+    d = _g["planettex"]
+    return {"available": True, "credit": d.get("credit"),
+            "licence": d.get("licence"), "note": d.get("note"),
+            "bodies": d.get("bodies", {})}
+
+
+def api_dso_photos(qs):
+    """Index of the bundled Messier photographs (scripts/
+    fetch_messier_photos.py).  Absent directory -> available: False."""
+    path = os.path.join(DATA, "dso_photos", "index.json")
+    if not os.path.exists(path):
+        return {"available": False,
+                "hint": "run scripts/fetch_messier_photos.py"}
+    if "dsophotos" not in _g:
+        with open(path, encoding="utf-8") as f:
+            _g["dsophotos"] = json.load(f)
+    d = _g["dsophotos"]
+    return {"available": True, "source": d.get("source"),
+            "objects": d.get("objects", {})}
+
+
+#: JPL's small-body services answer without an Access-Control-Allow-Origin
+#: header, so the page cannot call them: the request is relayed here (and
+#: by the iOS host, which serves the same path).  Only these two hosts and
+#: only these endpoints — an app that ships an open proxy ships a hole.
+JPL_HOSTS = {"ssd-api.jpl.nasa.gov": {"sbdb.api", "sbdb_query.api"},
+             "ssd.jpl.nasa.gov": {"api/horizons.api"}}
+
+
+def native_jpl(qs):
+    """Relay one allow-listed JPL query and return its body verbatim."""
+    from astrarium.mpc import _download
+    host = (qs.get("host") or ["ssd-api.jpl.nasa.gov"])[0]
+    path = (qs.get("path") or ["sbdb.api"])[0].lstrip("/")
+    allowed = JPL_HOSTS.get(host)
+    if allowed is None or path not in allowed:
+        return {"ok": False, "error": f"not allowed: {host}/{path}"}
+    args = {k: v[0] for k, v in qs.items() if k not in ("host", "path")}
+    url = f"https://{host}/{path}?" + urllib.parse.urlencode(args)
+    try:
+        return {"ok": True, "body": _download(url, timeout=120)}
+    except Exception as e:
+        return {"ok": False, "error": str(e)[:300]}
+
+
+def api_credits(qs):
+    """Attribution for every bundled data set, library and image.
+
+    Several of the bundled sources require this to travel with the work
+    rather than sit in a repository file: CC BY / CC BY-SA ask for
+    credit, and the Free Art License under which the constellation
+    artwork is published asks for the licence itself to accompany it.
+    """
+    path = os.path.join(DATA, "credits.json")
+    if not os.path.exists(path):
+        return {"available": False}
+    if "credits" not in _g:
+        with open(path, encoding="utf-8") as f:
+            _g["credits"] = json.load(f)
+    return dict(_g["credits"], available=True)
+
+
+def api_dso_info(qs):
+    """Short descriptions of the deep-sky objects (scripts/
+    fetch_dso_info.py).  Absent file -> available: False."""
+    path = os.path.join(DATA, "dso_info.json")
+    if not os.path.exists(path):
+        return {"available": False}
+    if "dsoinfo" not in _g:
+        with open(path, encoding="utf-8") as f:
+            _g["dsoinfo"] = json.load(f)
+    d = _g["dsoinfo"]
+    return {"available": True, "licence": d.get("licence"),
+            "source": d.get("source"), "objects": d.get("objects", {})}
+
+
+def api_horizon_mask(qs):
+    """Terrain profile of the site (for the landscape silhouette)."""
+    g = core()
+    site = g["db"].get((qs.get("site") or ["jp-tokyo"])[0])
+    if site.horizon is None:
+        return {"defined": False}
+    az = list(np.arange(0.0, 360.1, 2.0))
+    alt = [float(site.horizon.min_alt(a)) for a in az]
+    return {"defined": True, "az": az, "alt": alt}
+
+
+ROUTES = {"i18n": api_i18n, "sites": api_sites, "sky": api_sky,
+          "tonight": api_tonight, "events": api_events,
+          "riseset": api_riseset, "milkyway": api_milkyway,
+          "smallbodies": api_smallbodies,
+          "smallbodies_update": api_smallbodies_update,
+          "smallbodies_bright": api_smallbodies_bright,
+          "deepstars": api_deepstars,
+          "planetview": api_planetview,
+          "occultations": api_occultations,
+          "constellations_info": api_constellations_info,
+          "constellation_art": api_constellation_art,
+          "satellites": api_satellites,
+          "satellites_update": api_satellites_update,
+          "satellite_passes": api_satellite_passes,
+          "showers": api_showers,
+          "satellite_events": api_satellite_events,
+          "dso_photos": api_dso_photos, "dso_info": api_dso_info,
+          "planet_textures": api_planet_textures,
+          "horizon_mask": api_horizon_mask,
+          "credits": api_credits}
+
+#: routes that take a request body (posted by the page).  Kept apart
+#: from ROUTES so a GET can never reach one by accident.
+POST_ROUTES = {"satellites_import": api_satellites_import,
+               "smallbodies_import": api_smallbodies_import}
+
+MIME = {".html": "text/html; charset=utf-8", ".js": "text/javascript",
+        ".css": "text/css", ".svg": "image/svg+xml", ".png": "image/png",
+        ".jpg": "image/jpeg", ".jpeg": "image/jpeg",
+        ".json": "application/json"}
+
+
+class Handler(BaseHTTPRequestHandler):
+    def log_message(self, fmt, *args):
+        pass
+
+    def do_POST(self):
+        parsed = urllib.parse.urlparse(self.path)
+        fn = POST_ROUTES.get(parsed.path[5:]) \
+            if parsed.path.startswith("/api/") else None
+        if fn is None:
+            self.send_error(404)
+            return
+        n = int(self.headers.get("Content-Length") or 0)
+        # element-set files run to a couple of megabytes; anything much
+        # larger is not a TLE and is refused rather than buffered
+        if n > 8 << 20:
+            self.send_error(413)
+            return
+        raw = self.rfile.read(n) if n else b""
+        try:
+            data = fn(urllib.parse.parse_qs(parsed.query),
+                      raw.decode("utf-8", "replace"))
+        except Exception as e:                  # surfaced to the client
+            data = {"ok": False, "error": str(e)}
+        body = json.dumps(data, ensure_ascii=False).encode()
+        self.send_response(200)
+        self.send_header("Content-Type", "application/json")
+        self.send_header("Content-Length", str(len(body)))
+        self.end_headers()
+        self.wfile.write(body)
+
+    def do_GET(self):
+        parsed = urllib.parse.urlparse(self.path)
+        path = parsed.path
+        if path.startswith("/api/"):
+            name = path[5:]
+            fn = ROUTES.get(name)
+            if fn is None:
+                self.send_error(404)
+                return
+            try:
+                data = fn(urllib.parse.parse_qs(parsed.query))
+            except Exception as e:  # surfaced to the client console
+                self.send_response(500)
+                self.send_header("Content-Type", "application/json")
+                self.end_headers()
+                self.wfile.write(json.dumps(
+                    {"error": str(e)}).encode())
+                return
+            body = json.dumps(data, ensure_ascii=False,
+                              allow_nan=False).encode()
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json")
+            self.send_header("Content-Length", str(len(body)))
+            self.end_headers()
+            self.wfile.write(body)
+            return
+        # relayed JPL query (see native_jpl); the iOS host answers the
+        # same path natively, since its Python core cannot open sockets
+        if path == "/native/jpl":
+            data = native_jpl(urllib.parse.parse_qs(parsed.query))
+            body = json.dumps(data, ensure_ascii=False).encode()
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json")
+            self.send_header("Content-Length", str(len(body)))
+            self.end_headers()
+            self.wfile.write(body)
+            return
+        # constellation artwork (data/constellation_art/<Abbr>.png)
+        if path.startswith("/art/") and path.endswith(".png"):
+            name = os.path.basename(path)
+            f = os.path.normpath(os.path.join(DATA, "constellation_art",
+                                              name))
+            base = os.path.normpath(os.path.join(DATA,
+                                                 "constellation_art"))
+            if f.startswith(base) and os.path.isfile(f):
+                self.send_response(200)
+                self.send_header("Content-Type", "image/png")
+                self.send_header("Cache-Control", "max-age=86400")
+                self.end_headers()
+                with open(f, "rb") as fh:
+                    self.wfile.write(fh.read())
+            else:
+                self.send_error(404)
+            return
+        # planet surface maps (data/planet_textures/<body>.jpg)
+        if path.startswith("/planettex/"):
+            name = os.path.basename(path)
+            base = os.path.normpath(os.path.join(DATA, "planet_textures"))
+            f = os.path.normpath(os.path.join(base, name))
+            if f.startswith(base) and f.endswith(".jpg") and \
+                    os.path.isfile(f):
+                self.send_response(200)
+                self.send_header("Content-Type", "image/jpeg")
+                self.send_header("Cache-Control", "max-age=604800")
+                self.end_headers()
+                with open(f, "rb") as fh:
+                    self.wfile.write(fh.read())
+            else:
+                self.send_error(404)
+            return
+        # Messier photographs (data/dso_photos/<Mnn>.jpg|.png)
+        if path.startswith("/dsophoto/"):
+            name = os.path.basename(path)
+            base = os.path.normpath(os.path.join(DATA, "dso_photos"))
+            f = os.path.normpath(os.path.join(base, name))
+            ext = os.path.splitext(f)[1].lower()
+            if f.startswith(base) and ext in (".jpg", ".jpeg", ".png") \
+                    and os.path.isfile(f):
+                self.send_response(200)
+                self.send_header("Content-Type", MIME.get(
+                    ext, "image/jpeg"))
+                self.send_header("Cache-Control", "max-age=86400")
+                self.end_headers()
+                with open(f, "rb") as fh:
+                    self.wfile.write(fh.read())
+            else:
+                self.send_error(404)
+            return
+        # generated data assets
+        if path == "/milkyway.png":
+            f = os.path.normpath(os.path.join(DATA, "milkyway.png"))
+            if os.path.isfile(f):
+                self.send_response(200)
+                self.send_header("Content-Type", "image/png")
+                self.send_header("Cache-Control", "max-age=86400")
+                self.end_headers()
+                with open(f, "rb") as fh:
+                    self.wfile.write(fh.read())
+            else:
+                self.send_error(404)
+            return
+        # static
+        if path == "/":
+            path = "/index.html"
+        f = os.path.normpath(os.path.join(STATIC, path.lstrip("/")))
+        if not f.startswith(os.path.normpath(STATIC)) or \
+                not os.path.isfile(f):
+            self.send_error(404)
+            return
+        ext = os.path.splitext(f)[1]
+        self.send_response(200)
+        self.send_header("Content-Type",
+                         MIME.get(ext, "application/octet-stream"))
+        self.end_headers()
+        with open(f, "rb") as fh:
+            self.wfile.write(fh.read())
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--port", type=int, default=8080)
+    ap.add_argument("--host", default="127.0.0.1")
+    args = ap.parse_args()
+    try:
+        srv = ThreadingHTTPServer((args.host, args.port), Handler)
+    except OSError as e:
+        if e.errno == 48:      # EADDRINUSE
+            print(f"ポート {args.port} は使用中です / port already in use.\n"
+                  f"  ・既に起動済みなら → http://{args.host}:{args.port} "
+                  f"をそのまま開けます\n"
+                  f"  ・別ポートで起動   → python3 webapp/server.py "
+                  f"--port {args.port + 1}\n"
+                  f"  ・占有プロセス確認 → lsof -nP -iTCP:{args.port} "
+                  f"-sTCP:LISTEN\n"
+                  f"    (Ctrl+Z で停止したサーバーが残っている場合は "
+                  f"fg で戻すか kill してください)", file=sys.stderr)
+            sys.exit(1)
+        raise
+    core()   # warm caches before serving
+    print(f"astrarium web GUI: http://{args.host}:{args.port}")
+    print("終了は Ctrl+C (Ctrl+Z は停止のままポートを保持します)")
+    try:
+        srv.serve_forever()
+    except KeyboardInterrupt:
+        print("\n終了しました / server stopped")
+        srv.server_close()
+
+
+if __name__ == "__main__":
+    main()
