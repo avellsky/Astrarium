@@ -8,8 +8,12 @@
 body{max-width:46rem;margin:0 auto;padding:2rem 1.2rem 4rem;
  font:16px/1.75 -apple-system,BlinkMacSystemFont,"Hiragino Sans",
  "Noto Sans JP",sans-serif;color:#1a1c22;background:#fff}
-header{display:flex;align-items:center;gap:.8rem;margin-bottom:.4rem}
-header img{width:56px;height:56px;border-radius:12px}
+header{display:flex;align-items:center;gap:1.1rem;margin-bottom:.4rem}
+/* 原寸 256px。Retina の 2 倍表示で原寸を超えない 120px までに留める */
+header img{width:120px;height:120px;border-radius:26px}
+@media (max-width:26rem){
+ header{gap:.8rem}
+ header img{width:88px;height:88px;border-radius:19px}}
 h1{font-size:1.6rem;margin:0}
 h2{font-size:1.15rem;margin-top:2.2rem;border-top:1px solid #e5e7ee;
  padding-top:1.2rem}
@@ -46,19 +50,20 @@ section[hidden]{display:none}
 返信までに数日いただく場合があります。</p>
 <p><a href="privacy-policy.ja.html">プライバシーポリシー</a></p>
 
-<h2>ブラウザ版</h2>
-<p><a href="app/"><strong>ブラウザで Astrarium を開く</strong></a> —
-インストールなしで、iOS 版と同じ星図・同じ計算がそのまま動きます。
-星表も暦も計算エンジンもページ側で動くため、初回だけ読み込みに
-数十秒（約 70 MB）かかります。以降はブラウザのキャッシュから起動します。</p>
-
 <h2>使用マニュアル</h2>
+<p><strong>iPhone / iPad 版</strong></p>
 <ul>
   <li><a href="manual/astrarium-manual-ja.pdf">使用マニュアル（日本語・PDF）</a></li>
   <li><a href="manual/astrarium-manual-en.pdf">User Manual (English, PDF)</a></li>
 </ul>
-<p>画面の見かた、指の操作、流星群の出現数の計算、人工衛星、PNG/PDF 出力まで、
-実機の画面を添えて説明しています。</p>
+<p><strong>Mac 版</strong></p>
+<ul>
+  <li><a href="manual/astrarium-manual-mac-ja.pdf">使用マニュアル（日本語・PDF）</a></li>
+  <li><a href="manual/astrarium-manual-mac-en.pdf">User Manual (English, PDF)</a></li>
+</ul>
+<p>画面の見かた、操作、流星群の出現数の計算、人工衛星、PNG/PDF 出力まで、
+実機の画面を添えて説明しています。Mac 版は右パネルの構成とマウス・トラックパッドの
+操作に合わせた別冊です。</p>
 
 <h2>Astrarium について</h2>
 <p>観測地と日時を決めれば、その場所・その時刻の空をそのまま描くプラネタリウムです。
@@ -70,7 +75,7 @@ section[hidden]{display:none}
   <li>IAU 88星座の星座線と星座絵、天の川（Tycho-2 の星の光を積算）</li>
   <li>惑星・月の暦（JPL DE421）、惑星の拡大表示と衛星の配置</li>
   <li>流星群カレンダー、人工衛星（ISS・天宮）、彗星・小惑星</li>
-  <li>4種の経緯線、写野角枠、ナイトモード、PNG/PDF出力、音声解説つきデモ</li>
+  <li>4種の経緯線、写野角枠、ナイトモード、PNG/PDF出力、字幕つきデモ</li>
 </ul>
 
 <h2>よくある質問</h2>
@@ -96,20 +101,20 @@ section[hidden]{display:none}
 Replies may take a few days.</p>
 <p><a href="privacy-policy.en.html">Privacy policy</a></p>
 
-<h2>In your browser</h2>
-<p><a href="app/"><strong>Open Astrarium in a browser</strong></a> —
-the same chart and the same astronomy as the iOS app, with nothing to
-install. The catalogues, the ephemeris and the compute engine all run in
-the page, so the first visit downloads about 70 MB and takes half a
-minute; after that it starts from the browser cache.</p>
-
 <h2>User manual</h2>
+<p><strong>iPhone and iPad</strong></p>
 <ul>
   <li><a href="manual/astrarium-manual-en.pdf">User Manual (English, PDF)</a></li>
   <li><a href="manual/astrarium-manual-ja.pdf">使用マニュアル（日本語・PDF）</a></li>
 </ul>
-<p>Screen by screen: the gestures, the meteor-rate model, satellites and
-the printable PNG/PDF export, illustrated with screenshots.</p>
+<p><strong>Mac</strong></p>
+<ul>
+  <li><a href="manual/astrarium-manual-mac-en.pdf">User Manual (English, PDF)</a></li>
+  <li><a href="manual/astrarium-manual-mac-ja.pdf">使用マニュアル（日本語・PDF）</a></li>
+</ul>
+<p>Screen by screen: driving the chart, the meteor-rate model, satellites and
+the printable PNG/PDF export, illustrated with screenshots. The Mac edition is a
+separate book, written around the docked side panel and the mouse and trackpad.</p>
 
 <h2>About Astrarium</h2>
 <p>Choose a place and a time and Astrarium draws that sky. Every position is
@@ -125,7 +130,7 @@ No ads, no in-app purchases, no account.</p>
   <li>Meteor shower calendar, satellites (ISS and Tiangong), comets and
       asteroids</li>
   <li>Four coordinate grids, field-of-view frames, night-vision mode,
-      PNG/PDF export and a narrated demo</li>
+      PNG/PDF export and a captioned demo</li>
 </ul>
 
 <h2>Frequently asked</h2>
@@ -145,7 +150,7 @@ the date it was retrieved.</p>
 screenshot helps.</p>
 </section>
 
-<footer>Astrarium © Avellsky · <a href="https://github.com/avellsky/Astrarium">github.com/avellsky/Astrarium</a></footer>
+<footer>Astrarium © Avellsky. All rights reserved.</footer>
 <script>
 const pick = (l) => {
   document.querySelectorAll('section[data-lang]').forEach(s =>
