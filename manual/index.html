@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="../icon.png">
+<link rel="apple-touch-icon" href="../icon.png">
+<title>Astrarium — 使用マニュアル / User Manual</title>
+<style>
+  :root { color-scheme: dark; }
+  body { margin: 0; background: #0b0d13; color: #c2c6d2;
+    font-family: system-ui, -apple-system, "Segoe UI", "Hiragino Sans",
+      "Noto Sans JP", sans-serif; line-height: 1.75; }
+  .wrap { max-width: 820px; margin: 0 auto; padding: 28px 20px 60px; }
+  h1 { color: #fff; font-size: 26px; margin: 8px 0 2px; }
+  h2 { color: #fff; font-size: 19px; margin-top: 38px;
+    border-bottom: 1px solid rgba(255,255,255,.14); padding-bottom: 6px; }
+  h3 { color: #e6e9f2; font-size: 15px; margin-top: 24px; }
+  .sub { color: #8990a3; margin-bottom: 18px; }
+  a { color: #86b6ef; }
+  table { border-collapse: collapse; width: 100%; font-size: 14px;
+    margin: 10px 0; }
+  th, td { border: 1px solid rgba(255,255,255,.14); padding: 7px 10px;
+    text-align: left; vertical-align: top; }
+  th { color: #fff; background: rgba(255,255,255,.05); }
+  th.pro, td.pro { color: #ffd479; }
+  b.k { color: #86b6ef; font-weight: 600; }
+  ul { padding-left: 22px; }
+  li { margin: 3px 0; }
+  .nav { display: flex; gap: 10px; flex-wrap: wrap; margin: 14px 0 6px; }
+  .nav a { color: #86b6ef; text-decoration: none; font-size: 13px;
+    border: 1px solid rgba(57,135,229,.4); border-radius: 999px;
+    padding: 4px 14px; }
+  .note { background: rgba(57,135,229,.10);
+    border: 1px solid rgba(57,135,229,.35);
+    border-radius: 10px; padding: 10px 14px; font-size: 14px; }
+  .note.pro { background: rgba(255,196,84,.08);
+    border-color: rgba(255,196,84,.35); }
+  footer { margin-top: 48px; color: #8990a3; font-size: 13px;
+    border-top: 1px solid rgba(255,255,255,.14); padding-top: 14px; }
+  figure { margin: 18px 0; }
+  figure img { width: 100%; height: auto; display: block; border-radius: 10px;
+    border: 1px solid rgba(255,255,255,.14); }
+  figcaption { font-size: 12px; color: #8990a3; margin-top: 6px;
+    text-align: center; }
+  /* 起動画面は 2 枚並べる。無料版と Pro 版の違いは、まずここに出る */
+  .two { display: flex; gap: 14px; flex-wrap: wrap; }
+  .two figure { flex: 1 1 300px; margin: 8px 0; }
+  /* 画面の一覧。細い縦画面が並ぶので、幅で折り返す */
+  .shots { display: grid; gap: 14px;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); }
+  .shots figure { margin: 0; }
+  .logo { margin: 0 0 10px; }
+  .logo img { border-radius: 16px; display: block; }
+  .dl { font-size: 14px; }
+</style>
+</head>
+<body><div class="wrap">
+
+<p class="logo"><img src="../icon.png" alt="" width="72" height="72"></p>
+<h1>Astrarium（アストラリウム）</h1>
+<div class="sub">星図とプラネタリウム — 使用マニュアル（1.2 対応）/
+Planisphere &amp; planetarium — user manual (for 1.2)</div>
+<div class="nav">
+  <a href="#ja">日本語</a><a href="#en">English</a>
+  <a href="#dl">マニュアル / Manuals</a>
+  <a href="../">サポート / Support</a>
+  <a href="../privacy-policy.ja.html">プライバシー / Privacy</a>
+</div>
+
+<div class="two">
+  <figure><img src="img/opening.jpg" alt="Astrarium の起動画面" loading="lazy">
+    <figcaption>起動画面（無料版）/ The opening (free edition)</figcaption></figure>
+  <figure><img src="img/opening-pro.jpg" alt="Astrarium Pro の起動画面"
+      loading="lazy">
+    <figcaption>起動画面（Pro 版）/ The opening (Pro edition)</figcaption></figure>
+</div>
+
+<h2 id="ja">Astrarium とは</h2>
+<p>観測地と日時を決めれば、<b class="k">その場所・その時刻の空をそのまま描く</b>
+プラネタリウムです。いま空にあるものを映すだけでなく、時刻を自由に動かして
+過去と未来の空を再現し、惑星の満ち欠け、日食・月食、流星群、彗星までを
+同じ星図の上で扱えます。</p>
+<p>天体の位置計算は<b>すべて端末の中</b>で行います（惑星暦 JPL DE421、IAU の
+歳差・章動、IERS の地球回転パラメータ）。電波の届かない観測地でも全機能が
+そのまま動きます。広告・アカウント登録はありません。</p>
+
+<div class="shots">
+  <figure><img src="img/sky-allsky.jpg" alt="全天モード" loading="lazy">
+    <figcaption>全天モード — 星座早見盤と同じ丸い全天図</figcaption></figure>
+  <figure><img src="img/sky-conart.jpg" alt="星座絵" loading="lazy">
+    <figcaption>星座絵 — 86 星座分</figcaption></figure>
+  <figure><img src="img/sky-planet.jpg" alt="惑星の拡大表示" loading="lazy">
+    <figcaption>惑星の拡大 — 環と衛星、諸元まで</figcaption></figure>
+  <figure><img src="img/sky-meteors.jpg" alt="流星群" loading="lazy">
+    <figcaption>流星群 — 輻射点と予想出現数</figcaption></figure>
+  <figure><img src="img/sky-events.jpg" alt="イベント一覧" loading="lazy">
+    <figcaption>イベント — 日食・月食、合・衝ほか</figcaption></figure>
+  <figure><img src="img/sky-nayoro.jpg" alt="ふたご座流星群（なよろ）"
+      loading="lazy">
+    <figcaption>ふたご座流星群 — なよろ、2026年12月13日 20時</figcaption></figure>
+</div>
+
+<h3>できること</h3>
+<ul>
+  <li><b class="k">全天モードと地平モード</b> — 空全体の丸い図と、実際に見上げた
+      形の図。ピンチで 1 分角まで拡大できます</li>
+  <li><b class="k">時刻を自由に動かす</b> — 任意の日時へジャンプ、1〜6000 倍の
+      連続再生、朔望月送り、暦（カレンダー）からの日付選択。日時はすべて
+      <b>観測地の時刻</b>で表示します</li>
+  <li><b class="k">天体をタップすれば、その場の数値</b> — 方位・高度・座標・距離・
+      出没時刻が、時計を動かすとそのまま追従します</li>
+  <li><b class="k">惑星の拡大表示</b> — 視直径・輝面比・距離・軌道要素・基本物理量、
+      木星／土星／火星の衛星の配置</li>
+  <li><b class="k">月</b> — 月齢・輝面比・秤動・欠け際、満月の呼称</li>
+  <li><b class="k">流星群カレンダー</b> — 極大日時、輻射点高度、月明かりを織り込んだ
+      予想出現数</li>
+  <li><b class="k">彗星・小惑星</b> — MPC／JPL から軌道要素を取り込んで星図に重ねます</li>
+  <li><b class="k">4 種の経緯線</b>、天の赤道・黄道・銀河面・子午線、写野角枠
+      （Seestar・DWARF・カメラレンズ）</li>
+  <li><b class="k">ナイトモード</b>（赤色画面）、長時間露光、PNG／PDF 出力、
+      字幕つきデモ再生、極軸合わせ</li>
+  <li><b class="k">日本語と英語</b> — 天体名・星座名・星雲星団の解説まで切り替わります</li>
+</ul>
+
+<h2>Astrarium Pro で増えるもの</h2>
+<p>人工衛星・AR・オーロラ予報は、別売のアプリ <b class="k">Astrarium Pro</b> の
+機能です。画面は無料版と同じで、入口も同じ場所にあります（無料版では、押すと
+何ができるかの説明が出ます）。</p>
+
+<div class="shots">
+  <figure><img src="img/pro-satellites.jpg" alt="人工衛星（地球儀）" loading="lazy">
+    <figcaption>人工衛星 — 地球儀・世界地図・星図</figcaption></figure>
+  <figure><img src="img/pro-aurora.jpg" alt="オーロラ帯" loading="lazy">
+    <figcaption>オーロラ帯 — どこまで下がっているか</figcaption></figure>
+  <figure><img src="img/pro-aurora-panel.jpg" alt="オーロラ予報" loading="lazy">
+    <figcaption>オーロラ予報 — NASA DONKI と NOAA OVATION</figcaption></figure>
+  <figure><img src="img/pro-ar.jpg" alt="AR" loading="lazy">
+    <figcaption>AR — カメラ映像に星図を重ねる</figcaption></figure>
+  <figure><img src="img/pro-aurora-nayoro.jpg" alt="なよろから見たオーロラ"
+      loading="lazy">
+    <figcaption>Kp 9 のオーロラ — なよろから北の空（地平・方位 330〜50°）
+    </figcaption></figure>
+</div>
+
+<table>
+<tr><th>機能</th><th>無料版</th><th class="pro">Pro 版</th></tr>
+<tr><td>星図・惑星・流星群・彗星・イベント・出力</td><td>○</td><td class="pro">○</td></tr>
+<tr><td>人工衛星（ISS・天宮・Starlink ほか、可視パス予報）</td><td>—</td>
+    <td class="pro">○ 星図／世界地図／地球儀</td></tr>
+<tr><td>AR（カメラ映像に星図を重ねる・撮影）</td><td>見本のみ</td><td class="pro">○</td></tr>
+<tr><td>オーロラ予報（オーロラ帯・Kp・OVATION）</td><td>—</td><td class="pro">○</td></tr>
+<tr><td>深宇宙星表（追加ダウンロード）</td><td>—</td><td class="pro">○</td></tr>
+<tr><td>イベントの範囲</td><td>今後 30 日</td>
+    <td class="pro">過去〜10 年先、系外惑星のトランジット、変光星</td></tr>
+</table>
+
+<div class="note pro">オーロラ予報は「その観測地から、その Kp でオーロラが
+地平線の上に来るか」を答えます。観測地には<b>オーロラ観測スポット</b>
+（フェアバンクス、トロムソ、イエローナイフ、なよろ市立天文台きたすばる、
+陸別・銀河の森天文台ほか 23 か所）を用意しています。</div>
+
+<h2 id="dl">使用マニュアル（PDF）</h2>
+<table class="dl">
+<tr><th>版</th><th>日本語</th><th>English</th></tr>
+<tr><td>Astrarium（iPhone / iPad）</td>
+    <td><a href="astrarium-manual-ja.pdf">PDF</a></td>
+    <td><a href="astrarium-manual-en.pdf">PDF</a></td></tr>
+<tr><td>Astrarium（Mac）</td>
+    <td><a href="astrarium-manual-mac-ja.pdf">PDF</a></td>
+    <td><a href="astrarium-manual-mac-en.pdf">PDF</a></td></tr>
+<tr><td class="pro">Astrarium Pro（iPhone / iPad）</td>
+    <td><a href="astrarium-pro-manual-ja.pdf">PDF</a></td>
+    <td><a href="astrarium-pro-manual-en.pdf">PDF</a></td></tr>
+</table>
+<p>画面の見かた、操作、流星群の出現数の計算、極軸合わせ、PNG／PDF 出力まで、
+実機の画面を添えて説明しています。Mac 版は右パネルの構成とマウス・トラックパッドの
+操作に合わせた別冊です。Pro 版には人工衛星・AR・オーロラ予報の章が加わります。</p>
+
+<h2 id="en">In English</h2>
+<p><b class="k">Astrarium</b> is a planisphere and astronomical simulator for
+iPhone, iPad and Mac. Choose a place and a time and it draws that sky — not only
+the sky now, but any past or future one, with planetary phases, eclipses, meteor
+showers and comets on the same chart.</p>
+<p>Every position is computed <b>on the device</b> (JPL DE421, the IAU
+precession and nutation models, IERS Earth orientation), so the whole app works
+where there is no signal. No ads, no account.</p>
+<ul>
+  <li>All-sky and horizon views, pinch-zoom down to an arc minute</li>
+  <li>Drive the clock: any date, ×1 to ×6000 playback, the synodic month, a
+      calendar. Every date and time is <b>the time at the observing site</b></li>
+  <li>Tap anything and the figures follow the clock</li>
+  <li>Planet close-ups with the rings and moons, and the physical data</li>
+  <li>Meteor shower calendar with an expected rate that accounts for the
+      radiant altitude, twilight and moonlight</li>
+  <li>Comets and asteroids from the MPC and JPL</li>
+  <li>Four coordinate grids, FOV frames, night-vision mode, PNG/PDF export,
+      a captioned demo, polar alignment</li>
+</ul>
+<p><b class="k">Astrarium Pro</b>, a separate app, adds satellites (chart, world
+map and globe, with visible-pass predictions), AR — the chart drawn over the
+camera image — the aurora forecast (NASA DONKI and NOAA OVATION), the deep-sky
+catalogue and a wider event search.</p>
+
+<footer>
+Astrarium © 2026 Avellsky ／
+<a href="../">サポート / Support</a> ・
+<a href="../privacy-policy.ja.html">プライバシーポリシー</a> ・
+<a href="../privacy-policy.en.html">Privacy policy</a>
+</footer>
+
+</div></body>
+</html>
