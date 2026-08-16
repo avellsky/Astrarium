@@ -24,7 +24,7 @@ iPhone・iPad・Mac 対応／無料／広告なし・アプリ内課金なし・
   <img src="assets/phone-allsky.png"   width="180" alt="全天モード">
   <img src="assets/phone-conart.png"   width="180" alt="星座絵">
   <img src="assets/phone-planet.png"   width="180" alt="惑星の拡大表示">
-  <img src="assets/phone-starlink.png" width="180" alt="人工衛星">
+  <img src="assets/phone-events.png"   width="180" alt="イベント一覧">
   <img src="assets/phone-export.png"   width="180" alt="PNG／PDF 出力">
 </p>
 
@@ -41,9 +41,8 @@ iPhone・iPad・Mac 対応／無料／広告なし・アプリ内課金なし・
 - **月** — 月齢・輝面比・秤動・欠け際、満月の呼称（ピンクムーン、スーパームーンなど）
 - **極軸合わせ** — 北極星を選ぶと極軸望遠鏡の視野を再現。時角の目盛環の上で、いま北極星をどこに入れるかが分かります
 - **流星群カレンダー** — 極大日時、輻射点高度、月明かりを織り込んだ予想出現数
-- **人工衛星** — CelesTrak の軌道要素を取得して ISS・天宮などの通過を表示、可視パス予報つき
 - **彗星・小惑星** — MPC／JPL から軌道要素を取得して星図に重ねる
-- **イベント一覧** — 天体イベント全般のほか、掩蔽・恒星食、肉眼で見える人工衛星、日食・月食を選んで一覧。後の三つは**その観測地から実際に見えるものだけ**を示します
+- **イベント一覧** — 天体イベント全般のほか、掩蔽・恒星食、日食・月食を選んで一覧。後の二つは**その観測地から実際に見えるものだけ**を示します
 - **4 種の経緯線**、天の赤道・黄道・銀河面・子午線、写野角枠（Seestar・DWARF・カメラレンズ）
 - **ナイトモード**（赤色画面）、**長時間露光**、**PNG／PDF 出力**（白背景の印刷用配色）、字幕つきデモ再生
 - **日本語と英語** — 天体名・星座名・星雲星団の解説まで、どちらでも読めます（恒星の固有名は日本語ではカタカナ表記）
@@ -61,6 +60,24 @@ iPhone・iPad・Mac 対応／無料／広告なし・アプリ内課金なし・
 
 天体の位置計算はすべて端末の中で行います。電波の届かない観測地でも全機能がそのまま使えます。
 
+## Astrarium Pro
+
+人工衛星・AR・オーロラ予報は、別売の **Astrarium Pro** の機能です。画面は無料版と同じで、
+入口も同じ場所にあります（無料版では、押すと何ができるかの説明が出ます）。
+
+<p align="center">
+  <img src="assets/phone-pro-satellites.png" width="180" alt="人工衛星（地球儀）">
+  <img src="assets/phone-pro-aurora.png"     width="180" alt="オーロラ予報">
+</p>
+
+- **人工衛星** — CelesTrak の軌道要素を取得して ISS・天宮・Starlink などの通過を表示。
+  可視パス予報つき。星図のほか、世界地図と地球儀でも見られます
+- **AR** — カメラ映像の上に星図を重ね、そのまま撮影できます
+- **オーロラ予報** — NASA DONKI と NOAA OVATION から、オーロラ帯がどこまで下がるか、
+  観測地から見て地平線の上に出るかを描きます
+- **深宇宙星表**（追加ダウンロード）、**イベントの拡張**（過去と 10 年先まで、
+  系外惑星のトランジット、変光星の極大・極小）
+
 ## 動作環境
 
 | | |
@@ -75,8 +92,9 @@ iPhone・iPad・Mac 対応／無料／広告なし・アプリ内課金なし・
 |---|---|---|
 | iPhone / iPad 版 | [PDF](manual/astrarium-manual-ja.pdf) | [PDF](manual/astrarium-manual-en.pdf) |
 | Mac 版 | [PDF](manual/astrarium-manual-mac-ja.pdf) | [PDF](manual/astrarium-manual-mac-en.pdf) |
+| Astrarium Pro | [PDF](manual/astrarium-pro-manual-ja.pdf) | [PDF](manual/astrarium-pro-manual-en.pdf) |
 
-画面の見かた、操作、流星群の出現数の計算、人工衛星、極軸合わせ、PNG／PDF 出力まで、実機の画面を添えて説明しています。Mac 版は右パネルの構成とマウス・トラックパッドの操作に合わせた別冊です。
+画面の見かた、操作、流星群の出現数の計算、極軸合わせ、PNG／PDF 出力まで、実機の画面を添えて説明しています。Mac 版は右パネルの構成とマウス・トラックパッドの操作に合わせた別冊です。Pro 版のマニュアルには、人工衛星・AR・オーロラ予報の章が加わります。
 
 ## プライバシー
 
@@ -107,9 +125,8 @@ For iPhone, iPad and Mac. Free, with no ads, no in-app purchases and no account.
 - **The Moon** — age, illuminated fraction, libration, terminator and the traditional full-moon names
 - **Polar alignment** — select Polaris and the polar scope's field is drawn, with an hour-angle ring showing where Polaris must sit right now
 - **Meteor shower calendar** — maximum, radiant altitude and an expected hourly rate that accounts for moonlight and twilight
-- **Satellites** — CelesTrak elements, ISS and Tiangong passes, visible-pass predictions
 - **Comets and asteroids** — elements from the MPC and JPL, plotted on the chart
-- **Events** — all astronomical events, or occultations, naked-eye satellites and eclipses on their own; those three list only what can actually be seen from your site
+- **Events** — all astronomical events, or occultations and eclipses on their own; those two list only what can actually be seen from your site
 - **Four coordinate grids**, the celestial equator, ecliptic, galactic plane and meridian, and field-of-view frames
 - **Night-vision mode**, **long exposure**, **PNG/PDF export** on white paper, and a captioned demo tour
 - **Japanese and English throughout** — object names, constellations and the deep-sky descriptions
@@ -127,6 +144,25 @@ For iPhone, iPad and Mac. Free, with no ads, no in-app purchases and no account.
 
 Every position is computed on the device, so the whole app works where there is no signal.
 
+## Astrarium Pro
+
+Satellites, AR and the aurora forecast belong to **Astrarium Pro**, a separate
+app. The screen is the same one, and the entry points sit in the same places
+(in the free version they explain what they would do).
+
+<p align="center">
+  <img src="assets/phone-pro-satellites.png" width="180" alt="Satellites on the globe">
+  <img src="assets/phone-pro-aurora.png"     width="180" alt="Aurora forecast">
+</p>
+
+- **Satellites** — CelesTrak elements; passes of the ISS, Tiangong, Starlink and
+  more, with visible-pass predictions, on the chart, a world map and a globe
+- **AR** — the chart drawn over the camera image, and you can take the picture
+- **Aurora forecast** — from NASA DONKI and NOAA OVATION: how far the auroral
+  oval reaches, and whether it clears the horizon where you are
+- **Deep-sky catalogue** (optional download) and **more events** (the past and
+  ten years ahead, exoplanet transits, variable-star maxima and minima)
+
 ## Requirements
 
 | | |
@@ -141,6 +177,7 @@ Every position is computed on the device, so the whole app works where there is 
 |---|---|---|
 | iPhone and iPad | [PDF](manual/astrarium-manual-ja.pdf) | [PDF](manual/astrarium-manual-en.pdf) |
 | Mac | [PDF](manual/astrarium-manual-mac-ja.pdf) | [PDF](manual/astrarium-manual-mac-en.pdf) |
+| Astrarium Pro | [PDF](manual/astrarium-pro-manual-ja.pdf) | [PDF](manual/astrarium-pro-manual-en.pdf) |
 
 ## Privacy
 
