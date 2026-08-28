@@ -6,7 +6,7 @@
 
 **星図とプラネタリウム — 観測地と日時を決めれば、その空をそのまま描きます**
 
-iPhone・iPad・Mac 対応／無料／広告なし・アプリ内課金なし・アカウント登録なし
+iPhone・iPad・Mac 対応（Android 版はテスト公開中）／無料／広告なし・アプリ内課金なし・アカウント登録なし
 
 ### [📲 App Store で入手する](https://apps.apple.com/jp/app/id6795053748)
 
@@ -62,7 +62,8 @@ iPhone・iPad・Mac 対応／無料／広告なし・アプリ内課金なし・
 
 ## Astrarium Pro
 
-人工衛星・AR・オーロラ予報は、別売の **Astrarium Pro** の機能です。画面は無料版と同じで、
+**iPhone・iPad・Mac 版では**、人工衛星・AR・オーロラ予報は、別売の **Astrarium Pro**
+の機能です。画面は無料版と同じで、
 入口も同じ場所にあります（無料版では、押すと何ができるかの説明が出ます）。
 
 <p align="center">
@@ -78,23 +79,47 @@ iPhone・iPad・Mac 対応／無料／広告なし・アプリ内課金なし・
 - **深宇宙星表**（追加ダウンロード）、**イベントの拡張**（過去と 10 年先まで、
   系外惑星のトランジット、変光星の極大・極小）
 
+## Android 版
+
+Android 版ができました。**いまは公開前のクローズドテスト中**で、参加してくださる方を募集しています。
+
+星図・計算・画面は iPhone / iPad 版とまったく同じものを積んでいるので、同じ空を同じ精度で描きます。Android 版で違うのは次の四つです。
+
+- **AR で北を手で合わせる必要がありません** — 端末の絶対方位センサから真北がそのまま得られます
+- **AR と宇宙ステーション**（ISS・天宮）**の通過予報が最初から使えます** — Apple 版では Pro の機能です（Starlink を含む全天体の追尾は Pro のままです）
+- **書き出したものは共有フォルダに入ります** — PNG は `Pictures/Astrarium`、PDF は `ダウンロード/Astrarium`。アプリを削除しても残ります
+- 位置情報の許可は初回の起動時に尋ねます。断っても全機能が使えます
+
+### テストに参加するには
+
+参加は二段階で、**両方**必要です。
+
+1. Google グループ [astrarium](https://groups.google.com/g/astrarium) に参加する
+2. そのうえで Play でテスターに登録する（登録用のリンクはグループに掲示しています）
+
+①を飛ばして②を開くと「App not available」と出ます。**アプリが未公開なのではなく**、いま開いているアカウントがグループの一員として Play 側にまだ届いていない、という意味です。少し時間を置いてから開き直してください。
+
+Google の公開要件で、テスターは **14 日間続けて**参加している必要があります。途中で抜けると数え直しになってしまうので、それまでは登録したままにしていただけると助かります。使い込んでいただく必要はありません。
+
 ## 動作環境
 
 | | |
 |---|---|
 | iPhone / iPad | iOS・iPadOS 17.0 以降 |
+| Android | Android 8.0 以降（クローズドテスト中） |
 | Mac | macOS 13.0 以降（Apple シリコン・Intel） |
-| 価格 | 無料。ユニバーサル購入（片方で入手すれば両方で使えます） |
+| 価格 | 無料。iPhone / iPad と Mac はユニバーサル購入（片方で入手すれば両方で使えます） |
 
 ## 使用マニュアル
 
 | | 日本語 | English |
 |---|---|---|
 | iPhone / iPad 版 | [PDF](manual/astrarium-manual-ja.pdf) | [PDF](manual/astrarium-manual-en.pdf) |
+| Android 版 | [PDF](manual/astrarium-manual-android-ja.pdf) | [PDF](manual/astrarium-manual-android-en.pdf) |
 | Mac 版 | [PDF](manual/astrarium-manual-mac-ja.pdf) | [PDF](manual/astrarium-manual-mac-en.pdf) |
 | Astrarium Pro | [PDF](manual/astrarium-pro-manual-ja.pdf) | [PDF](manual/astrarium-pro-manual-en.pdf) |
 
-画面の見かた、操作、流星群の出現数の計算、極軸合わせ、PNG／PDF 出力まで、実機の画面を添えて説明しています。Mac 版は右パネルの構成とマウス・トラックパッドの操作に合わせた別冊です。Pro 版のマニュアルには、人工衛星・AR・オーロラ予報の章が加わります。
+画面の見かた、操作、流星群の出現数の計算、極軸合わせ、PNG／PDF 出力まで、実機の画面を添えて説明しています。Android 版は画面が iPhone / iPad 版と同じなので本文もほぼ共通で、違うところ（書き出しの行き先、AR、位置情報の許可）だけが差し替えてあります。Mac 版は右パネルの構成とマウス・トラックパッドの操作に合わせた別冊です。Pro 版のマニュアルには、人工衛星・AR・オーロラ予報の章が加わります。
 
 ## プライバシー
 
@@ -112,7 +137,8 @@ iPhone・iPad・Mac 対応／無料／広告なし・アプリ内課金なし・
 
 **A planisphere and astronomical simulator — choose a place and a time, and it draws that sky.**
 
-For iPhone, iPad and Mac. Free, with no ads, no in-app purchases and no account.
+For iPhone, iPad and Mac; an Android version is in closed testing.
+Free, with no ads, no in-app purchases and no account.
 
 ### [📲 Get it on the App Store](https://apps.apple.com/jp/app/id6795053748)
 
@@ -146,8 +172,8 @@ Every position is computed on the device, so the whole app works where there is 
 
 ## Astrarium Pro
 
-Satellites, AR and the aurora forecast belong to **Astrarium Pro**, a separate
-app. The screen is the same one, and the entry points sit in the same places
+**On iPhone, iPad and Mac,** satellites, AR and the aurora forecast belong to
+**Astrarium Pro**, a separate app. The screen is the same one, and the entry points sit in the same places
 (in the free version they explain what they would do).
 
 <p align="center">
@@ -163,19 +189,47 @@ app. The screen is the same one, and the entry points sit in the same places
 - **Deep-sky catalogue** (optional download) and **more events** (the past and
   ten years ahead, exoplanet transits, variable-star maxima and minima)
 
+## Android
+
+An Android version is ready and is **in closed testing** before release; testers
+are welcome. It bundles the same chart, the same computing core and the same
+screen as the iPhone and iPad version, so it draws the same sky to the same
+accuracy. Four things differ:
+
+- **AR needs no manual alignment to north** — true north comes straight from the device's absolute-orientation sensor
+- **AR and the space stations** (ISS and Tiangong) **are included** — on Apple these belong to Pro (tracking the full satellite set, Starlink included, stays a Pro feature)
+- **What you export lands in shared folders** — PNG in `Pictures/Astrarium`, PDF in `Download/Astrarium`. They remain after the app is removed
+- Location permission is asked for on first launch; decline it and nothing is lost
+
+### Joining the test
+
+There are two steps, and **both** are needed:
+
+1. Join the Google group [astrarium](https://groups.google.com/g/astrarium)
+2. Then opt in as a tester on Play (the link is posted in the group)
+
+If you open step 2 first, Play answers "App not available". **The test is not
+closed** — it means the account you are signed in with has not reached Play as a
+member of the group yet. Wait a little and open it again.
+
+Google requires testers to stay opted in for **14 consecutive days**, so please
+leave it in place until then. You do not have to use it heavily.
+
 ## Requirements
 
 | | |
 |---|---|
 | iPhone / iPad | iOS and iPadOS 17.0 or later |
+| Android | Android 8.0 or later (in closed testing) |
 | Mac | macOS 13.0 or later (Apple silicon and Intel) |
-| Price | Free. Universal purchase — getting one gets you the other |
+| Price | Free. iPhone / iPad and Mac are a universal purchase — getting one gets you the other |
 
 ## Manuals
 
 | | 日本語 | English |
 |---|---|---|
 | iPhone and iPad | [PDF](manual/astrarium-manual-ja.pdf) | [PDF](manual/astrarium-manual-en.pdf) |
+| Android | [PDF](manual/astrarium-manual-android-ja.pdf) | [PDF](manual/astrarium-manual-android-en.pdf) |
 | Mac | [PDF](manual/astrarium-manual-mac-ja.pdf) | [PDF](manual/astrarium-manual-mac-en.pdf) |
 | Astrarium Pro | [PDF](manual/astrarium-pro-manual-ja.pdf) | [PDF](manual/astrarium-pro-manual-en.pdf) |
 
