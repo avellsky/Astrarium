@@ -99,7 +99,9 @@ Android 版ができました。**いまは公開前のクローズドテスト�
 
 ①を飛ばして②を開くと「App not available」と出ます。**アプリが未公開なのではなく**、いま開いているアカウントがグループの一員として Play 側にまだ届いていない、という意味です。少し時間を置いてから開き直してください。
 
-Google の公開要件で、テスターは **14 日間続けて**参加している必要があります。途中で抜けると数え直しになってしまうので、それまでは登録したままにしていただけると助かります。使い込んでいただく必要はありません。
+Google の公開要件で、テスターは **14 日間続けて**参加している必要があります。途中で抜けると数え直しになってしまうので、それまでは登録したままにしていただけると助かります。
+
+**アプリ自体は、いつ消していただいても構いません。** カウントから外れるのは、登録に使ったリンクの画面で「テストを終了」を押したときだけで、アンインストールでは外れません。ただ、**一度だけ起動して触ってみて**いただけると助かります（実際に使われたかどうかも見られているためです）。
 
 ## 動作環境
 
@@ -213,7 +215,12 @@ closed** — it means the account you are signed in with has not reached Play as
 member of the group yet. Wait a little and open it again.
 
 Google requires testers to stay opted in for **14 consecutive days**, so please
-leave it in place until then. You do not have to use it heavily.
+leave it in place until then.
+
+**Uninstalling the app is fine at any point.** The only thing that drops you
+from the count is pressing "Leave the test" on the link you signed up with.
+Do open it once, though — Google also looks at whether testers actually used
+the app.
 
 ## Requirements
 
