@@ -1,0 +1,7 @@
+# ASC / Play へ上げるための道具と素材。公開ページには要らない。
+# 中身は apps/Astrarium/previews/ (asc.py, 撮影スクリプト, 動画)。
+previews/
+
+# macOS の残骸
+.DS_Store
+._*

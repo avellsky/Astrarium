@@ -6,7 +6,7 @@
 
 **星図とプラネタリウム — 観測地と日時を決めれば、その空をそのまま描きます**
 
-iPhone・iPad・Mac 対応（Android 版はテスト公開中）／無料／広告なし・アプリ内課金なし・アカウント登録なし
+iPhone・iPad・Mac・Apple Watch 対応（Android 版はテスト公開中）／無料／広告なし・アプリ内課金なし・アカウント登録なし
 
 ### [📲 App Store で入手する](https://apps.apple.com/jp/app/id6795053748)
 
@@ -54,7 +54,7 @@ iPhone・iPad・Mac 対応（Android 版はテスト公開中）／無料／広�
 | 恒星 9,096 個（約 8 等まで、距離つき） | Yale Bright Star Catalogue (BSC5) ／ 視差は Hipparcos |
 | 星雲・星団・銀河 155 個（写真と解説つき） | メシエ天体／カルドウェル天体 |
 | IAU 88 星座の星座線 672 本と星座絵 | — |
-| 天の川の全天マップ | Tycho-2 星表の星の光を積算 |
+| 天の川の全天マップ | NASA Deep Star Maps 2020（Gaia DR2 ほか17億星の光を積算）|
 | 惑星・月の暦と表面テクスチャ | JPL DE421 |
 | 主要流星群 16 件、MPC 観測所コード、世界の観測地 | — |
 
@@ -78,6 +78,22 @@ iPhone・iPad・Mac 対応（Android 版はテスト公開中）／無料／広�
   観測地から見て地平線の上に出るかを描きます
 - **深宇宙星表**（追加ダウンロード）、**イベントの拡張**（過去と 10 年先まで、
   系外惑星のトランジット、変光星の極大・極小）
+
+## Apple Watch
+
+iPhone に入れると、**Apple Watch にも入ります**（別に買うものはありません）。
+
+<p align="center">
+  <img src="assets/watch-tonight.png" width="150" alt="時計の「今夜」">
+  <img src="assets/watch-chart.png"   width="150" alt="時計の星図">
+</p>
+
+腕の上で読みたいのは、これから数時間の空であって星表ではない — そう考えて、二つだけ置いています。
+
+- **今夜** — 薄明の終わりと始まり、月齢と月の出入り、いま出ている惑星の方角と高度、次の人工衛星の通過、活動中の流星群
+- **星図** — 全天を一枚の円に（等距離射影）。デジタルクラウンで前後 12 時間まで送れます。画面を叩くと星の名前が消えます
+
+恒星と星座線は時計の中で計算します（986 個の星表を積んでいます）。太陽・月・惑星と人工衛星は iPhone が計算して送ります。**数字がいつのものかを画面の下に出し**、iPhone と離れているあいだはそう書きます。一度届いたあとは、iPhone が鞄の中でも星図は時計だけで動きます。
 
 ## Android 版
 
@@ -110,6 +126,7 @@ Google の公開要件で、テスターは **14 日間続けて**参加して�
 | iPhone / iPad | iOS・iPadOS 17.0 以降 |
 | Android | Android 8.0 以降（クローズドテスト中） |
 | Mac | macOS 13.0 以降（Apple シリコン・Intel） |
+| Apple Watch | watchOS 10.0 以降。iPhone 版に同梱しています |
 | 価格 | 無料。iPhone / iPad と Mac はユニバーサル購入（片方で入手すれば両方で使えます） |
 
 ## 使用マニュアル
@@ -121,7 +138,7 @@ Google の公開要件で、テスターは **14 日間続けて**参加して�
 | Mac 版 | [PDF](manual/astrarium-manual-mac-ja.pdf) | [PDF](manual/astrarium-manual-mac-en.pdf) |
 | Astrarium Pro | [PDF](manual/astrarium-pro-manual-ja.pdf) | [PDF](manual/astrarium-pro-manual-en.pdf) |
 
-画面の見かた、操作、流星群の出現数の計算、極軸合わせ、PNG／PDF 出力まで、実機の画面を添えて説明しています。Android 版は画面が iPhone / iPad 版と同じなので本文もほぼ共通で、違うところ（書き出しの行き先、AR、位置情報の許可）だけが差し替えてあります。Mac 版は右パネルの構成とマウス・トラックパッドの操作に合わせた別冊です。Pro 版のマニュアルには、人工衛星・AR・オーロラ予報の章が加わります。
+画面の見かた、操作、流星群の出現数の計算、極軸合わせ、PNG／PDF 出力まで、実機の画面を添えて説明しています。Android 版は画面が iPhone / iPad 版と同じなので本文もほぼ共通で、違うところ（書き出しの行き先、AR、位置情報の許可）だけが差し替えてあります。Mac 版は右パネルの構成とマウス・トラックパッドの操作に合わせた別冊です。Apple Watch は iPhone / iPad 版マニュアルの第 12 章です。Pro 版のマニュアルには、人工衛星・AR・オーロラ予報の章が加わります。
 
 ## プライバシー
 
@@ -139,7 +156,7 @@ Google の公開要件で、テスターは **14 日間続けて**参加して�
 
 **A planisphere and astronomical simulator — choose a place and a time, and it draws that sky.**
 
-For iPhone, iPad and Mac; an Android version is in closed testing.
+For iPhone, iPad, Mac and Apple Watch; an Android version is in closed testing.
 Free, with no ads, no in-app purchases and no account.
 
 ### [📲 Get it on the App Store](https://apps.apple.com/jp/app/id6795053748)
@@ -166,7 +183,7 @@ Free, with no ads, no in-app purchases and no account.
 | 9,096 stars to about magnitude 8, with distances | Yale Bright Star Catalogue (BSC5); parallaxes from Hipparcos |
 | 155 nebulae, clusters and galaxies, with photographs | Messier and Caldwell |
 | The 88 IAU constellations: 672 line segments and the figures | — |
-| A whole-sky Milky Way map | integrated light of the Tycho-2 stars |
+| A whole-sky Milky Way map | NASA Deep Star Maps 2020 — the light of 1.7 billion stars |
 | Planetary and lunar ephemeris with surface maps | JPL DE421 |
 | 16 major meteor showers, MPC observatory codes, observing sites | — |
 
@@ -190,6 +207,22 @@ Every position is computed on the device, so the whole app works where there is 
   oval reaches, and whether it clears the horizon where you are
 - **Deep-sky catalogue** (optional download) and **more events** (the past and
   ten years ahead, exoplanet transits, variable-star maxima and minima)
+
+## Apple Watch
+
+Install it on iPhone and it **goes to the Apple Watch with it** — there is nothing more to buy.
+
+<p align="center">
+  <img src="assets/watch-tonight.png" width="150" alt="Tonight on the watch">
+  <img src="assets/watch-chart.png"   width="150" alt="The watch star chart">
+</p>
+
+What you want on your wrist is the next few hours of sky, not a catalogue, so there are only two screens.
+
+- **Tonight** — when it gets dark and light again, the Moon's age and rise and set, which planets are up and where, the next satellite pass, and any shower running
+- **Star chart** — the whole sky in one disc (equidistant projection). Turn the Digital Crown to move up to twelve hours either way; tap to hide the star names
+
+Stars and constellation lines are computed on the watch itself (986 of them are carried there). The Sun, Moon, planets and satellites are solved on the iPhone and sent across. **The bottom line says how old the figures are**, and says so plainly while the iPhone is out of range. After that first delivery the chart keeps working on the watch alone.
 
 ## Android
 
@@ -229,6 +262,7 @@ the app.
 | iPhone / iPad | iOS and iPadOS 17.0 or later |
 | Android | Android 8.0 or later (in closed testing) |
 | Mac | macOS 13.0 or later (Apple silicon and Intel) |
+| Apple Watch | watchOS 10.0 or later — it ships inside the iPhone app |
 | Price | Free. iPhone / iPad and Mac are a universal purchase — getting one gets you the other |
 
 ## Manuals
