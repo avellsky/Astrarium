@@ -43,7 +43,7 @@
     border: 1px solid rgba(255,255,255,.14); }
   figcaption { font-size: 12px; color: #8990a3; margin-top: 6px;
     text-align: center; }
-  /* 起動画面は 2 枚並べる。無料版と Pro 版の違いは、まずここに出る */
+  /* 起動画面は 2 枚並べる。錠の掛かった状態と、購読で開いた状態 */
   .two { display: flex; gap: 14px; flex-wrap: wrap; }
   .two figure { flex: 1 1 300px; margin: 8px 0; }
   /* 画面の一覧。細い縦画面が並ぶので、幅で折り返す */
@@ -59,8 +59,8 @@
 
 <p class="logo"><img src="../icon.png" alt="" width="72" height="72"></p>
 <h1>Astrarium（アストラリウム）</h1>
-<div class="sub">星図とプラネタリウム — 使用マニュアル（2.0/PRO 1.0 対応）/
-Planisphere &amp; planetarium — user manual (for 2.0/PRO 1.0)</div>
+<div class="sub">星図とプラネタリウム — 使用マニュアル（2.1 対応）/
+Planisphere &amp; planetarium — user manual (for 2.1)</div>
 <div class="nav">
   <a href="#ja">日本語</a><a href="#en">English</a>
   <a href="#dl">マニュアル / Manuals</a>
@@ -68,13 +68,10 @@ Planisphere &amp; planetarium — user manual (for 2.0/PRO 1.0)</div>
   <a href="../privacy-policy.ja.html">プライバシー / Privacy</a>
 </div>
 
-<div class="two">
-  <figure><img src="img/opening.jpg" alt="Astrarium の起動画面" loading="lazy">
-    <figcaption>起動画面（無料版）/ The opening (free edition)</figcaption></figure>
-  <figure><img src="img/opening-pro.jpg" alt="Astrarium Pro の起動画面"
-      loading="lazy">
-    <figcaption>起動画面（Pro 版）/ The opening (Pro edition)</figcaption></figure>
-</div>
+<!-- **一枚にした** (2026-09-25)。Pro が本体へ合流し、別売のアプリが
+     無くなったので、並べて見せる相手がいない。 -->
+<p class="logo"><img src="img/opening.jpg" alt="Astrarium の起動画面"
+    loading="lazy" style="max-width:min(540px,100%);border-radius:8px"></p>
 
 <h2 id="ja">Astrarium とは</h2>
 <p>観測地と日時を決めれば、<b class="k">その場所・その時刻の空をそのまま描く</b>
@@ -143,12 +140,13 @@ Planisphere &amp; planetarium — user manual (for 2.0/PRO 1.0)</div>
 </div>
 
 <h2>Astrarium Pro で増えるもの</h2>
-<p>太陽系3Dマップ・オーロラ予報・固有運動タイムマシン・深宇宙星表は、別売のアプリ
-<b class="k">Astrarium Pro</b> の機能です。画面の作りも操作も無料版と同じで、入口も
-同じ場所にあります（無料版では、押すと何ができるかの説明が出ます）。
-<b>人工衛星と AR は無料版でも使えます</b> — 人工衛星は宇宙ステーションと肉眼で
-見える衛星（4 等まで）までで、Pro 版はそこに残りの衛星群と世界地図・地球儀、
-名前・ID での検索が加わります。</p>
+<p>太陽系3Dマップ・オーロラ予報・固有運動タイムマシン・深宇宙星表は、
+<b class="k">Astrarium Pro</b>（アプリ内課金）の機能です。2.1 から、別売の
+アプリではなく<b>同じアプリの中の購読</b>になりました。入口は施錠された状態で
+同じ場所にあり、押すと何が増えるのかと値段が出ます。
+<b>AR は購読しなくても使えます</b>。人工衛星も、宇宙ステーションと肉眼で
+見える衛星（4 等まで）までは課金の外にあり、Pro はそこに残りの衛星群と
+世界地図・地球儀、名前・ID での検索が加わります。</p>
 
 <div class="shots">
   <figure><img src="img/pro-ssd.jpg" alt="太陽系3Dマップ" loading="lazy">
@@ -174,7 +172,7 @@ Planisphere &amp; planetarium — user manual (for 2.0/PRO 1.0)</div>
 </div>
 
 <table>
-<tr><th>機能</th><th>無料版</th><th class="pro">Pro 版</th></tr>
+<tr><th>機能</th><th>購読なし</th><th class="pro">Pro（購読）</th></tr>
 <tr><td>星図・惑星・流星群・彗星・イベント・出力</td><td>○</td><td class="pro">○</td></tr>
 <tr><td>イベント検索（次の／1 日〜10 年、過去も未来も）</td><td>○</td>
     <td class="pro">○</td></tr>
@@ -202,23 +200,23 @@ Planisphere &amp; planetarium — user manual (for 2.0/PRO 1.0)</div>
 <h2 id="dl">使用マニュアル（PDF）</h2>
 <table class="dl">
 <tr><th>版</th><th>対応</th><th>日本語</th><th>English</th></tr>
-<tr><td>Astrarium（iPhone / iPad）</td><td>2.0</td>
+<tr><td>Astrarium（iPhone / iPad）</td><td>2.1</td>
     <td><a href="astrarium-manual-ja.pdf">PDF</a></td>
     <td><a href="astrarium-manual-en.pdf">PDF</a></td></tr>
 <tr><td>Astrarium（Android）</td><td>2.0</td>
     <td><a href="astrarium-manual-android-ja.pdf">PDF</a></td>
     <td><a href="astrarium-manual-android-en.pdf">PDF</a></td></tr>
-<tr><td>Astrarium（Mac）</td><td>2.0</td>
+<tr><td>Astrarium（Mac）</td><td>2.1</td>
     <td><a href="astrarium-manual-mac-ja.pdf">PDF</a></td>
     <td><a href="astrarium-manual-mac-en.pdf">PDF</a></td></tr>
-<tr><td class="pro">Astrarium Pro（iPhone / iPad）</td><td>1.0</td>
+<tr><td class="pro">Astrarium Pro（アプリ内課金）</td><td>2.1</td>
     <td><a href="astrarium-pro-manual-ja.pdf">PDF</a></td>
     <td><a href="astrarium-pro-manual-en.pdf">PDF</a></td></tr>
 </table>
 <p>画面の見かた、操作、流星群の出現数の計算、極軸合わせ、PNG／PDF 出力まで、
 実機の画面を添えて説明しています。Mac 版は右パネルの構成とマウス・トラックパッドの
-操作に合わせた別冊です。Pro 版には太陽系3Dマップ・オーロラ予報・固有運動タイムマシン・深宇宙星表の章が
-加わります。</p>
+操作に合わせた別冊です。Pro のマニュアルには太陽系3Dマップ・オーロラ予報・
+固有運動タイムマシン・深宇宙星表の章が加わります。</p>
 <p>Android 版は画面が iPhone / iPad 版と同じなので、本文もほぼ共通です。
 違うのは<b>書き出したものの行き先</b>（星図の PNG と AR の撮影は
 「Pictures／Astrarium」、PDF は「ダウンロード／Astrarium」。共有フォルダなので
@@ -258,15 +256,16 @@ with their bearing and altitude, the next satellite pass and any shower running 
 and a star chart holding the whole sky in one disc, which the Digital Crown moves
 up to twelve hours either way. Chapter 12 of the iPhone and iPad manual covers
 it.</p>
-<p><b class="k">Astrarium Pro</b>, a separate app, adds the 3D solar system map
+<p><b class="k">Astrarium Pro</b>, an in-app subscription, adds the 3D solar system map
 (1.56 million small bodies, the comets and the spacecraft), the aurora forecast
 (NASA DONKI and NOAA OVATION), the proper-motion time machine (50,000 years
 either way), the deep star catalogue (UCAC4, 2.34 million stars to 12th
 magnitude), exoplanet transits, variable-star maxima and minima, the equidistant
-projection for planetarium domes and local sidereal time. Satellites and AR are
-in the free edition too — the free one carries the space stations and the
-naked-eye satellites down to magnitude 4, and Pro adds the remaining groups, the
-world map and globe, and search by name.</p>
+projection for planetarium domes and local sidereal time. From 2.1 it is an
+in-app subscription rather than a separate app; the entry points stay where they
+are, locked, and show what they add and what it costs. AR needs no subscription,
+and neither do the space stations and the naked-eye satellites down to magnitude
+4 — Pro adds the remaining groups, the world map and globe, and search by name.</p>
 
 <footer>
 Astrarium © 2026 Avellsky ／
