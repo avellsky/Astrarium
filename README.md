@@ -1,0 +1,313 @@
+<div align="center">
+
+<img src="icon.png" width="120" alt="Astrarium">
+
+# Astrarium（アストラリウム）
+
+**星図とプラネタリウム — 観測地と日時を決めれば、その空をそのまま描きます**
+
+iPhone・iPad・Mac・Apple Watch 対応（Android 版はテスト公開中）／無料／広告なし・アカウント登録なし
+（Astrarium Pro は、同じアプリの中の任意の購読です）
+
+### [📲 App Store で入手する](https://apps.apple.com/jp/app/id6795053748)
+
+<img src="assets/qr-appstore.png" width="180" alt="App Store へのQRコード">
+
+[日本語](#astrariumアストラリウム) ・ [English](#astrarium)
+
+</div>
+
+---
+
+## 画面
+
+<p align="center">
+  <img src="assets/phone-allsky.png"   width="180" alt="全天モード">
+  <img src="assets/phone-conart.png"   width="180" alt="星座絵">
+  <img src="assets/phone-planet.png"   width="180" alt="惑星の拡大表示">
+  <img src="assets/phone-events.png"   width="180" alt="イベント一覧">
+  <img src="assets/phone-export.png"   width="180" alt="PNG／PDF 出力">
+</p>
+
+<p align="center"><img src="assets/mac-allsky.png" width="820" alt="Mac 版の全天モード"></p>
+
+<p align="center"><img src="assets/mac-planet.png" width="820" alt="Mac 版の土星の拡大表示"></p>
+
+## できること
+
+- **全天モードと地平モード** — 星座早見盤と同じ丸い全天図と、実際に空を見上げたときに近い地平図
+- **時刻を自由に動かす** — 任意の日時へジャンプ、1 倍から 6000 倍までの段階再生、朔望月送り、時刻を完全に止める停止ボタン
+- **天体をタップすれば、その場の数値** — 方位・高度・座標・距離・出没時刻が、時計を動かすとそのまま追従します
+- **惑星の拡大表示** — 視直径・輝面比・距離・軌道要素、基本物理量（直径・質量・密度・自転周期・赤道傾斜角・表面重力）、木星／土星／火星の衛星の配置
+- **月** — 月齢・輝面比・秤動・欠け際、満月の呼称（ピンクムーン、スーパームーンなど）
+- **極軸合わせ** — 北極星を選ぶと極軸望遠鏡の視野を再現。時角の目盛環の上で、いま北極星をどこに入れるかが分かります
+- **流星群カレンダー** — 極大日時、輻射点高度、月明かりを織り込んだ予想出現数
+- **彗星・小惑星** — MPC／JPL から軌道要素を取得して星図に重ねる
+- **イベント一覧** — 天体イベント全般のほか、掩蔽・恒星食、日食・月食を選んで一覧。後の二つは**その観測地から実際に見えるものだけ**を示します
+- **4 種の経緯線**、天の赤道・黄道・銀河面・子午線、写野角枠（Seestar・DWARF・カメラレンズ）
+- **ナイトモード**（赤色画面）、**長時間露光**、**PNG／PDF 出力**（白背景の印刷用配色）、字幕つきデモ再生
+- **日本語と英語** — 天体名・星座名・星雲星団の解説まで、どちらでも読めます（恒星の固有名は日本語ではカタカナ表記）
+
+## 収録データ（すべて内蔵・オフラインで動作）
+
+| 内容 | 出典 |
+|---|---|
+| 恒星 9,096 個（約 8 等まで、距離つき） | Yale Bright Star Catalogue (BSC5) ／ 視差は Hipparcos |
+| 星雲・星団・銀河 155 個（写真と解説つき） | メシエ天体／カルドウェル天体 |
+| IAU 88 星座の星座線 672 本と星座絵 | — |
+| 天の川の全天マップ | NASA Deep Star Maps 2020（Gaia DR2 ほか17億星の光を積算）|
+| 惑星・月の暦と表面テクスチャ | JPL DE421 |
+| 主要流星群 16 件、MPC 観測所コード、世界の観測地 | — |
+
+天体の位置計算はすべて端末の中で行います。電波の届かない観測地でも全機能がそのまま使えます。
+
+## Astrarium Pro
+
+**Astrarium Pro** は、同じアプリの中の任意の購読です（2.1 から。それまでは
+別売のアプリでした）。入口は施錠された状態で同じ場所にあり、押すと何が増えるのかと
+値段が出ます。月額 400 円 / 年額 4,000 円（日本の場合。価格は国・地域により
+異なります）、最初の 1 週間は無料です。
+
+**AR は購読しなくても使えます。** 人工衛星も、宇宙ステーション（ISS・天宮）と
+肉眼で見える衛星（4 等まで）までは課金の外にあります。
+
+<p align="center">
+  <img src="assets/phone-pro-satellites.png" width="180" alt="人工衛星（地球儀）">
+  <img src="assets/phone-pro-aurora.png"     width="180" alt="オーロラ予報">
+</p>
+
+- **太陽系3Dマップ** — 小惑星 156 万個・彗星・準惑星・探査機を、黄道面の上から
+- **オーロラ予報** — NASA DONKI と NOAA OVATION から、オーロラ帯がどこまで下がるか、
+  観測地から見て地平線の上に出るかを描きます
+- **固有運動タイムマシン** — ±5 万年。星が動き、星座の形が崩れ、北極星が入れ替わります
+- **深宇宙星表** — UCAC4 の 234 万星（12 等まで、同梱）。視野 12 度以下で降りてきます
+- **人工衛星の残りの群**（Starlink・気象衛星・科学衛星・日本の静止衛星ほか）と、
+  世界地図・地球儀での表示、名前と ID での検索
+- **系外惑星のトランジット予報・変光星の極大と極小**
+- **等距離射影**（ドームマスター）と**地方恒星時**
+
+## Apple Watch
+
+iPhone に入れると、**Apple Watch にも入ります**（別に買うものはありません）。
+
+<p align="center">
+  <img src="assets/watch-tonight.png" width="150" alt="時計の「今夜」">
+  <img src="assets/watch-chart.png"   width="150" alt="時計の星図">
+</p>
+
+腕の上で読みたいのは、これから数時間の空であって星表ではない — そう考えて、二つだけ置いています。
+
+- **今夜** — 薄明の終わりと始まり、月齢と月の出入り、いま出ている惑星の方角と高度、次の人工衛星の通過、活動中の流星群
+- **星図** — 全天を一枚の円に（等距離射影）。デジタルクラウンで前後 12 時間まで送れます。画面を叩くと星の名前が消えます
+
+恒星と星座線は時計の中で計算します（986 個の星表を積んでいます）。太陽・月・惑星と人工衛星は iPhone が計算して送ります。**数字がいつのものかを画面の下に出し**、iPhone と離れているあいだはそう書きます。一度届いたあとは、iPhone が鞄の中でも星図は時計だけで動きます。
+
+## Android 版
+
+Android 版ができました。**いまは公開前のクローズドテスト中**で、参加してくださる方を募集しています。
+
+星図・計算・画面は iPhone / iPad 版とまったく同じものを積んでいるので、同じ空を同じ精度で描きます。Android 版で違うのは次の四つです。
+
+- **AR で北を手で合わせる必要がありません** — 端末の絶対方位センサから真北がそのまま得られます
+- **AR と宇宙ステーション**（ISS・天宮）**の通過予報が最初から使えます**（Apple 版も同じで、どちらも購読は要りません。Starlink を含む残りの群は Apple 版では購読の内側です）
+- **書き出したものは共有フォルダに入ります** — PNG は `Pictures/Astrarium`、PDF は `ダウンロード/Astrarium`。アプリを削除しても残ります
+- 位置情報の許可は初回の起動時に尋ねます。断っても全機能が使えます
+
+### テストに参加するには
+
+参加は二段階で、**両方**必要です。
+
+1. Google グループ [astrarium](https://groups.google.com/g/astrarium) に参加する
+2. そのうえで Play でテスターに登録する（登録用のリンクはグループに掲示しています）
+
+①を飛ばして②を開くと「App not available」と出ます。**アプリが未公開なのではなく**、いま開いているアカウントがグループの一員として Play 側にまだ届いていない、という意味です。少し時間を置いてから開き直してください。
+
+Google の公開要件で、テスターは **14 日間続けて**参加している必要があります。途中で抜けると数え直しになってしまうので、それまでは登録したままにしていただけると助かります。
+
+**アプリ自体は、いつ消していただいても構いません。** カウントから外れるのは、登録に使ったリンクの画面で「テストを終了」を押したときだけで、アンインストールでは外れません。ただ、**一度だけ起動して触ってみて**いただけると助かります（実際に使われたかどうかも見られているためです）。
+
+## 動作環境
+
+| | |
+|---|---|
+| iPhone / iPad | iOS・iPadOS 17.0 以降 |
+| Android | Android 8.0 以降（クローズドテスト中） |
+| Mac | macOS 13.0 以降（Apple シリコン・Intel） |
+| Apple Watch | watchOS 10.0 以降。iPhone 版に同梱しています |
+| 価格 | 無料。iPhone / iPad と Mac はユニバーサル購入（片方で入手すれば両方で使えます） |
+
+## 使用マニュアル
+
+| | 日本語 | English |
+|---|---|---|
+| iPhone / iPad 版 | [PDF](manual/astrarium-manual-ja.pdf) | [PDF](manual/astrarium-manual-en.pdf) |
+| Android 版 | [PDF](manual/astrarium-manual-android-ja.pdf) | [PDF](manual/astrarium-manual-android-en.pdf) |
+| Mac 版 | [PDF](manual/astrarium-manual-mac-ja.pdf) | [PDF](manual/astrarium-manual-mac-en.pdf) |
+| Astrarium Pro | [PDF](manual/astrarium-pro-manual-ja.pdf) | [PDF](manual/astrarium-pro-manual-en.pdf) |
+
+画面の見かた、操作、流星群の出現数の計算、極軸合わせ、PNG／PDF 出力まで、実機の画面を添えて説明しています。Android 版は画面が iPhone / iPad 版と同じなので本文もほぼ共通で、違うところ（書き出しの行き先、AR、位置情報の許可）だけが差し替えてあります。Mac 版は右パネルの構成とマウス・トラックパッドの操作に合わせた別冊です。Apple Watch は iPhone / iPad 版マニュアルの第 12 章です。Pro のマニュアルには、太陽系3Dマップ・オーロラ予報・固有運動タイムマシン・深宇宙星表の章が加わります。
+
+## プライバシー
+
+現在地は「その場所の空」を計算するためだけに使い、端末の外へは一切送信しません。許可しなくても、観測地の一覧から選ぶか緯度・経度を入力すれば、すべての機能を同じように使えます。解析や広告の SDK は含まれていません。
+
+[プライバシーポリシー（日本語）](privacy-policy.ja.html) ・ [Privacy policy (English)](privacy-policy.en.html)
+
+## サポート
+
+不具合のご連絡・ご質問は <avellsky@gmail.com> までお願いします。お使いの機種・OS のバージョン・再現手順を添えていただけると助かります。返信までに数日いただく場合があります。
+
+---
+
+# Astrarium
+
+**A planisphere and astronomical simulator — choose a place and a time, and it draws that sky.**
+
+For iPhone, iPad, Mac and Apple Watch; an Android version is in closed testing.
+Free, with no ads and no account. Astrarium Pro is an optional subscription
+inside the same app.
+
+### [📲 Get it on the App Store](https://apps.apple.com/jp/app/id6795053748)
+
+## What it does
+
+- **All-sky and horizon views** — the whole sky as a circle, as on a cardboard planisphere, or the sky as you would actually see it looking out
+- **Drive the clock** — jump to any date, step the rate ×1 → ×60 → ×600 → ×6000, advance by the synodic month, or hold the sky still
+- **Tap anything and the figures follow the clock** — azimuth, altitude, coordinates, distance, and the times it rises and sets
+- **Planet close-ups** — apparent diameter, phase, distances, orbital elements, the physical data (diameter, mass, density, rotation, axial tilt, gravity) and the moons of Jupiter, Saturn and Mars
+- **The Moon** — age, illuminated fraction, libration, terminator and the traditional full-moon names
+- **Polar alignment** — select Polaris and the polar scope's field is drawn, with an hour-angle ring showing where Polaris must sit right now
+- **Meteor shower calendar** — maximum, radiant altitude and an expected hourly rate that accounts for moonlight and twilight
+- **Comets and asteroids** — elements from the MPC and JPL, plotted on the chart
+- **Events** — all astronomical events, or occultations and eclipses on their own; those two list only what can actually be seen from your site
+- **Four coordinate grids**, the celestial equator, ecliptic, galactic plane and meridian, and field-of-view frames
+- **Night-vision mode**, **long exposure**, **PNG/PDF export** on white paper, and a captioned demo tour
+- **Japanese and English throughout** — object names, constellations and the deep-sky descriptions
+
+## Catalogues (all bundled — it works offline)
+
+| Contents | Source |
+|---|---|
+| 9,096 stars to about magnitude 8, with distances | Yale Bright Star Catalogue (BSC5); parallaxes from Hipparcos |
+| 155 nebulae, clusters and galaxies, with photographs | Messier and Caldwell |
+| The 88 IAU constellations: 672 line segments and the figures | — |
+| A whole-sky Milky Way map | NASA Deep Star Maps 2020 — the light of 1.7 billion stars |
+| Planetary and lunar ephemeris with surface maps | JPL DE421 |
+| 16 major meteor showers, MPC observatory codes, observing sites | — |
+
+Every position is computed on the device, so the whole app works where there is no signal.
+
+## Astrarium Pro
+
+**Astrarium Pro** is an optional subscription inside the same app (since 2.1;
+before that it was a separate app). The entry points stay where they are, locked,
+and show what they add and what it costs. US$3.99 a month or US$39.99 a year
+(United States; prices vary by region), with the first week free.
+
+**AR needs no subscription**, and neither do the space stations (ISS and
+Tiangong) or the naked-eye satellites down to magnitude 4.
+
+<p align="center">
+  <img src="assets/phone-pro-satellites.png" width="180" alt="Satellites on the globe">
+  <img src="assets/phone-pro-aurora.png"     width="180" alt="Aurora forecast">
+</p>
+
+- **3D solar system map** — 1.56 million small bodies, comets, dwarf planets and
+  spacecraft, seen from above the ecliptic
+- **Aurora forecast** — from NASA DONKI and NOAA OVATION: how far the auroral
+  oval reaches, and whether it clears the horizon where you are
+- **Proper-motion time machine** — 50,000 years either way; the figures come
+  apart and the pole star changes
+- **Deep star catalogue** — 2.34 million UCAC4 stars to 12th magnitude, bundled,
+  appearing below a 12-degree field
+- **The remaining satellite groups** (Starlink, weather, science, the Japanese
+  geostationary ones) with a world map, a globe and search by name or ID
+- **Exoplanet transits and variable-star maxima and minima**
+- **The equidistant (dome master) projection** and **local sidereal time**
+
+## Apple Watch
+
+Install it on iPhone and it **goes to the Apple Watch with it** — there is nothing more to buy.
+
+<p align="center">
+  <img src="assets/watch-tonight.png" width="150" alt="Tonight on the watch">
+  <img src="assets/watch-chart.png"   width="150" alt="The watch star chart">
+</p>
+
+What you want on your wrist is the next few hours of sky, not a catalogue, so there are only two screens.
+
+- **Tonight** — when it gets dark and light again, the Moon's age and rise and set, which planets are up and where, the next satellite pass, and any shower running
+- **Star chart** — the whole sky in one disc (equidistant projection). Turn the Digital Crown to move up to twelve hours either way; tap to hide the star names
+
+Stars and constellation lines are computed on the watch itself (986 of them are carried there). The Sun, Moon, planets and satellites are solved on the iPhone and sent across. **The bottom line says how old the figures are**, and says so plainly while the iPhone is out of range. After that first delivery the chart keeps working on the watch alone.
+
+## Android
+
+An Android version is ready and is **in closed testing** before release; testers
+are welcome. It bundles the same chart, the same computing core and the same
+screen as the iPhone and iPad version, so it draws the same sky to the same
+accuracy. Four things differ:
+
+- **AR needs no manual alignment to north** — true north comes straight from the device's absolute-orientation sensor
+- **AR and the space stations** (ISS and Tiangong) **are included** — the same on Apple, where neither needs a subscription (the remaining groups, Starlink included, are inside Astrarium Pro there)
+- **What you export lands in shared folders** — PNG in `Pictures/Astrarium`, PDF in `Download/Astrarium`. They remain after the app is removed
+- Location permission is asked for on first launch; decline it and nothing is lost
+
+### Joining the test
+
+There are two steps, and **both** are needed:
+
+1. Join the Google group [astrarium](https://groups.google.com/g/astrarium)
+2. Then opt in as a tester on Play (the link is posted in the group)
+
+If you open step 2 first, Play answers "App not available". **The test is not
+closed** — it means the account you are signed in with has not reached Play as a
+member of the group yet. Wait a little and open it again.
+
+Google requires testers to stay opted in for **14 consecutive days**, so please
+leave it in place until then.
+
+**Uninstalling the app is fine at any point.** The only thing that drops you
+from the count is pressing "Leave the test" on the link you signed up with.
+Do open it once, though — Google also looks at whether testers actually used
+the app.
+
+## Requirements
+
+| | |
+|---|---|
+| iPhone / iPad | iOS and iPadOS 17.0 or later |
+| Android | Android 8.0 or later (in closed testing) |
+| Mac | macOS 13.0 or later (Apple silicon and Intel) |
+| Apple Watch | watchOS 10.0 or later — it ships inside the iPhone app |
+| Price | Free. iPhone / iPad and Mac are a universal purchase — getting one gets you the other |
+
+## Manuals
+
+| | 日本語 | English |
+|---|---|---|
+| iPhone and iPad | [PDF](manual/astrarium-manual-ja.pdf) | [PDF](manual/astrarium-manual-en.pdf) |
+| Android | [PDF](manual/astrarium-manual-android-ja.pdf) | [PDF](manual/astrarium-manual-android-en.pdf) |
+| Mac | [PDF](manual/astrarium-manual-mac-ja.pdf) | [PDF](manual/astrarium-manual-mac-en.pdf) |
+| Astrarium Pro | [PDF](manual/astrarium-pro-manual-ja.pdf) | [PDF](manual/astrarium-pro-manual-en.pdf) |
+
+## Privacy
+
+Your position is used only to compute the sky where you are, and never leaves the device. If you decline, pick a site from the bundled list or type in the coordinates: nothing is lost. There are no analytics or advertising SDKs.
+
+[Privacy policy](privacy-policy.en.html)
+
+## Support
+
+Questions and bug reports: <avellsky@gmail.com>. The device model, the OS version and how to reproduce it all help. Replies may take a few days.
+
+---
+
+<div align="center">
+
+このリポジトリはサポートページ、使用マニュアル、プライバシーポリシーを置くためのものです。<br>
+This repository hosts the support page, the manuals and the privacy policy.
+
+Astrarium © 2026 Avellsky. All rights reserved.
+
+</div>
