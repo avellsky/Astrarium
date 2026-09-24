@@ -6,7 +6,8 @@
 
 **星図とプラネタリウム — 観測地と日時を決めれば、その空をそのまま描きます**
 
-iPhone・iPad・Mac・Apple Watch 対応（Android 版はテスト公開中）／無料／広告なし・アプリ内課金なし・アカウント登録なし
+iPhone・iPad・Mac・Apple Watch 対応（Android 版はテスト公開中）／無料／広告なし・アカウント登録なし
+（Astrarium Pro は、同じアプリの中の任意の購読です）
 
 ### [📲 App Store で入手する](https://apps.apple.com/jp/app/id6795053748)
 
@@ -62,22 +63,28 @@ iPhone・iPad・Mac・Apple Watch 対応（Android 版はテスト公開中）�
 
 ## Astrarium Pro
 
-**iPhone・iPad・Mac 版では**、人工衛星・AR・オーロラ予報は、別売の **Astrarium Pro**
-の機能です。画面は無料版と同じで、
-入口も同じ場所にあります（無料版では、押すと何ができるかの説明が出ます）。
+**Astrarium Pro** は、同じアプリの中の任意の購読です（2.1 から。それまでは
+別売のアプリでした）。入口は施錠された状態で同じ場所にあり、押すと何が増えるのかと
+値段が出ます。月額 400 円 / 年額 4,000 円（日本の場合。価格は国・地域により
+異なります）、最初の 1 週間は無料です。
+
+**AR は購読しなくても使えます。** 人工衛星も、宇宙ステーション（ISS・天宮）と
+肉眼で見える衛星（4 等まで）までは課金の外にあります。
 
 <p align="center">
   <img src="assets/phone-pro-satellites.png" width="180" alt="人工衛星（地球儀）">
   <img src="assets/phone-pro-aurora.png"     width="180" alt="オーロラ予報">
 </p>
 
-- **人工衛星** — CelesTrak の軌道要素を取得して ISS・天宮・Starlink などの通過を表示。
-  可視パス予報つき。星図のほか、世界地図と地球儀でも見られます
-- **AR** — カメラ映像の上に星図を重ね、そのまま撮影できます
+- **太陽系3Dマップ** — 小惑星 156 万個・彗星・準惑星・探査機を、黄道面の上から
 - **オーロラ予報** — NASA DONKI と NOAA OVATION から、オーロラ帯がどこまで下がるか、
   観測地から見て地平線の上に出るかを描きます
-- **深宇宙星表**（追加ダウンロード）、**イベントの拡張**（過去と 10 年先まで、
-  系外惑星のトランジット、変光星の極大・極小）
+- **固有運動タイムマシン** — ±5 万年。星が動き、星座の形が崩れ、北極星が入れ替わります
+- **深宇宙星表** — UCAC4 の 234 万星（12 等まで、同梱）。視野 12 度以下で降りてきます
+- **人工衛星の残りの群**（Starlink・気象衛星・科学衛星・日本の静止衛星ほか）と、
+  世界地図・地球儀での表示、名前と ID での検索
+- **系外惑星のトランジット予報・変光星の極大と極小**
+- **等距離射影**（ドームマスター）と**地方恒星時**
 
 ## Apple Watch
 
@@ -102,7 +109,7 @@ Android 版ができました。**いまは公開前のクローズドテスト�
 星図・計算・画面は iPhone / iPad 版とまったく同じものを積んでいるので、同じ空を同じ精度で描きます。Android 版で違うのは次の四つです。
 
 - **AR で北を手で合わせる必要がありません** — 端末の絶対方位センサから真北がそのまま得られます
-- **AR と宇宙ステーション**（ISS・天宮）**の通過予報が最初から使えます** — Apple 版では Pro の機能です（Starlink を含む全天体の追尾は Pro のままです）
+- **AR と宇宙ステーション**（ISS・天宮）**の通過予報が最初から使えます**（Apple 版も同じで、どちらも購読は要りません。Starlink を含む残りの群は Apple 版では購読の内側です）
 - **書き出したものは共有フォルダに入ります** — PNG は `Pictures/Astrarium`、PDF は `ダウンロード/Astrarium`。アプリを削除しても残ります
 - 位置情報の許可は初回の起動時に尋ねます。断っても全機能が使えます
 
@@ -138,7 +145,7 @@ Google の公開要件で、テスターは **14 日間続けて**参加して�
 | Mac 版 | [PDF](manual/astrarium-manual-mac-ja.pdf) | [PDF](manual/astrarium-manual-mac-en.pdf) |
 | Astrarium Pro | [PDF](manual/astrarium-pro-manual-ja.pdf) | [PDF](manual/astrarium-pro-manual-en.pdf) |
 
-画面の見かた、操作、流星群の出現数の計算、極軸合わせ、PNG／PDF 出力まで、実機の画面を添えて説明しています。Android 版は画面が iPhone / iPad 版と同じなので本文もほぼ共通で、違うところ（書き出しの行き先、AR、位置情報の許可）だけが差し替えてあります。Mac 版は右パネルの構成とマウス・トラックパッドの操作に合わせた別冊です。Apple Watch は iPhone / iPad 版マニュアルの第 12 章です。Pro 版のマニュアルには、人工衛星・AR・オーロラ予報の章が加わります。
+画面の見かた、操作、流星群の出現数の計算、極軸合わせ、PNG／PDF 出力まで、実機の画面を添えて説明しています。Android 版は画面が iPhone / iPad 版と同じなので本文もほぼ共通で、違うところ（書き出しの行き先、AR、位置情報の許可）だけが差し替えてあります。Mac 版は右パネルの構成とマウス・トラックパッドの操作に合わせた別冊です。Apple Watch は iPhone / iPad 版マニュアルの第 12 章です。Pro のマニュアルには、太陽系3Dマップ・オーロラ予報・固有運動タイムマシン・深宇宙星表の章が加わります。
 
 ## プライバシー
 
@@ -157,7 +164,8 @@ Google の公開要件で、テスターは **14 日間続けて**参加して�
 **A planisphere and astronomical simulator — choose a place and a time, and it draws that sky.**
 
 For iPhone, iPad, Mac and Apple Watch; an Android version is in closed testing.
-Free, with no ads, no in-app purchases and no account.
+Free, with no ads and no account. Astrarium Pro is an optional subscription
+inside the same app.
 
 ### [📲 Get it on the App Store](https://apps.apple.com/jp/app/id6795053748)
 
@@ -191,22 +199,31 @@ Every position is computed on the device, so the whole app works where there is 
 
 ## Astrarium Pro
 
-**On iPhone, iPad and Mac,** satellites, AR and the aurora forecast belong to
-**Astrarium Pro**, a separate app. The screen is the same one, and the entry points sit in the same places
-(in the free version they explain what they would do).
+**Astrarium Pro** is an optional subscription inside the same app (since 2.1;
+before that it was a separate app). The entry points stay where they are, locked,
+and show what they add and what it costs. US$3.99 a month or US$39.99 a year
+(United States; prices vary by region), with the first week free.
+
+**AR needs no subscription**, and neither do the space stations (ISS and
+Tiangong) or the naked-eye satellites down to magnitude 4.
 
 <p align="center">
   <img src="assets/phone-pro-satellites.png" width="180" alt="Satellites on the globe">
   <img src="assets/phone-pro-aurora.png"     width="180" alt="Aurora forecast">
 </p>
 
-- **Satellites** — CelesTrak elements; passes of the ISS, Tiangong, Starlink and
-  more, with visible-pass predictions, on the chart, a world map and a globe
-- **AR** — the chart drawn over the camera image, and you can take the picture
+- **3D solar system map** — 1.56 million small bodies, comets, dwarf planets and
+  spacecraft, seen from above the ecliptic
 - **Aurora forecast** — from NASA DONKI and NOAA OVATION: how far the auroral
   oval reaches, and whether it clears the horizon where you are
-- **Deep-sky catalogue** (optional download) and **more events** (the past and
-  ten years ahead, exoplanet transits, variable-star maxima and minima)
+- **Proper-motion time machine** — 50,000 years either way; the figures come
+  apart and the pole star changes
+- **Deep star catalogue** — 2.34 million UCAC4 stars to 12th magnitude, bundled,
+  appearing below a 12-degree field
+- **The remaining satellite groups** (Starlink, weather, science, the Japanese
+  geostationary ones) with a world map, a globe and search by name or ID
+- **Exoplanet transits and variable-star maxima and minima**
+- **The equidistant (dome master) projection** and **local sidereal time**
 
 ## Apple Watch
 
@@ -232,7 +249,7 @@ screen as the iPhone and iPad version, so it draws the same sky to the same
 accuracy. Four things differ:
 
 - **AR needs no manual alignment to north** — true north comes straight from the device's absolute-orientation sensor
-- **AR and the space stations** (ISS and Tiangong) **are included** — on Apple these belong to Pro (tracking the full satellite set, Starlink included, stays a Pro feature)
+- **AR and the space stations** (ISS and Tiangong) **are included** — the same on Apple, where neither needs a subscription (the remaining groups, Starlink included, are inside Astrarium Pro there)
 - **What you export lands in shared folders** — PNG in `Pictures/Astrarium`, PDF in `Download/Astrarium`. They remain after the app is removed
 - Location permission is asked for on first launch; decline it and nothing is lost
 
