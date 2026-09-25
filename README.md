@@ -22,14 +22,16 @@ iPhone・iPad・Mac・Apple Watch 対応（Android 版はテスト公開中）�
 ## 画面
 
 <p align="center">
-  <img src="assets/phone-allsky.png"   width="180" alt="全天モード">
-  <img src="assets/phone-conart.png"   width="180" alt="星座絵">
-  <img src="assets/phone-planet.png"   width="180" alt="惑星の拡大表示">
-  <img src="assets/phone-events.png"   width="180" alt="イベント一覧">
-  <img src="assets/phone-export.png"   width="180" alt="PNG／PDF 出力">
+  <img src="assets/phone-allsky.png" width="180" alt="全天モード">
+  <img src="assets/phone-conart.png" width="180" alt="星座絵">
+  <img src="assets/phone-planet.png" width="180" alt="惑星の拡大表示">
+  <img src="assets/phone-iss.png"    width="180" alt="宇宙ステーションの通過">
+  <img src="assets/phone-export.png" width="180" alt="PNG／PDF 出力">
 </p>
 
 <p align="center"><img src="assets/mac-allsky.png" width="820" alt="Mac 版の全天モード"></p>
+
+<p align="center"><img src="assets/mac-events.png" width="820" alt="Mac 版のイベント一覧"></p>
 
 <p align="center"><img src="assets/mac-planet.png" width="820" alt="Mac 版の土星の拡大表示"></p>
 
@@ -42,7 +44,7 @@ iPhone・iPad・Mac・Apple Watch 対応（Android 版はテスト公開中）�
 - **月** — 月齢・輝面比・秤動・欠け際、満月の呼称（ピンクムーン、スーパームーンなど）
 - **極軸合わせ** — 北極星を選ぶと極軸望遠鏡の視野を再現。時角の目盛環の上で、いま北極星をどこに入れるかが分かります
 - **流星群カレンダー** — 極大日時、輻射点高度、月明かりを織り込んだ予想出現数
-- **彗星・小惑星** — MPC／JPL から軌道要素を取得して星図に重ねる
+- **彗星・小惑星** — 彗星 4,122 個の軌道要素を内蔵（MPC と JPL SBDB の合わせ技）。MPC／JPL から取り直すこともできます
 - **イベント一覧** — 天体イベント全般のほか、掩蔽・恒星食、日食・月食を選んで一覧。後の二つは**その観測地から実際に見えるものだけ**を示します
 - **4 種の経緯線**、天の赤道・黄道・銀河面・子午線、写野角枠（Seestar・DWARF・カメラレンズ）
 - **ナイトモード**（赤色画面）、**長時間露光**、**PNG／PDF 出力**（白背景の印刷用配色）、字幕つきデモ再生
@@ -57,6 +59,7 @@ iPhone・iPad・Mac・Apple Watch 対応（Android 版はテスト公開中）�
 | IAU 88 星座の星座線 672 本と星座絵 | — |
 | 天の川の全天マップ | NASA Deep Star Maps 2020（Gaia DR2 ほか17億星の光を積算）|
 | 惑星・月の暦と表面テクスチャ | JPL DE421 |
+| 彗星 4,122 個の軌道要素 | MPC CometEls ／ JPL SBDB |
 | 主要流星群 16 件、MPC 観測所コード、世界の観測地 | — |
 
 天体の位置計算はすべて端末の中で行います。電波の届かない観測地でも全機能がそのまま使えます。
@@ -72,15 +75,21 @@ iPhone・iPad・Mac・Apple Watch 対応（Android 版はテスト公開中）�
 肉眼で見える衛星（4 等まで）までは課金の外にあります。
 
 <p align="center">
-  <img src="assets/phone-pro-satellites.png" width="180" alt="人工衛星（地球儀）">
-  <img src="assets/phone-pro-aurora.png"     width="180" alt="オーロラ予報">
+  <img src="assets/phone-pro-ssd.png"    width="180" alt="太陽系3Dマップ">
+  <img src="assets/phone-pro-aurora.png" width="180" alt="オーロラ予報">
+  <img src="assets/phone-pro-pm.png"     width="180" alt="固有運動タイムマシン">
+  <img src="assets/phone-pro-deep.png"   width="180" alt="深宇宙星表">
 </p>
 
-- **太陽系3Dマップ** — 小惑星 156 万個・彗星・準惑星・探査機を、黄道面の上から
+- **太陽系3Dマップ** — 小惑星 156 万個・彗星 4,122 個・準惑星を、黄道面の上から。
+  探査機 35 機は**実際に飛んだ道を同梱**しているので（37 万点）、通信の無い
+  場所でもボイジャーの軌跡がそのまま出ます
 - **オーロラ予報** — NASA DONKI と NOAA OVATION から、オーロラ帯がどこまで下がるか、
   観測地から見て地平線の上に出るかを描きます
 - **固有運動タイムマシン** — ±5 万年。星が動き、星座の形が崩れ、北極星が入れ替わります
-- **深宇宙星表** — UCAC4 の 234 万星（12 等まで、同梱）。視野 12 度以下で降りてきます
+- **深宇宙星表** — UCAC4 の 234 万星（12 等まで）。視野 12 度以下で降りてきます。
+  本体は 37 MB あるのでアプリには積まず、**使う人だけが落とす**形にしました
+  （探索タブの一番下から。一度落とせば端末に残り、次からは通信しません）
 - **人工衛星の残りの群**（Starlink・気象衛星・科学衛星・日本の静止衛星ほか）と、
   世界地図・地球儀での表示、名前と ID での検索
 - **系外惑星のトランジット予報・変光星の極大と極小**
@@ -178,7 +187,7 @@ inside the same app.
 - **The Moon** — age, illuminated fraction, libration, terminator and the traditional full-moon names
 - **Polar alignment** — select Polaris and the polar scope's field is drawn, with an hour-angle ring showing where Polaris must sit right now
 - **Meteor shower calendar** — maximum, radiant altitude and an expected hourly rate that accounts for moonlight and twilight
-- **Comets and asteroids** — elements from the MPC and JPL, plotted on the chart
+- **Comets and asteroids** — 4,122 comets bundled (MPC CometEls together with JPL's SBDB), and the elements can be fetched again from the MPC and JPL
 - **Events** — all astronomical events, or occultations and eclipses on their own; those two list only what can actually be seen from your site
 - **Four coordinate grids**, the celestial equator, ecliptic, galactic plane and meridian, and field-of-view frames
 - **Night-vision mode**, **long exposure**, **PNG/PDF export** on white paper, and a captioned demo tour
@@ -193,6 +202,7 @@ inside the same app.
 | The 88 IAU constellations: 672 line segments and the figures | — |
 | A whole-sky Milky Way map | NASA Deep Star Maps 2020 — the light of 1.7 billion stars |
 | Planetary and lunar ephemeris with surface maps | JPL DE421 |
+| Orbital elements for 4,122 comets | MPC CometEls and JPL SBDB |
 | 16 major meteor showers, MPC observatory codes, observing sites | — |
 
 Every position is computed on the device, so the whole app works where there is no signal.
@@ -208,18 +218,24 @@ and show what they add and what it costs. US$3.99 a month or US$39.99 a year
 Tiangong) or the naked-eye satellites down to magnitude 4.
 
 <p align="center">
-  <img src="assets/phone-pro-satellites.png" width="180" alt="Satellites on the globe">
-  <img src="assets/phone-pro-aurora.png"     width="180" alt="Aurora forecast">
+  <img src="assets/phone-pro-ssd.png"    width="180" alt="3D solar system map">
+  <img src="assets/phone-pro-aurora.png" width="180" alt="Aurora forecast">
+  <img src="assets/phone-pro-pm.png"     width="180" alt="Proper-motion time machine">
+  <img src="assets/phone-pro-deep.png"   width="180" alt="Deep-sky star catalogue">
 </p>
 
-- **3D solar system map** — 1.56 million small bodies, comets, dwarf planets and
-  spacecraft, seen from above the ecliptic
+- **3D solar system map** — 1.56 million minor planets, 4,122 comets and the
+  dwarf planets, seen from above the ecliptic. The paths 35 spacecraft actually
+  flew are **carried in the app** (370,000 points), so Voyager's track is drawn
+  where there is no signal
 - **Aurora forecast** — from NASA DONKI and NOAA OVATION: how far the auroral
   oval reaches, and whether it clears the horizon where you are
 - **Proper-motion time machine** — 50,000 years either way; the figures come
   apart and the pole star changes
-- **Deep star catalogue** — 2.34 million UCAC4 stars to 12th magnitude, bundled,
-  appearing below a 12-degree field
+- **Deep-sky star catalogue** — 2.34 million UCAC4 stars to 12th magnitude,
+  appearing below a 12-degree field. At 37 MB it is not carried in the app:
+  **whoever wants it downloads it** (from the foot of the Explore tab). Once
+  downloaded it stays on the device and needs no connection afterwards
 - **The remaining satellite groups** (Starlink, weather, science, the Japanese
   geostationary ones) with a world map, a globe and search by name or ID
 - **Exoplanet transits and variable-star maxima and minima**
