@@ -76,7 +76,7 @@ iPhone・iPad・Mac・Apple Watch 対応（Android 版はテスト公開中）�
 
 <p align="center">
   <img src="assets/phone-pro-ssd.png"    width="180" alt="太陽系3Dマップ">
-  <img src="assets/phone-pro-aurora.png" width="180" alt="オーロラ予報">
+  <img src="assets/phone-pro-aurora.png" width="180" alt="オーロラ爆発">
   <img src="assets/phone-pro-pm.png"     width="180" alt="固有運動タイムマシン">
   <img src="assets/phone-pro-deep.png"   width="180" alt="深宇宙星表">
 </p>
@@ -85,7 +85,10 @@ iPhone・iPad・Mac・Apple Watch 対応（Android 版はテスト公開中）�
   探査機 35 機は**実際に飛んだ道を同梱**しているので（37 万点）、通信の無い
   場所でもボイジャーの軌跡がそのまま出ます
 - **オーロラ予報** — NASA DONKI と NOAA OVATION から、オーロラ帯がどこまで下がるか、
-  観測地から見て地平線の上に出るかを描きます
+  観測地から見て地平線の上に出るかを描きます。色は輝線（酸素 557.7 / 630.0 nm、
+  窒素）の強さを高さごとに解いて CIE の等色関数で画面の色に直し、カーテンは
+  磁力線に沿わせています。**オーロラ爆発**（サブストーム）も再現します —
+  真夜中手前の弧が崩れ、極へ膨らみながら西へ走り、回復相で脈動へ変わるまで
 - **固有運動タイムマシン** — ±5 万年。星が動き、星座の形が崩れ、北極星が入れ替わります
 - **深宇宙星表** — UCAC4 の 234 万星（12 等まで）。視野 12 度以下で降りてきます。
   本体は 37 MB あるのでアプリには積まず、**使う人だけが落とす**形にしました
@@ -219,7 +222,7 @@ Tiangong) or the naked-eye satellites down to magnitude 4.
 
 <p align="center">
   <img src="assets/phone-pro-ssd.png"    width="180" alt="3D solar system map">
-  <img src="assets/phone-pro-aurora.png" width="180" alt="Aurora forecast">
+  <img src="assets/phone-pro-aurora.png" width="180" alt="Auroral breakup">
   <img src="assets/phone-pro-pm.png"     width="180" alt="Proper-motion time machine">
   <img src="assets/phone-pro-deep.png"   width="180" alt="Deep-sky star catalogue">
 </p>
@@ -229,7 +232,12 @@ Tiangong) or the naked-eye satellites down to magnitude 4.
   flew are **carried in the app** (370,000 points), so Voyager's track is drawn
   where there is no signal
 - **Aurora forecast** — from NASA DONKI and NOAA OVATION: how far the auroral
-  oval reaches, and whether it clears the horizon where you are
+  oval reaches, and whether it clears the horizon where you are. The colour is
+  computed from the emission lines themselves (oxygen 557.7 / 630.0 nm,
+  nitrogen) at each altitude and converted through the CIE colour matching
+  functions; the curtains follow the magnetic field lines. An **auroral
+  breakup** plays out too — the arc before midnight falling apart, swelling
+  poleward, running west, and turning into pulsating patches
 - **Proper-motion time machine** — 50,000 years either way; the figures come
   apart and the pole star changes
 - **Deep-sky star catalogue** — 2.34 million UCAC4 stars to 12th magnitude,
